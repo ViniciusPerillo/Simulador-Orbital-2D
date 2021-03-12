@@ -1,6 +1,15 @@
 # Simulador Orbital 2D
  ## Simulador de orbitas baseado na mecânica newtoniana aplicado em duas dimensões feito em JavaScripit
  ***
+ ### Tabela de Conteúdo
+  - [Sobre](https://github.com/ViniciusPerillo/Simulador-Orbital-2D-em-JavaScripit#simulador-orbital-2d)
+  - [Tabela de Conteúdo](https://github.com/ViniciusPerillo/Simulador-Orbital-2D-em-JavaScripit#tabela-de-conteudo)
+  - [Status](https://github.com/ViniciusPerillo/Simulador-Orbital-2D-em-JavaScripit#status)
+  - [Features](https://github.com/ViniciusPerillo/Simulador-Orbital-2D-em-JavaScripit#features)
+  - [Pré-requisitos](https://github.com/ViniciusPerillo/Simulador-Orbital-2D-em-JavaScripit#pré-requisitos)
+  - [Autor](https://github.com/ViniciusPerillo/Simulador-Orbital-2D-em-JavaScripit#autor)
+  - [Licença](https://github.com/ViniciusPerillo/Simulador-Orbital-2D-em-JavaScripit#licença)
+ ***
  ### Status
   #### 🚧 Em contrução... 🚧
  ***
