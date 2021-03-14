@@ -15,7 +15,7 @@
  ***
  ### Features
   - #### Interface
-   - [ ] Header e escalas
+   - [x] Header e lugar escalas
    - [ ] Movimento de tela e zoom
    - [ ] Criação de astros
    - [ ] Seleção e exclusão de astros
