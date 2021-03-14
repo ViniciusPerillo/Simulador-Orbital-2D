@@ -33,9 +33,14 @@ header{
     margin: 0px 20px 0px 20px;
 }
 
-.astro{
+figure{
     position: absolute;
     display: block;
+    margin: 0px;
+}
+
+.astro{
     border-radius: 50%;
     overflow: hidden;
 }
+
