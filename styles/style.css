@@ -32,3 +32,10 @@ header{
     width: 20vh;
     margin: 0px 20px 0px 20px;
 }
+
+.astro{
+    position: absolute;
+    display: block;
+    border-radius: 50%;
+    overflow: hidden;
+}
