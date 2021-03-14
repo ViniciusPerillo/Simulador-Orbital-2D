@@ -35,7 +35,7 @@ export class Figure{
 
     set setImgPath(path){
         this.imgPath = path;
-        this.img.scr = this.imgPath;
+        this.img.src = this.imgPath;
         if(this.imgPath == ''){
             this.img.style.display = 'none'
         }else{
