@@ -11,8 +11,7 @@ export class Figure{
      * @param {number} height px
      * @param {string} imgPath 
      */
-    constructor(x, y, width, height = width, imgPath = null,){
-        this.imgPath = imgPath;
+    constructor(x, y, width, height = width, imgPath = ''){
         this.figure = document.createElement('figure');
         document.body.appendChild(this.figure)
         this.figure.style.backgroundColor = `rgb(${randomRGB()},${randomRGB()},${randomRGB()})`;

@@ -1,5 +1,7 @@
 //Imports-------------------------------------------------------------------------------------------------------------------------------
     import {Figure} from './classes/figure.js';
+    import {Astro} from './classes/astro.js';
+    import {Vetor} from './classes/vetor.js';
 
 //DOM Events----------------------------------------------------------------------------------------------------------------------------
     document.addEventListener('DOMContentLoaded', run);
@@ -30,6 +32,7 @@
             figure: [],
             object: [],
         }
+        let spaceScale = 3e+2; // 1 px : spaceScale Km 
     //Interface
         let mouseDown = false;
         let mousePosition = {
@@ -39,11 +42,33 @@
     //Auxiliares
 //Funções-------------------------------------------------------------------------------------------------------------------------------
     function run(){
-        astros.figure.push(new Figure(200,200,50,50,));
-        astros.figure.push(new Figure(400,400,100,100,'../../imagens/teste.jpg'))
+        astros.object.push(new Astro(applySpaceScale(200,1),applySpaceScale(200,1),1,6e+24,new Vetor(0,0)));
+        astros.object.push(new Astro(applySpaceScale(700,1),applySpaceScale(700,1),0,2e+27,new Vetor(0,0)));
+        astros.figure.push(new Figure(0,0,0,));
+        astros.figure.push(new Figure(0,0,0,0,'../../imagens/teste.jpg'));
         astros.figure[0].getFigure.classList.add('astro');
         astros.figure[1].getFigure.classList.add('astro');
-        console.log(astros.figure[0]);
+        updateAstroFigure();
+    }
+
+    function updateAstroFigure(){
+        for(let i in astros.object){
+            astros.figure[i].setSize(Math.round(applySpaceScale(astros.object[i].getRadius,-1)));
+            astros.figure[i].setPosition(
+                Math.round(applySpaceScale(astros.object[i].getX-astros.object[i].getRadius,-1)),
+                Math.round(applySpaceScale(astros.object[i].getY-astros.object[i].getRadius,-1))
+            )
+        }
+    }
+
+    /**
+     * @description Aplica a escala de espaço, tanto de px para Km, como de Km para px
+     * @param {number} number 
+     * @param {1|-1} operator 1 : px to Km | -1 : Km to px 
+     * @returns {number}
+     */
+    function applySpaceScale(number, operator){
+        return number*Math.pow(spaceScale,operator);
     }
 
     function setMousePosition(event){

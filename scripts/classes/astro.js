@@ -1,4 +1,4 @@
-import Vetor from './vector.js'
+import {Vetor} from './vetor.js'
 /**
  * @description Classe cria um objeto Astro para o Simulador 2D
  * @author Vinicius Gonçalves Perillo --> https://github.com/ViniciusPerillo
