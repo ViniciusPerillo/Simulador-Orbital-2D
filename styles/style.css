@@ -43,5 +43,6 @@ figure{
 .astro{
     border-radius: 50%;
     overflow: hidden;
+    z-index: -1000000;
 }
 
