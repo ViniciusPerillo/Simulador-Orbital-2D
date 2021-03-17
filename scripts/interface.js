@@ -39,8 +39,8 @@
     //Auxiliares
 //Funções-------------------------------------------------------------------------------------------------------------------------------
     function run(){
-        astros.figure.push(new Figure(50,50,200,200,));
-        astros.figure.push(new Figure(100,100,400,400,'../../imagens/teste.jpg'))
+        astros.figure.push(new Figure(200,200,50,50,));
+        astros.figure.push(new Figure(400,400,100,100,'../../imagens/teste.jpg'))
         astros.figure[0].getFigure.classList.add('astro');
         astros.figure[1].getFigure.classList.add('astro');
         console.log(astros.figure[0]);
