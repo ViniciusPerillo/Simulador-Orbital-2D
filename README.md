@@ -12,19 +12,20 @@
  ***
  ### Status
   #### 🚧 Em contrução... 🚧
+   - Arrastar astros testável
  ***
  ### Features
   - #### Interface
    - [x] Header e lugar escalas
-   - [ ] Movimento de tela e zoom
+   - [ ] Arrastar e zoom
    - [ ] Criação de astros
    - [ ] Seleção e exclusão de astros
    - [ ] Rastro do astro
    - [ ] Box com dados do astro selecionado
   - #### Simulador
-   - [ ] Vetores
+   - [x] Vetores
    - [ ] Formulas 
-   - [ ] Astro
+   - [x] Astro
    - [ ] Aplicação da Gravitação Universal
  ***
  ### Pré-requisitos
