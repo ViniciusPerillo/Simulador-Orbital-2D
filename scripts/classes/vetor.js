@@ -1,3 +1,7 @@
+/**
+ * @description Classe cria um objeto Astro para o Simulador 2D
+ * @author Vinicius Gonçalves Perillo --> https://github.com/ViniciusPerillo
+ */
 export class Vetor{
     /**
      * @description Cria a instância de Vetor
