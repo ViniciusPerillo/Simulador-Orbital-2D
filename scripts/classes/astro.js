@@ -1,3 +1,5 @@
+import Vetor from './vector.js'
+
 export class Astro{
     /**
      * @description Cria uma instância de Astro
@@ -5,15 +7,16 @@ export class Astro{
      * @param {number} y Km
      * @param {0|1} type 
      * @param {number} mass Kg
+     * @param {Vetor} initialVelocity velocidade inicial do astro
      */
-    constructor(x, y, type, mass){
+    constructor(x, y, type, mass, initialVelocity){
         this.setX = x;
         this.setY = y;
         this.setType = type;
         this.setMass = mass;
+        this.setVelocityVector = initialVelocity;
     }
 
-//Setters-------------------------------------------------------------------------------------------------------------------------------
     /**
      * @description Define a posição do astro no eixo x
      * @param {number} x Km
@@ -55,23 +58,40 @@ export class Astro{
         this.radius = Math.pow((3*this.mass)/(4*Math.PI*this.density),1/3)/1000;
     }
 
+    /**
+     * @description Define o vetor aceleração do astro
+     * @param {Vetor} acceleration
+     */
     set setAccelerationVector(acceleration){
         this.accelerationVector = acceleration;
     }
 
+    /**
+     * @description define o vetor aceleração centrípeta  
+     * @param {Vetor} centripetalA
+     * @private
+     */
     set setCentripetalAccelerationVector(centripetalA){
         this.centripetalAccelerationVector = centripetalA;
     }
 
+    /**
+     * @description define o vetor aceleração tangencial
+     * @param {Vetor} tangencialA
+     * @private
+     */
     set setTangencialAccelerationVector(tangencialA){
         this.tangencialAccelerationVector = tangencialA;
     }
 
+    /**
+     * @description define o vetor velocidade
+     * @param {Vetor} velocity
+     */
     set setVelocityVector(velocity){
         this.velocityVector = velocity;
     }
 
-//Getters-------------------------------------------------------------------------------------------------------------------------------
     /**
      * @description retorna a posição do astro no eixo x em Km
      */
@@ -151,6 +171,6 @@ export class Astro{
      * @description retorna o vetor da velocidade resultando atuando no astro
      */
     get getVelocityVector(){
-
+        return this.velocityVector;
     }
 }
