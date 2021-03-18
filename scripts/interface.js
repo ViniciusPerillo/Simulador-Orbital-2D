@@ -18,7 +18,7 @@
             y: null,
         }
     //Auxiliares
-    
+
 //DOM Events------------------------------------------------------------------------------------------------------------------------------
     document.addEventListener('DOMContentLoaded', run);  
     document.addEventListener('mousedown', (event)=>{unlockDrag(event)});
@@ -103,7 +103,12 @@
     }
 
     function attSpaceScaleHTMLElement(){
-        spaceScaleHTMLElement.innerHTML = `1 px  :  ${spaceScale.toExponential(1)} Km`
+        spaceScaleHTMLElement.innerHTML = `1 px  :  ${
+            (spaceScale/Math.pow(10,Math.floor(Math.log10(spaceScale)))).toFixed(1)
+        } × 10${
+            (Math.floor(Math.log10(spaceScale))).toString().sup()
+        } Km`
+        console.log(spaceScale.toExponential(1));
     }
 
     /**
