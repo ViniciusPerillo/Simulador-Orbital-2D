@@ -15,9 +15,13 @@
         if(mouseDown){
             let deltaX = event.x - mousePosition.x;
             let deltaY = event.y - mousePosition.y;
-            for(let i in astros.figure){
-                astros.figure[i].setPosition(astros.figure[i].getX + deltaX, astros.figure[i].getY + deltaY);
+            for(let i in astros.object){
+                astros.object[i].setPosition(
+                    astros.object[i].getX + applySpaceScale(deltaX,1),
+                    astros.object[i].getY + applySpaceScale(deltaY,1)
+                );
             }
+            updateAstroFigure();
             setMousePosition(event);
         }
     })
@@ -25,6 +29,21 @@
     document.addEventListener('mouseup',()=>{
         mouseDown = false;
     })
+
+    document.addEventListener('wheel',(event)=>{
+        setMousePosition(event);
+        let mouseX = applySpaceScale(event.x,1);
+        let mouseY = applySpaceScale(event.y,1);
+        spaceScale *= Math.pow(10, event.deltaY*0.125/Math.abs(event.deltaY));
+        for(let i in astros.object){
+            astros.object[i].setPosition(
+                astros.object[i].getX - (mouseX - applySpaceScale(mousePosition.x,1)),
+                astros.object[i].getY - (mouseY - applySpaceScale(mousePosition.y,1)),
+            )
+        }
+        updateAstroFigure();
+        attSpaceScaleHTMLElement();
+    });
 
 //Variáveis-----------------------------------------------------------------------------------------------------------------------------
     //Simulador
@@ -34,6 +53,7 @@
         }
         let spaceScale = 3e+2; // 1 px : spaceScale Km 
     //Interface
+        let spaceScaleHTMLElement = document.querySelector('div#spaceScale');
         let mouseDown = false;
         let mousePosition = {
             x: null,
@@ -49,16 +69,21 @@
         astros.figure[0].getFigure.classList.add('astro');
         astros.figure[1].getFigure.classList.add('astro');
         updateAstroFigure();
+        attSpaceScaleHTMLElement();
     }
 
     function updateAstroFigure(){
         for(let i in astros.object){
-            astros.figure[i].setSize(Math.round(applySpaceScale(astros.object[i].getRadius,-1)));
+            astros.figure[i].setSize(Math.round(applySpaceScale(2*astros.object[i].getRadius,-1)));
             astros.figure[i].setPosition(
                 Math.round(applySpaceScale(astros.object[i].getX-astros.object[i].getRadius,-1)),
                 Math.round(applySpaceScale(astros.object[i].getY-astros.object[i].getRadius,-1))
             )
         }
+    }
+
+    function attSpaceScaleHTMLElement(){
+        spaceScaleHTMLElement.innerHTML = `1 px  :  ${spaceScale.toExponential(1)} Km`
     }
 
     /**

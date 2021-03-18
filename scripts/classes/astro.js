@@ -20,6 +20,11 @@ export class Astro{
         this.setVelocityVector = initialVelocity;
     }
 
+    setPosition(x,y){
+        this.setX = x;
+        this.setY = y;
+    }
+
     /**
      * @description Define a posição do astro no eixo x
      * @param {number} x Km
