@@ -3,16 +3,51 @@
     import {Astro} from './classes/astro.js';
     import {Vetor} from './classes/vetor.js';
 
-//DOM Events----------------------------------------------------------------------------------------------------------------------------
-    document.addEventListener('DOMContentLoaded', run);
-
-    document.addEventListener('mousedown',(event)=>{
-        mouseDown = true;
+//Variáveis-----------------------------------------------------------------------------------------------------------------------------
+    //Simulador
+        let astros = {
+            figure: [],
+            object: [],
+        }
+        let spaceScale = 3e+2; // 1 px : spaceScale Km 
+    //Interface
+        let spaceScaleHTMLElement = document.querySelector('div#spaceScale');
+        let arrastar = false;
+        let mousePosition = {
+            x: null,
+            y: null,
+        }
+    //Auxiliares
+    
+//DOM Events------------------------------------------------------------------------------------------------------------------------------
+    document.addEventListener('DOMContentLoaded', run);  
+    document.addEventListener('mousedown', (event)=>{unlockDrag(event)});
+    document.addEventListener('mousemove', (event)=>{drag(event)})
+    document.addEventListener('mouseup', lockDrag)
+    document.addEventListener('wheel', (event)=>{zoom(event)});
+//Listeners-------------------------------------------------------------------------------------------------------------------------------
+    /**
+     * @description desbloqueia a função arrastar os astros
+     * @param {MouseEvent} event 
+     */
+    function unlockDrag(event){
+        arrastar = true;
         setMousePosition(event);
-    });
+    }
 
-    document.addEventListener('mousemove',(event)=>{
-        if(mouseDown){
+    /**
+     * @description bloqueia a função arrastar os astros
+     */
+    function lockDrag(){
+        arrastar = false;
+    }
+
+    /**
+     * @description Arrasta os astros
+     * @param {MouseEvent} event 
+     */
+    function drag(event){
+        if(arrastar){
             let deltaX = event.x - mousePosition.x;
             let deltaY = event.y - mousePosition.y;
             for(let i in astros.object){
@@ -24,13 +59,13 @@
             updateAstroFigure();
             setMousePosition(event);
         }
-    })
+    }
 
-    document.addEventListener('mouseup',()=>{
-        mouseDown = false;
-    })
-
-    document.addEventListener('wheel',(event)=>{
+    /**
+     * @description Da zoom in ou zoom out baseado no deslocamento do scroll do mouse, mudando a escala de espaço. 
+     * @param {MouseEvent} event 
+     */
+    function zoom(event){
         setMousePosition(event);
         let mouseX = applySpaceScale(event.x,1);
         let mouseY = applySpaceScale(event.y,1);
@@ -43,23 +78,8 @@
         }
         updateAstroFigure();
         attSpaceScaleHTMLElement();
-    });
+    }
 
-//Variáveis-----------------------------------------------------------------------------------------------------------------------------
-    //Simulador
-        let astros = {
-            figure: [],
-            object: [],
-        }
-        let spaceScale = 3e+2; // 1 px : spaceScale Km 
-    //Interface
-        let spaceScaleHTMLElement = document.querySelector('div#spaceScale');
-        let mouseDown = false;
-        let mousePosition = {
-            x: null,
-            y: null,
-        }
-    //Auxiliares
 //Funções-------------------------------------------------------------------------------------------------------------------------------
     function run(){
         astros.object.push(new Astro(applySpaceScale(200,1),applySpaceScale(200,1),1,6e+24,new Vetor(0,0)));
