@@ -1,3 +1,6 @@
+/**
+ * @description Uma classe com formulas e constantes fisicas, como Math para matematica.
+ */
 export class Fisica{
     /**
      * @returns Retorna a Constante Gravitacional Universal: 6.674184e-11
