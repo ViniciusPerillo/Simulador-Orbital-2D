@@ -85,7 +85,7 @@
         astros.object.push(new Astro(applySpaceScale(200,1),applySpaceScale(200,1),1,6e+24,new Vetor(0,0)));
         astros.object.push(new Astro(applySpaceScale(700,1),applySpaceScale(700,1),0,2e+27,new Vetor(0,0)));
         astros.figure.push(new Figure(0,0,0,));
-        astros.figure.push(new Figure(0,0,0,0,'../../imagens/teste.jpg'));
+        astros.figure.push(new Figure(0,0,0,0,'imagens/teste.jpg'));
         astros.figure[0].getFigure.classList.add('astro');
         astros.figure[1].getFigure.classList.add('astro');
         updateAstroFigure();
