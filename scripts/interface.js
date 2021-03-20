@@ -1,7 +1,7 @@
 //Imports-------------------------------------------------------------------------------------------------------------------------------
     import {Figure} from './classes/figure.js';
     import {Astro} from './classes/astro.js';
-    import {Vetor} from './classes/vetor.js';
+    import {Vector} from './classes/vetor.js';
 
 //Variáveis-----------------------------------------------------------------------------------------------------------------------------
     //Simulador
@@ -12,7 +12,7 @@
         let spaceScale = 3e+2; // 1 px : spaceScale Km 
     //Interface
         let spaceScaleHTMLElement = document.querySelector('div#spaceScale');
-        let arrastar = false;
+        let isDraggable = false;
         let mousePosition = {
             x: null,
             y: null,
@@ -31,7 +31,7 @@
      * @param {MouseEvent} event 
      */
     function unlockDrag(event){
-        arrastar = true;
+        isDraggable = true;
         setMousePosition(event);
     }
 
@@ -39,7 +39,7 @@
      * @description bloqueia a função arrastar os astros
      */
     function lockDrag(){
-        arrastar = false;
+        isDraggable = false;
     }
 
     /**
@@ -47,7 +47,7 @@
      * @param {MouseEvent} event 
      */
     function drag(event){
-        if(arrastar){
+        if(isDraggable){
             let deltaX = event.x - mousePosition.x;
             let deltaY = event.y - mousePosition.y;
             for(let i in astros.object){
@@ -82,14 +82,15 @@
 
 //Funções-------------------------------------------------------------------------------------------------------------------------------
     function run(){
-        astros.object.push(new Astro(applySpaceScale(200,1),applySpaceScale(200,1),1,6e+24,new Vetor(0,0)));
-        astros.object.push(new Astro(applySpaceScale(700,1),applySpaceScale(700,1),0,2e+27,new Vetor(0,0)));
+        astros.object.push(new Astro(applySpaceScale(200,1),applySpaceScale(200,1),1,6e+24,new Vector(0,0)));
+        astros.object.push(new Astro(applySpaceScale(700,1),applySpaceScale(700,1),0,2e+27,new Vector(0,0)));
         astros.figure.push(new Figure(0,0,0,));
         astros.figure.push(new Figure(0,0,0,0,'../../imagens/teste.jpg'));
         astros.figure[0].getFigure.classList.add('astro');
         astros.figure[1].getFigure.classList.add('astro');
         updateAstroFigure();
         attSpaceScaleHTMLElement();
+        attAccelerationsVectors();
     }
 
     function updateAstroFigure(){
@@ -108,9 +109,37 @@
         } × 10${
             (Math.floor(Math.log10(spaceScale))).toString().sup()
         } Km`
-        console.log(spaceScale.toExponential(1));
     }
 
+    function attAccelerationsVectors(){
+        for(let i in astros.object){
+            astros.object[i].setAccelerationVector = Vector.vectorSum(getAccelerationsActingOnTheAstro(i));
+            console.log(astros.object[i].getAccelerationVector);
+        }
+    }
+
+    function getAccelerationsActingOnTheAstro(astroIndex){
+        let accelerationsActingOnTheAstro = [];
+        for(let j in astros.object){
+            let distanceUntilAstroX = astros.object[j].getX - astros.object[astroIndex].getX;
+            let distanceUntilAstroY = astros.object[j].getY - astros.object[astroIndex].getY;
+            let distanceUntilAstro = Math.hypot(distanceUntilAstroX, distanceUntilAstroY);
+            if(distanceUntilAstro > 0){
+                accelerationsActingOnTheAstro.push(new Vector(
+                    applyLawOfGravitation(distanceUntilAstro, astros.object[j].getMass),
+                    Math.atan2(distanceUntilAstroY, distanceUntilAstroX)
+                ))
+            }
+        }
+        return accelerationsActingOnTheAstro;
+    }
+
+    
+//Funções Auxiliares----------------------------------------------------------------------------------------------------------------------
+    function applyLawOfGravitation(distance, mass){
+        return 6.674184e-11*mass/Math.pow(distance,2);
+    }
+    
     /**
      * @description Aplica a escala de espaço, tanto de px para Km, como de Km para px
      * @param {number} number 

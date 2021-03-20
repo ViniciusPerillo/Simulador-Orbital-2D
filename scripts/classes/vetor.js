@@ -2,7 +2,7 @@
  * @description Classe cria um objeto Astro para o Simulador 2D
  * @author Vinicius Gonçalves Perillo --> https://github.com/ViniciusPerillo
  */
-export class Vetor{
+export class Vector{
     /**
      * @description Cria a instância de Vetor
      * @param {number} module 
@@ -15,7 +15,7 @@ export class Vetor{
     
     /**
      * @description Realiza uma soma vetorial 
-     * @param {Vetor []} vectors 
+     * @param {Vector []} vectors 
      */
     static vectorSum(vectors){
         let sumVectors = {x: 0, y: 0}
@@ -23,7 +23,7 @@ export class Vetor{
             sumVectors.x += vectors[i].getVectorXModule;
             sumVectors.y += vectors[i].getVectorYModule;
         }
-        return new Vetor(Math.hypot(sumVectors.x,sumVectors.y), Math.atan2(sumVectors.y,sumVectors.x));
+        return new Vector(Math.hypot(sumVectors.x,sumVectors.y), Math.atan2(sumVectors.y,sumVectors.x));
     }
 
     /**
@@ -53,14 +53,14 @@ export class Vetor{
      * @description Retorna o modulo da projeção do vetor no eixo x
      */
     get getVectorXModule(){
-        return this.module*Math.cos(angle);
+        return this.module*Math.cos(this.angle);
     }
 
     /**
      * @description Retorna o modulo da projeção do vetor no eixo x
      */
     get getVectorYModule(){
-        return this.module*Math.sen(angle);
+        return this.module*Math.sin(this.angle);
     }
 
     /**

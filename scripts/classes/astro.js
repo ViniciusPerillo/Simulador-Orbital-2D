@@ -1,4 +1,4 @@
-import {Vetor} from './vetor.js'
+import {Vector} from './vetor.js'
 /**
  * @description Classe cria um objeto Astro para o Simulador 2D
  * @author Vinicius Gonçalves Perillo --> https://github.com/ViniciusPerillo
@@ -10,7 +10,7 @@ export class Astro{
      * @param {number} y Km
      * @param {0|1} type 
      * @param {number} mass Kg
-     * @param {Vetor} initialVelocity velocidade inicial do astro
+     * @param {Vector} initialVelocity velocidade inicial do astro
      */
     constructor(x, y, type, mass, initialVelocity){
         this.setX = x;
@@ -68,7 +68,7 @@ export class Astro{
 
     /**
      * @description Define o vetor aceleração do astro
-     * @param {Vetor} acceleration
+     * @param {Vector} acceleration
      */
     set setAccelerationVector(acceleration){
         this.accelerationVector = acceleration;
@@ -76,7 +76,7 @@ export class Astro{
 
     /**
      * @description define o vetor aceleração centrípeta  
-     * @param {Vetor} centripetalA
+     * @param {Vector} centripetalA
      * @private
      */
     set setCentripetalAccelerationVector(centripetalA){
@@ -85,7 +85,7 @@ export class Astro{
 
     /**
      * @description define o vetor aceleração tangencial
-     * @param {Vetor} tangencialA
+     * @param {Vector} tangencialA
      * @private
      */
     set setTangencialAccelerationVector(tangencialA){
@@ -93,8 +93,8 @@ export class Astro{
     }
 
     /**
-     * @description define o vetor velocidade
-     * @param {Vetor} velocity
+     * @description define o Vector velocidade
+     * @param {Vector} velocity
      */
     set setVelocityVector(velocity){
         this.velocityVector = velocity;
@@ -155,7 +155,7 @@ export class Astro{
     }
 
     /**
-     * @description retorna o vetor da aceleração resultante atuando no astro
+     * @description retorna o Vector da aceleração resultante atuando no astro
      */
     get getAccelerationVector(){
         return this.accelerationVector;
