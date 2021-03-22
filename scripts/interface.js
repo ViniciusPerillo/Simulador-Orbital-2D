@@ -1,15 +1,15 @@
-//Imports-------------------------------------------------------------------------------------------------------------------------------
+//Imports
     import {Figure} from './classes/figure.js';
     import {Astro} from './classes/astro.js';
     import {Vector} from './classes/vetor.js';
 
-//Variáveis-----------------------------------------------------------------------------------------------------------------------------
+//Variáveis
     //Simulador
         let astros = {
             figure: [],
             object: [],
         }
-        let spaceScale = 3e+2; // 1 px : spaceScale Km 
+        let spaceScale = 3e+5; // 1 px : spaceScale m 
     //Interface
         let spaceScaleHTMLElement = document.querySelector('div#spaceScale');
         let isDraggable = false;
@@ -19,13 +19,14 @@
         }
     //Auxiliares
 
-//DOM Events------------------------------------------------------------------------------------------------------------------------------
+//DOM Events
     document.addEventListener('DOMContentLoaded', run);  
     document.addEventListener('mousedown', (event)=>{unlockDrag(event)});
     document.addEventListener('mousemove', (event)=>{drag(event)})
     document.addEventListener('mouseup', lockDrag)
     document.addEventListener('wheel', (event)=>{zoom(event)});
-//Listeners-------------------------------------------------------------------------------------------------------------------------------
+    document.addEventListener('keydown', (event)=>{keyboardListeners(event)})
+//Listeners
     /**
      * @description desbloqueia a função arrastar os astros
      * @param {MouseEvent} event 
@@ -50,13 +51,13 @@
         if(isDraggable){
             let deltaX = event.x - mousePosition.x;
             let deltaY = event.y - mousePosition.y;
-            for(let i in astros.object){
-                astros.object[i].setPosition(
-                    astros.object[i].getX + applySpaceScale(deltaX,1),
-                    astros.object[i].getY + applySpaceScale(deltaY,1)
+            for(let astro in astros.object){
+                astros.object[astro].setPosition(
+                    astros.object[astro].getX + applySpaceScale(deltaX,1),
+                    astros.object[astro].getY + applySpaceScale(deltaY,1)
                 );
             }
-            updateAstroFigure();
+            attAstrosFigure();
             setMousePosition(event);
         }
     }
@@ -70,17 +71,32 @@
         let mouseX = applySpaceScale(event.x,1);
         let mouseY = applySpaceScale(event.y,1);
         spaceScale *= Math.pow(10, event.deltaY*0.125/Math.abs(event.deltaY));
-        for(let i in astros.object){
-            astros.object[i].setPosition(
-                astros.object[i].getX - (mouseX - applySpaceScale(mousePosition.x,1)),
-                astros.object[i].getY - (mouseY - applySpaceScale(mousePosition.y,1)),
+        for(let astro in astros.object){
+            astros.object[astro].setPosition(
+                astros.object[astro].getX - (mouseX - applySpaceScale(mousePosition.x,1)),
+                astros.object[astro].getY - (mouseY - applySpaceScale(mousePosition.y,1)),
             )
         }
-        updateAstroFigure();
+        attAstrosFigure();
         attSpaceScaleHTMLElement();
     }
 
-//Funções-------------------------------------------------------------------------------------------------------------------------------
+    function keyboardListeners(event){
+        if(event.code == 'Space'){
+            for(let astro in astros.object){
+                console.log(astros.object[astro].getAccelerationVector);
+                console.log(astros.object[astro].getVelocityVector);
+                console.log(astros.object[astro].getCentripetalAccelerationVector);
+                console.log(astros.object[astro].getTangencialAccelerationVector);
+                astros.object[astro].applyPhysics(3600);
+                console.log('--------------------------------------------------------------')
+            }
+        }
+        console.log('====================================================================')
+        attAstrosFigure();
+    }
+
+//Funções
     function run(){
         astros.object.push(new Astro(applySpaceScale(200,1),applySpaceScale(200,1),1,6e+24,new Vector(0,0)));
         astros.object.push(new Astro(applySpaceScale(700,1),applySpaceScale(700,1),0,2e+27,new Vector(0,0)));
@@ -88,17 +104,17 @@
         astros.figure.push(new Figure(0,0,0,0,'../../imagens/teste.jpg'));
         astros.figure[0].getFigure.classList.add('astro');
         astros.figure[1].getFigure.classList.add('astro');
-        updateAstroFigure();
+        attAstrosFigure();
         attSpaceScaleHTMLElement();
         attAccelerationsVectors();
     }
 
-    function updateAstroFigure(){
-        for(let i in astros.object){
-            astros.figure[i].setSize(Math.round(applySpaceScale(2*astros.object[i].getRadius,-1)));
-            astros.figure[i].setPosition(
-                Math.round(applySpaceScale(astros.object[i].getX-astros.object[i].getRadius,-1)),
-                Math.round(applySpaceScale(astros.object[i].getY-astros.object[i].getRadius,-1))
+    function attAstrosFigure(){
+        for(let astro in astros.object){
+            astros.figure[astro].setSize(Math.round(applySpaceScale(2*astros.object[astro].getRadius,-1)));
+            astros.figure[astro].setPosition(
+                Math.round(applySpaceScale(astros.object[astro].getX-astros.object[astro].getRadius,-1)),
+                Math.round(applySpaceScale(astros.object[astro].getY-astros.object[astro].getRadius,-1))
             )
         }
     }
@@ -107,27 +123,26 @@
         spaceScaleHTMLElement.innerHTML = `1 px  :  ${
             (spaceScale/Math.pow(10,Math.floor(Math.log10(spaceScale)))).toFixed(1)
         } × 10${
-            (Math.floor(Math.log10(spaceScale))).toString().sup()
+            (Math.floor(Math.log10(spaceScale))-3).toString().sup()
         } Km`
     }
 
     function attAccelerationsVectors(){
-        for(let i in astros.object){
-            astros.object[i].setAccelerationVector = Vector.vectorSum(getAccelerationsActingOnTheAstro(i));
-            console.log(astros.object[i].getAccelerationVector);
+        for(let astro in astros.object){
+            astros.object[astro].setAccelerationVector = Vector.vectorSum(getAccelerationsActingOnTheAstro(astro));
+            
         }
     }
 
-    function getAccelerationsActingOnTheAstro(astroIndex){
+    function getAccelerationsActingOnTheAstro(targetAstro){
         let accelerationsActingOnTheAstro = [];
-        for(let j in astros.object){
-            let distanceUntilAstroX = astros.object[j].getX - astros.object[astroIndex].getX;
-            let distanceUntilAstroY = astros.object[j].getY - astros.object[astroIndex].getY;
-            let distanceUntilAstro = Math.hypot(distanceUntilAstroX, distanceUntilAstroY);
-            if(distanceUntilAstro > 0){
+        for(let astro in astros.object){
+            let xAxisDistance = astros.object[astro].getX - astros.object[targetAstro].getX; 
+            let yAxisDistance = astros.object[astro].getY - astros.object[targetAstro].getY;
+            if(astro != targetAstro){
                 accelerationsActingOnTheAstro.push(new Vector(
-                    applyLawOfGravitation(distanceUntilAstro, astros.object[j].getMass),
-                    Math.atan2(distanceUntilAstroY, distanceUntilAstroX)
+                    applyLawOfGravitation(Math.hypot(xAxisDistance, yAxisDistance), 
+                    astros.object[astro].getMass),Math.atan2(yAxisDistance, xAxisDistance)
                 ))
             }
         }
@@ -135,7 +150,7 @@
     }
 
     
-//Funções Auxiliares----------------------------------------------------------------------------------------------------------------------
+//Funções Auxiliares
     function applyLawOfGravitation(distance, mass){
         return 6.674184e-11*mass/Math.pow(distance,2);
     }

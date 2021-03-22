@@ -19,9 +19,9 @@ export class Vector{
      */
     static vectorSum(vectors){
         let sumVectors = {x: 0, y: 0}
-        for(let i in vectors){
-            sumVectors.x += vectors[i].getVectorXModule;
-            sumVectors.y += vectors[i].getVectorYModule;
+        for(let vector in vectors){
+            sumVectors.x += vectors[vector].getXaxisProjectionModule;
+            sumVectors.y += vectors[vector].getYaxisProjectionModule;
         }
         return new Vector(Math.hypot(sumVectors.x,sumVectors.y), Math.atan2(sumVectors.y,sumVectors.x));
     }
@@ -52,14 +52,14 @@ export class Vector{
     /**
      * @description Retorna o modulo da projeção do vetor no eixo x
      */
-    get getVectorXModule(){
+    get getXaxisProjectionModule(){
         return this.module*Math.cos(this.angle);
     }
 
     /**
      * @description Retorna o modulo da projeção do vetor no eixo x
      */
-    get getVectorYModule(){
+    get getYaxisProjectionModule(){
         return this.module*Math.sin(this.angle);
     }
 
@@ -68,5 +68,9 @@ export class Vector{
      */
     get getAngle(){
         return this.angle;
+    }
+
+    get isNull(){
+        return this.module == 0;
     }
 }
