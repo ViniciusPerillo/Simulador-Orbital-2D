@@ -30,14 +30,14 @@ export class Astro{
             this.getVelocityVector.setAngle = this.getAccelerationVector.getAngle;
             this.setCentripetalAccelerationVector = new Vector(0,0);
             this.setTangencialAccelerationVector = this.getAccelerationVector;
-            console.log('opa')
+            console.log('opa');
         }else{
             this.setCentripetalAcceleration();
             this.setTangencialAcceleration();
         }
         this.setPosition(
             positionTimeEquation(this.getX, this.velocityVector.getXaxisProjectionModule, this.getTangencialAccelerationVector.getXaxisProjectionModule, time),
-            positionTimeEquation(this.getY, this.velocityVector.getYaxisProjectionModule, this.getTangencialAccelerationVector.getYxisProjectionModule, time)
+            positionTimeEquation(this.getY, this.velocityVector.getYaxisProjectionModule, this.getTangencialAccelerationVector.getYaxisProjectionModule, time)
         )
         this.attVelocityVector(time);
     }
@@ -53,6 +53,7 @@ export class Astro{
         let angle = this.getVelocityVector.getAngle + Math.PI/2*this.orbitDirection();
         let module = Math.cos(Math.abs(this.getAccelerationVector.getAngle - angle))*this.getAccelerationVector.getModule
         this.setCentripetalAccelerationVector = new Vector(module, angle);
+        console.log(this.orbitDirection());
     }
     
     /**

@@ -9,7 +9,7 @@
             figure: [],
             object: [],
         }
-        let spaceScale = 3e+5; // 1 px : spaceScale m 
+        let spaceScale = 1e+6; // 1 px : spaceScale m 
     //Interface
         let spaceScaleHTMLElement = document.querySelector('div#spaceScale');
         let isDraggable = false;
@@ -88,19 +88,20 @@
                 console.log(astros.object[astro].getVelocityVector);
                 console.log(astros.object[astro].getCentripetalAccelerationVector);
                 console.log(astros.object[astro].getTangencialAccelerationVector);
-                astros.object[astro].applyPhysics(3600);
+                astros.object[astro].applyPhysics(360);
                 console.log('--------------------------------------------------------------')
             }
         }
         console.log('====================================================================')
         attAstrosFigure();
+        attAccelerationsVectors();
     }
 
 //Funções
     function run(){
-        astros.object.push(new Astro(applySpaceScale(200,1),applySpaceScale(200,1),1,6e+24,new Vector(0,0)));
-        astros.object.push(new Astro(applySpaceScale(700,1),applySpaceScale(700,1),0,2e+27,new Vector(0,0)));
-        astros.figure.push(new Figure(0,0,0,));
+        astros.object.push(new Astro(applySpaceScale(100,1),applySpaceScale(100,1),1,6e+24,new Vector(0,0)));
+        astros.object.push(new Astro(applySpaceScale(484.4,1),applySpaceScale(100,1),1,7.36e+22,new Vector(1000,3*Math.PI/2)));
+        astros.figure.push(new Figure(0,0,0));
         astros.figure.push(new Figure(0,0,0,0,'../../imagens/teste.jpg'));
         astros.figure[0].getFigure.classList.add('astro');
         astros.figure[1].getFigure.classList.add('astro');
