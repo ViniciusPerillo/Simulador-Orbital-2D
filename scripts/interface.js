@@ -54,7 +54,7 @@
             for(let astro in astros.object){
                 astros.object[astro].setPosition(
                     astros.object[astro].getX + applySpaceScale(deltaX,1),
-                    astros.object[astro].getY + applySpaceScale(deltaY,1)
+                    astros.object[astro].getY - applySpaceScale(deltaY,1)
                 );
             }
             attAstrosFigure();
@@ -74,7 +74,7 @@
         for(let astro in astros.object){
             astros.object[astro].setPosition(
                 astros.object[astro].getX - (mouseX - applySpaceScale(mousePosition.x,1)),
-                astros.object[astro].getY - (mouseY - applySpaceScale(mousePosition.y,1)),
+                astros.object[astro].getY + (mouseY - applySpaceScale(mousePosition.y,1)),
             )
         }
         attAstrosFigure();
@@ -84,12 +84,13 @@
     function keyboardListeners(event){
         if(event.code == 'Space'){
             for(let astro in astros.object){
-                console.log(astros.object[astro].getAccelerationVector);
-                console.log(astros.object[astro].getVelocityVector);
-                console.log(astros.object[astro].getCentripetalAccelerationVector);
-                console.log(astros.object[astro].getTangencialAccelerationVector);
-                astros.object[astro].applyPhysics(360);
-                console.log('--------------------------------------------------------------')
+                //console.log(astros.object[astro].getAccelerationVector);
+                //console.log(astros.object[astro].getVelocityVector);
+                //console.log(astros.object[astro].getCentripetalAccelerationVector);
+                astros.object[astro].applyPhysics(60*60);
+                //console.log(astros.object[astro].getTangencialAccelerationVector);
+                //console.log(astros.object[astro].getVelocityVector);
+                //console.log('--------------------------------------------------------------')
             }
         }
         console.log('====================================================================')
@@ -99,10 +100,10 @@
 
 //Funções
     function run(){
-        astros.object.push(new Astro(applySpaceScale(100,1),applySpaceScale(100,1),1,6e+24,new Vector(0,0)));
-        astros.object.push(new Astro(applySpaceScale(484.4,1),applySpaceScale(100,1),1,7.36e+22,new Vector(1000,3*Math.PI/2)));
+        astros.object.push(new Astro(applySpaceScale(100,1),applySpaceScale(-400,1),1,6e+24,new Vector(0,0)));
+        astros.object.push(new Astro(applySpaceScale(484.4,1),applySpaceScale(-400,1),1,7.36e+22,new Vector(1000,3*Math.PI/2)));
         astros.figure.push(new Figure(0,0,0));
-        astros.figure.push(new Figure(0,0,0,0,'../../imagens/teste.jpg'));
+        astros.figure.push(new Figure(0,0,0,0,'imagens/teste.jpg'));
         astros.figure[0].getFigure.classList.add('astro');
         astros.figure[1].getFigure.classList.add('astro');
         attAstrosFigure();
@@ -115,7 +116,7 @@
             astros.figure[astro].setSize(Math.round(applySpaceScale(2*astros.object[astro].getRadius,-1)));
             astros.figure[astro].setPosition(
                 Math.round(applySpaceScale(astros.object[astro].getX-astros.object[astro].getRadius,-1)),
-                Math.round(applySpaceScale(astros.object[astro].getY-astros.object[astro].getRadius,-1))
+                Math.round(applySpaceScale((astros.object[astro].getY+astros.object[astro].getRadius)*-1,-1))
             )
         }
     }

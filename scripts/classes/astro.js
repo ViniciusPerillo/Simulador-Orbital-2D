@@ -62,7 +62,7 @@ export class Astro{
      */
     setTangencialAcceleration(){
         this.setTangencialAccelerationVector = new Vector(
-            Math.sin(Math.abs(this.getAccelerationVector.getAngle - this.getCentripetalAccelerationVector.getAngle))*this.movementType(),
+            Math.sin(Math.abs(this.getAccelerationVector.getAngle - this.getCentripetalAccelerationVector.getAngle))*this.movementType()*this.getAccelerationVector.getModule,
             this.getVelocityVector.getAngle
         )
     }
@@ -85,7 +85,7 @@ export class Astro{
     }
 
     movementType(){
-        return signal(this.getCentripetalAccelerationVector.getAngle - this.getAccelerationVector.getAngle);
+        return signal(this.getCentripetalAccelerationVector.getAngle - this.getAccelerationVector.getAngle)*this.orbitDirection();
     }
 
     /**
