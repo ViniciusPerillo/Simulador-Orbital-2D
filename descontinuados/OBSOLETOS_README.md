@@ -1,0 +1,2 @@
+# Descontinuados
+## Esta pasta contém arquivos criados durante a confecção do projeto mas que, por alguma mudança de planos, não foram utilizados, mas possuem valor devido ao conhecimento adquirido durante a criação.

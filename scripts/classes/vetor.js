@@ -2,7 +2,7 @@
  * @description Classe cria um objeto Astro para o Simulador 2D
  * @author Vinicius Gonçalves Perillo --> https://github.com/ViniciusPerillo
  */
-export class Vetor{
+export class Vector{
     /**
      * @description Cria a instância de Vetor
      * @param {number} module 
@@ -15,15 +15,15 @@ export class Vetor{
     
     /**
      * @description Realiza uma soma vetorial 
-     * @param {Vetor []} vectors 
+     * @param {Vector []} vectors 
      */
     static vectorSum(vectors){
         let sumVectors = {x: 0, y: 0}
-        for(let i in vectors){
-            sumVectors.x += vectors[i].getVectorXModule;
-            sumVectors.y += vectors[i].getVectorYModule;
+        for(let vector in vectors){
+            sumVectors.x += vectors[vector].getXaxisProjectionModule;
+            sumVectors.y += vectors[vector].getYaxisProjectionModule;
         }
-        return new Vetor(Math.hypot(sumVectors.x,sumVectors.y), Math.atan2(sumVectors.y,sumVectors.x));
+        return new Vector(Math.hypot(sumVectors.x,sumVectors.y), Math.atan2(sumVectors.y,sumVectors.x));
     }
 
     /**
@@ -52,15 +52,15 @@ export class Vetor{
     /**
      * @description Retorna o modulo da projeção do vetor no eixo x
      */
-    get getVectorXModule(){
-        return this.module*Math.cos(angle);
+    get getXaxisProjectionModule(){
+        return this.module*Math.cos(this.angle);
     }
 
     /**
      * @description Retorna o modulo da projeção do vetor no eixo x
      */
-    get getVectorYModule(){
-        return this.module*Math.sen(angle);
+    get getYaxisProjectionModule(){
+        return this.module*Math.sin(this.angle);
     }
 
     /**
@@ -68,5 +68,9 @@ export class Vetor{
      */
     get getAngle(){
         return this.angle;
+    }
+
+    get isNull(){
+        return this.module == 0;
     }
 }

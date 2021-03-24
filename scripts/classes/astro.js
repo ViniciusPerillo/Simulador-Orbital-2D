@@ -1,4 +1,4 @@
-import {Vetor} from './vetor.js'
+import {Vector} from './vetor.js'
 /**
  * @description Classe cria um objeto Astro para o Simulador 2D
  * @author Vinicius Gonçalves Perillo --> https://github.com/ViniciusPerillo
@@ -6,18 +6,20 @@ import {Vetor} from './vetor.js'
 export class Astro{
     /**
      * @description Cria uma instância de Astro
-     * @param {number} x Km
-     * @param {number} y Km
-     * @param {0|1} type 
+     * @param {number} x m
+     * @param {number} y m
+     * @param {-1|0|1} type 
      * @param {number} mass Kg
-     * @param {Vetor} initialVelocity velocidade inicial do astro
+     * @param {Vector} initialVelocity velocidade inicial do astro
      */
-    constructor(x, y, type, mass, initialVelocity){
+    constructor(x, y, type, mass, initialVelocity, density = 0){
         this.setX = x;
         this.setY = y;
         this.setType = type;
+        if(type==-1) this.setDensity = density;
         this.setMass = mass;
         this.setVelocityVector = initialVelocity;
+        
     }
 
     setPosition(x,y){
@@ -25,9 +27,70 @@ export class Astro{
         this.setY = y;
     }
 
+    applyPhysics(time){
+        if(this.getVelocityVector.isNull){
+            this.getVelocityVector.setAngle = this.getAccelerationVector.getAngle;
+            this.setCentripetalAccelerationVector = new Vector(0,0);
+            this.setTangencialAccelerationVector = this.getAccelerationVector;
+        }else{
+            this.setCentripetalAcceleration();
+            this.setTangencialAcceleration();
+        }
+        this.setPosition(
+            positionTimeEquation(this.getX, this.velocityVector.getXaxisProjectionModule, this.getTangencialAccelerationVector.getXaxisProjectionModule, time),
+            positionTimeEquation(this.getY, this.velocityVector.getYaxisProjectionModule, this.getTangencialAccelerationVector.getYaxisProjectionModule, time)
+        )
+        this.attVelocityVector(time);
+    }
+   
+    
+    
+
+    /**
+     * @description  
+     * @private
+     */
+    setCentripetalAcceleration(){
+        let angle = this.getVelocityVector.getAngle + Math.PI/2*this.orbitDirection();
+        let module = Math.cos(Math.abs(this.getAccelerationVector.getAngle - angle))*this.getAccelerationVector.getModule
+        this.setCentripetalAccelerationVector = new Vector(module, angle);
+    }
+    
+    /**
+     * @description  
+     * @private
+     */
+    setTangencialAcceleration(){
+        this.setTangencialAccelerationVector = new Vector(
+            Math.sin(Math.abs(this.getAccelerationVector.getAngle - this.getCentripetalAccelerationVector.getAngle))*this.movementType()*this.getAccelerationVector.getModule,
+            this.getVelocityVector.getAngle
+        )
+    }
+    
+    /**
+     * @description  
+     * @private
+     */
+    attVelocityVector(time){  
+        let angle = this.getVelocityVector.getAngle;
+        if(!this.getVelocityVector.isNull){
+            angle += (time * this.getCentripetalAccelerationVector.getModule / this.getVelocityVector.getModule)*this.orbitDirection();
+        }
+        let module = velocityTimeEquation(this.getVelocityVector.getModule, this.getTangencialAccelerationVector.getModule, time);
+        this.setVelocityVector = new Vector(module,angle);
+    }
+
+    orbitDirection(){
+        return signal(Math.sin(this.getAccelerationVector.getAngle - this.getVelocityVector.getAngle));
+    }
+
+    movementType(){
+        return signal(this.getCentripetalAccelerationVector.getAngle - this.getAccelerationVector.getAngle)*this.orbitDirection();
+    }
+
     /**
      * @description Define a posição do astro no eixo x
-     * @param {number} x Km
+     * @param {number} x m
      */
     set setX(x){
         this.x = x;
@@ -35,7 +98,7 @@ export class Astro{
 
     /**
      * @description Define a posição do astro no eixo y
-     * @param {number} y Km
+     * @param {number} y m
      */
     set setY(y){
         this.y = y;
@@ -43,18 +106,29 @@ export class Astro{
 
     /**
      * @description Define o tipo de astro( Joviano = 0, Telúrico = 1) e sua densidade baseada nisso. Fonte: http://astroweb.iag.usp.br/~dalpino/AGA215/NOTAS-DE-AULA/SSolar-Bete.pdf
-     * @param {0|1} tipo
+     * @param {0|1} type
      */
-    set setType(tipo){
-        switch(tipo){
+    set setType(type){
+        switch(type){
             case 0: 
                 this.density = 1000;
                 break;
             case 1: 
                 this.density = 5000;
                 break;
+            default:
+                break;
         }
-        this.type = tipo;
+        this.type = type;
+    }
+
+    /**
+     * @description Define a densidade do astro.
+     * @param {number} density
+     */
+    set setDensity(density){
+        this.setType = -1;
+        this.density = density;
     }
 
     /**
@@ -63,29 +137,29 @@ export class Astro{
      */
     set setMass(mass){
         this.mass = mass;
-        this.radius = Math.pow((3*this.mass)/(4*Math.PI*this.density),1/3)/1000;
+        this.radius = Math.pow((3*this.mass)/(4*Math.PI*this.density),1/3);
     }
 
     /**
      * @description Define o vetor aceleração do astro
-     * @param {Vetor} acceleration
+     * @param {Vector} acceleration
      */
     set setAccelerationVector(acceleration){
         this.accelerationVector = acceleration;
     }
 
     /**
-     * @description define o vetor aceleração centrípeta  
-     * @param {Vetor} centripetalA
+     * @description define o vetor aceleração centrípeta
+     * @param {Vector} centripetalA
      * @private
      */
-    set setCentripetalAccelerationVector(centripetalA){
+     set setCentripetalAccelerationVector(centripetalA){
         this.centripetalAccelerationVector = centripetalA;
     }
 
     /**
      * @description define o vetor aceleração tangencial
-     * @param {Vetor} tangencialA
+     * @param {Vector} tangencialA
      * @private
      */
     set setTangencialAccelerationVector(tangencialA){
@@ -93,8 +167,8 @@ export class Astro{
     }
 
     /**
-     * @description define o vetor velocidade
-     * @param {Vetor} velocity
+     * @description define o Vector velocidade
+     * @param {Vector} velocity
      */
     set setVelocityVector(velocity){
         this.velocityVector = velocity;
@@ -147,6 +221,8 @@ export class Astro{
      */
     get getNameOfType(){
         switch(this.type){
+            case -1:
+                return 'Custom'
             case 0:
                 return 'Joviano'
             case 1:
@@ -155,7 +231,7 @@ export class Astro{
     }
 
     /**
-     * @description retorna o vetor da aceleração resultante atuando no astro
+     * @description retorna o Vector da aceleração resultante atuando no astro
      */
     get getAccelerationVector(){
         return this.accelerationVector;
@@ -172,7 +248,7 @@ export class Astro{
      * @description retorna o vetor da aceleração tangencial atuando no astro
      */
     get getTangencialAccelerationVector(){
-        return this.getTangencialAccelerationVector;
+        return this.tangencialAccelerationVector;
     }
 
     /**
@@ -181,4 +257,27 @@ export class Astro{
     get getVelocityVector(){
         return this.velocityVector;
     }
+
+    /**
+     * @description retorna o vetor do momento linear do astro
+     */
+    get getLinearMomentumVector(){
+        return new Vector(this.getVelocityVector.getModule*this.getMass, this.getVelocityVector.getAngle);
+    }
+}
+
+function signal(targetNumber){
+    if(targetNumber != 0){
+        return targetNumber/Math.abs(targetNumber);
+    }else{
+        return 0;
+    }
+}
+
+function positionTimeEquation(s0, v0, a, t){
+    return s0 + v0*t + a*Math.pow(t,2)/2;
+}
+
+function velocityTimeEquation(v0, a, t){
+    return v0 + a*t;
 }
