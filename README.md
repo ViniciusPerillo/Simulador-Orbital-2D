@@ -17,18 +17,19 @@
  ### Features
   - #### Interface
    - [x] Header e lugar escalas
-   - [ ] Arrastar e zoom
+   - [x] Arrastar e zoom
    - [ ] Criação de astros
    - [ ] Seleção e exclusão de astros
    - [ ] Rastro do astro
    - [ ] Box com dados do astro selecionado
   - #### Simulador
-   - [x] Vetores
-   - [ ] Formulas 
+   - [x] Vetores 
    - [x] Astro
-   - [ ] Aplicação da Gravitação Universal
+   - [x] Aplicação da Gravitação Universal
+   - [x] Colisões
  ***
- ### Pré-requisitos
+ ### Como usar
+  #### Simulador pronto, ainda sem interface para o usuário fazer o que quiser, entretanto ao segurar espaço é possível ver os astros interagindo.
   #### 🚧 Em contrução... 🚧
  ***
  ### Autor
