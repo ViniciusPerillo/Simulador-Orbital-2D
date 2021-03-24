@@ -84,7 +84,7 @@
     function keyboardListeners(event){
         if(event.code == 'Space'){
             for(let astro in astros.object){
-                astros.object[astro].applyPhysics(6*60*60);
+                astros.object[astro].applyPhysics(30*60);
             }
         }
         inelasticCollision();
@@ -94,8 +94,9 @@
 
 //Funções
     function run(){
-        createAstro(applySpaceScale(100,1), applySpaceScale(-400,1), 1, 6e+24, new Vector(0,0));
+        createAstro(applySpaceScale(100,1), applySpaceScale(-400,1), 1, 6e+25, new Vector(2500,Math.PI/2));
         createAstro(applySpaceScale(484.4,1), applySpaceScale(-400,1), 1, 7.36e+22, new Vector(1000,Math.PI), 0, 'imagens/teste.jpg');
+        createAstro(applySpaceScale(-284.4,1), applySpaceScale(-400,1), 1, 7.36e+26, new Vector(500,Math.PI), 0, 'imagens/teste.jpg');
         attSpaceScaleHTMLElement();
         attAccelerationsVectors();
     }
@@ -111,31 +112,14 @@
     }
 
     function inelasticCollision(){
-        let collidingBodies = [];
-        for(let astro in astros.object){
-            if(isColliding(astro)){
-                collidingBodies.push(Number(astro))
+        for(let targetAstro in astros.object){
+            for(let astro in astros.object){
+                if(astro != targetAstro && isCollidingWith(astro, targetAstro)){
+                    applyCollision(targetAstro, astro);
+                    inelasticCollision();
+                }  
             }
         }
-        if(collidingBodies.length < 3 && collidingBodies.length >0){
-            applyCollision(collidingBodies);
-        }else{
-            let collidingGroups = [];
-            for(let body in collidingBodies){
-                
-            }
-        }
-    }
-
-    function isColliding(targetAstro){
-        for(let astro in astros.object){
-            if(astro != targetAstro){
-                if(isCollidingWith(astro,targetAstro)){
-                return true;
-                }
-            }  
-        }
-        return false;
     }
 
     function isCollidingWith(astro1, astro2){
@@ -144,28 +128,16 @@
         return distanceBetweenThem < sumOfRadiuses;
     }
 
-    function applyCollision(collidingBodies){
-        let x = 0;
-        let y = 0;
-        let mass = 0;
-        let volume = 0;
-        let momentumVectors = [];
-        let velocityVector;
-        for(let body in collidingBodies){
-            x += astros.object[body].getX*astros.object[body].getMass;
-            y += astros.object[body].getY*astros.object[body].getMass;
-            mass += astros.object[body].getMass;
-            volume += Math.PI*4*Math.pow(astros.object[body].getRadius,3)/3;
-            momentumVectors.push(astros.object[body].getLinearMomentum);
-        }
-        for(let body in collidingBodies){
-            deleteAstro(collidingBodies.length-body-1);
-        }
-        velocityVector = Vector.vectorSum(momentumVectors);
-        x /= mass;
-        y /= mass;
-        velocityVector.setModule = velocityVector.getModule/mass;
-        createAstro(x, y, -1, mass, velocityVector, mass/volume, 'imagens/teste.jpg');
+    function applyCollision(astro1, astro2){
+        let mass = astros.object[astro1].getMass + astros.object[astro2].getMass
+        let x = (astros.object[astro1].getX*astros.object[astro1].getMass + astros.object[astro2].getX*astros.object[astro2].getMass) / mass
+        let y = (astros.object[astro1].getY*astros.object[astro1].getMass + astros.object[astro2].getY*astros.object[astro2].getMass) / mass
+        let volume = (Math.PI*4*Math.pow(astros.object[astro1].getRadius,3) + Math.PI*4*Math.pow(astros.object[astro2].getRadius,3)) / 3;
+        let velocityVector = Vector.vectorSum([astros.object[astro1].getLinearMomentumVector,astros.object[astro2].getLinearMomentumVector]);
+        velocityVector.setModule = velocityVector.getModule / mass;
+        deleteAstro(astro2);
+        deleteAstro(astro1);
+        createAstro(x, y, -1, mass, velocityVector, mass / volume, 'imagens/teste.jpg');
     }
 
     function attSpaceScaleHTMLElement(){
@@ -231,4 +203,3 @@
         mousePosition.x = event.x;
         mousePosition.y = event.y;
     }
-

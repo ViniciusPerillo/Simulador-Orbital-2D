@@ -261,7 +261,7 @@ export class Astro{
     /**
      * @description retorna o vetor do momento linear do astro
      */
-    get getLinearMomentum(){
+    get getLinearMomentumVector(){
         return new Vector(this.getVelocityVector.getModule*this.getMass, this.getVelocityVector.getAngle);
     }
 }
