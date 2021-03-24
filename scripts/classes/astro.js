@@ -8,16 +8,18 @@ export class Astro{
      * @description Cria uma instância de Astro
      * @param {number} x m
      * @param {number} y m
-     * @param {0|1} type 
+     * @param {-1|0|1} type 
      * @param {number} mass Kg
      * @param {Vector} initialVelocity velocidade inicial do astro
      */
-    constructor(x, y, type, mass, initialVelocity){
+    constructor(x, y, type, mass, initialVelocity, density = 0){
         this.setX = x;
         this.setY = y;
         this.setType = type;
+        if(type==-1) this.setDensity = density;
         this.setMass = mass;
         this.setVelocityVector = initialVelocity;
+        
     }
 
     setPosition(x,y){
@@ -30,7 +32,6 @@ export class Astro{
             this.getVelocityVector.setAngle = this.getAccelerationVector.getAngle;
             this.setCentripetalAccelerationVector = new Vector(0,0);
             this.setTangencialAccelerationVector = this.getAccelerationVector;
-            console.log('opa');
         }else{
             this.setCentripetalAcceleration();
             this.setTangencialAcceleration();
@@ -53,7 +54,6 @@ export class Astro{
         let angle = this.getVelocityVector.getAngle + Math.PI/2*this.orbitDirection();
         let module = Math.cos(Math.abs(this.getAccelerationVector.getAngle - angle))*this.getAccelerationVector.getModule
         this.setCentripetalAccelerationVector = new Vector(module, angle);
-        console.log(this.orbitDirection());
     }
     
     /**
@@ -106,18 +106,29 @@ export class Astro{
 
     /**
      * @description Define o tipo de astro( Joviano = 0, Telúrico = 1) e sua densidade baseada nisso. Fonte: http://astroweb.iag.usp.br/~dalpino/AGA215/NOTAS-DE-AULA/SSolar-Bete.pdf
-     * @param {0|1} tipo
+     * @param {0|1} type
      */
-    set setType(tipo){
-        switch(tipo){
+    set setType(type){
+        switch(type){
             case 0: 
                 this.density = 1000;
                 break;
             case 1: 
                 this.density = 5000;
                 break;
+            default:
+                break;
         }
-        this.type = tipo;
+        this.type = type;
+    }
+
+    /**
+     * @description Define a densidade do astro.
+     * @param {number} density
+     */
+    set setDensity(density){
+        this.setType = -1;
+        this.density = density;
     }
 
     /**
@@ -210,6 +221,8 @@ export class Astro{
      */
     get getNameOfType(){
         switch(this.type){
+            case -1:
+                return 'Custom'
             case 0:
                 return 'Joviano'
             case 1:
@@ -243,6 +256,13 @@ export class Astro{
      */
     get getVelocityVector(){
         return this.velocityVector;
+    }
+
+    /**
+     * @description retorna o vetor do momento linear do astro
+     */
+    get getLinearMomentum(){
+        return new Vector(this.getVelocityVector.getModule*this.getMass, this.getVelocityVector.getAngle);
     }
 }
 

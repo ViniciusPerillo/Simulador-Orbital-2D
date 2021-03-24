@@ -84,29 +84,18 @@
     function keyboardListeners(event){
         if(event.code == 'Space'){
             for(let astro in astros.object){
-                //console.log(astros.object[astro].getAccelerationVector);
-                //console.log(astros.object[astro].getVelocityVector);
-                //console.log(astros.object[astro].getCentripetalAccelerationVector);
-                astros.object[astro].applyPhysics(60*60);
-                //console.log(astros.object[astro].getTangencialAccelerationVector);
-                //console.log(astros.object[astro].getVelocityVector);
-                //console.log('--------------------------------------------------------------')
+                astros.object[astro].applyPhysics(6*60*60);
             }
         }
-        console.log('====================================================================')
+        inelasticCollision();
         attAstrosFigure();
         attAccelerationsVectors();
     }
 
 //Funções
     function run(){
-        astros.object.push(new Astro(applySpaceScale(100,1),applySpaceScale(-400,1),1,6e+24,new Vector(0,0)));
-        astros.object.push(new Astro(applySpaceScale(484.4,1),applySpaceScale(-400,1),1,7.36e+22,new Vector(1000,3*Math.PI/2)));
-        astros.figure.push(new Figure(0,0,0));
-        astros.figure.push(new Figure(0,0,0,0,'imagens/teste.jpg'));
-        astros.figure[0].getFigure.classList.add('astro');
-        astros.figure[1].getFigure.classList.add('astro');
-        attAstrosFigure();
+        createAstro(applySpaceScale(100,1), applySpaceScale(-400,1), 1, 6e+24, new Vector(0,0));
+        createAstro(applySpaceScale(484.4,1), applySpaceScale(-400,1), 1, 7.36e+22, new Vector(1000,Math.PI), 0, 'imagens/teste.jpg');
         attSpaceScaleHTMLElement();
         attAccelerationsVectors();
     }
@@ -119,6 +108,64 @@
                 Math.round(applySpaceScale((astros.object[astro].getY+astros.object[astro].getRadius)*-1,-1))
             )
         }
+    }
+
+    function inelasticCollision(){
+        let collidingBodies = [];
+        for(let astro in astros.object){
+            if(isColliding(astro)){
+                collidingBodies.push(Number(astro))
+            }
+        }
+        if(collidingBodies.length < 3 && collidingBodies.length >0){
+            applyCollision(collidingBodies);
+        }else{
+            let collidingGroups = [];
+            for(let body in collidingBodies){
+                
+            }
+        }
+    }
+
+    function isColliding(targetAstro){
+        for(let astro in astros.object){
+            if(astro != targetAstro){
+                if(isCollidingWith(astro,targetAstro)){
+                return true;
+                }
+            }  
+        }
+        return false;
+    }
+
+    function isCollidingWith(astro1, astro2){
+        let distanceBetweenThem = Math.hypot(astros.object[astro1].getX - astros.object[astro2].getX, astros.object[astro1].getY - astros.object[astro1].getY);
+        let sumOfRadiuses = astros.object[astro1].getRadius + astros.object[astro2].getRadius;
+        return distanceBetweenThem < sumOfRadiuses;
+    }
+
+    function applyCollision(collidingBodies){
+        let x = 0;
+        let y = 0;
+        let mass = 0;
+        let volume = 0;
+        let momentumVectors = [];
+        let velocityVector;
+        for(let body in collidingBodies){
+            x += astros.object[body].getX*astros.object[body].getMass;
+            y += astros.object[body].getY*astros.object[body].getMass;
+            mass += astros.object[body].getMass;
+            volume += Math.PI*4*Math.pow(astros.object[body].getRadius,3)/3;
+            momentumVectors.push(astros.object[body].getLinearMomentum);
+        }
+        for(let body in collidingBodies){
+            deleteAstro(collidingBodies.length-body-1);
+        }
+        velocityVector = Vector.vectorSum(momentumVectors);
+        x /= mass;
+        y /= mass;
+        velocityVector.setModule = velocityVector.getModule/mass;
+        createAstro(x, y, -1, mass, velocityVector, mass/volume, 'imagens/teste.jpg');
     }
 
     function attSpaceScaleHTMLElement(){
@@ -149,6 +196,19 @@
             }
         }
         return accelerationsActingOnTheAstro;
+    }
+
+    function createAstro(x, y, type, mass, initialVelocity, density = 0,imgPath = ''){
+        astros.object.push(new Astro(x, y, type, mass, initialVelocity, density))
+        let newAstroIndex = astros.figure.push(new Figure(0,0,0,0,imgPath)) - 1
+        astros.figure[newAstroIndex].getFigure.classList.add('astro');
+        attAstrosFigure();
+    }
+
+    function deleteAstro(astroIndex){
+        astros.object.splice(astroIndex,1);
+        document.body.removeChild(astros.figure[astroIndex].getFigure)
+        astros.figure.splice(astroIndex,1);
     }
 
     
