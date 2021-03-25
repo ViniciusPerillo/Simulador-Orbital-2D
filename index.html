@@ -8,11 +8,32 @@
     <link rel="stylesheet" href="styles/style.css">
 </head>
 <body>
-    <header>
+    <header class="flexRow">
         <div id="spaceScale" class= "headerDiv">escala de espaço</div>
         <div class= "headerDiv"><h1>logo</h1></div>
         <div id="timeScale" class= "headerDiv" >escala de tempo</div>
     </header>
+    <article id="simulator"></article>
+    <article id="options" class="flexRow">
+        <div id="options" class="flexColumn">
+            <h1>Configurações</h1>
+            <div class="flexRow">
+                <label id="precisionMode" for="precisionMode" class="flexRow">
+                    <input type="checkbox" id="precisionMode"> Modo de Precisão
+                </label>
+                <select id="units">
+                    <option value="second">Segundos</option>
+                    <option value="minute">Minutos</option>
+                    <option value="hour">Horas</option>
+                    <option value="day">Dias</option>
+                </select>            
+            </div>
+            <p id="precisionModeWarning">O modo de precisão pode sobrecarregar seu navegador se a unidade da escala de tempo for muito maior que a unidade de precisão</p>
+            <div>
+                
+            </div>
+        </div>
+    </article>
     <script src="scripts/interface.js" type="module"></script>
 </body>
 </html>

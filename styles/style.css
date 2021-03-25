@@ -4,32 +4,25 @@ body{
     background-color: rgb(25, 25, 25);
     margin: 0px;
     overflow: hidden;
+    font-family: 'Montserrat', sans-serif;
+    text-shadow: 1px 1px 1px rgba(0,0,0,.4);
+    color: rgb(255,255,255);
 }
 
-header{
+header.flexRow{
     position: relative;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    
     top: 0px;
     height: 10vh;
     margin: 0px;
     background-color: rgb(89, 74, 102);
     border-bottom: solid rgb(60, 50, 68) .4vh;
     box-shadow: rgb(0, 0, 0) 2px 1px 2px;
-    
-    font-family: 'Montserrat', sans-serif;
-    color: rgb(255,255,255);
-
 }
 
 .headerDiv{
     position: relative;
     display: block;
-    width: 20vh;
+    width: 30vh;
     margin: 0px 20px 0px 20px;
 }
 
@@ -46,3 +39,65 @@ figure{
     z-index: -1000000;
 }
 
+.flexRow{
+    display: flex;
+    position: absolute;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.flexColumn{
+    display: flex;
+    position: absolute;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+article#options{
+    top: 0;
+    background-color: rgba(0,0,0,.7);
+    width: 100%;
+    height: 100%;
+}
+
+div.flexRow{
+    position: relative;
+}
+
+div#options{
+    background-color: rgb(89, 74, 102);
+    border-radius: 20px;
+    border: solid rgb(60, 50, 68) .4vh;
+    padding: 0vh 3vh 3vh 3vh;
+    width: 41vh;
+}
+
+label#precisionMode{
+    margin: 0 25px 0 5px;
+    position: relative;
+}
+
+input#precisionMode{
+    width: 20px;
+    height: 20px;
+}
+
+select{
+    font-family: 'Montserrat', sans-serif;
+    background-color: rgb(129, 114, 142);
+    font-weight: 500;
+    color: whitesmoke;
+    text-shadow: 1px 1px 2px rgba(0,0,0,.4);
+}
+
+#precisionModeWarning{
+    display: none;
+    font-size: 0.7em;
+    word-wrap: normal;
+    font-weight: 900;
+    color: rgb(255, 0, 0);
+}
