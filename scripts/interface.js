@@ -4,6 +4,7 @@ import {Astro} from './classes/astro.js';
 import {Vector} from './classes/vetor.js';
 
 //Variáveis 
+/*Simulador*/
 let astros = {
     figure: [],
     object: [],
@@ -14,35 +15,38 @@ let timeScale = {
     'selectedUnitIndex': 0,
     'multiplier': 1
 }
+let isSimulating = false;
 
-let precisionUnit;
-
+/*Interface*/
 let spaceScaleHTMLElement = document.querySelector('div#spaceScale');
 let timeScaleHTMLElement = document.querySelector('div#timeScale');
 let optionsMenu = document.querySelector('article#options')
-let precisionModeCheckbox = document.querySelector('input#precisionMode')
-let precisionUnitsSelect = document.getElementById("units");
-
 let mousePosition = {
     x: null,
     y: null,
 }
 let isDraggable = false;
 let isOptionOpen = false;
-let isSimulating;
+
+/*PrecisionMode*/
+let precisionUnit;
+let precisionModeCheckbox = document.querySelector('input#precisionMode')
+let precisionUnitsHTMLSelect = document.getElementById("units");
 let isPrecisionMode = false;
 
+/*Keyboar booleans*/
 let isTPressed = false;
 
 //DOM Events
 document.addEventListener('DOMContentLoaded', run);  
 document.addEventListener('mousedown', (event)=>{if(!isOptionOpen)unlockDrag(event)});
-document.addEventListener('mousemove', (event)=>{drag(event)});
+document.addEventListener('mousemove', (event)=>{if(isDraggable)drag(event)});
 document.addEventListener('mouseup', lockDrag);
 document.addEventListener('wheel', (event)=>{if(!isOptionOpen)zoom(event)});
 document.addEventListener('keydown', (event)=>{keyDownListeners(event)});
-document.addEventListener('keyup',(event)=>{keyUpListeners(event)})
+document.addEventListener('keyup',(event)=>{keyUpListeners(event)});
 precisionModeCheckbox.addEventListener('change', precisionMode);
+precisionUnitsHTMLSelect.addEventListener('change', attPrecisionUnit);
 
 //Listeners
 /**
@@ -66,7 +70,6 @@ function lockDrag(){
  * @param {MouseEvent} event 
  */
 function drag(event){
-    if(isDraggable){
         let deltaX = event.x - mousePosition.x;
         let deltaY = event.y - mousePosition.y;
         for(let astro in astros.object){
@@ -77,7 +80,6 @@ function drag(event){
         }
         attAstrosFigure();
         setMousePosition(event);
-    }
 }
 
 /**
@@ -100,15 +102,18 @@ function zoom(event){
 }
 
 function keyDownListeners(event){
-    if(event.code == 'Space'){
-        
+    if(event.code == 'Space' && !isOptionOpen){
+        isSimulating = !isSimulating;
+        simulate();
     }else if(event.code == 'Escape'){
         isOptionOpen = !isOptionOpen;
-        options();
-    }else if(event.code == 'KeyT'){
+        isSimulating = false;
+        toggleOptions();
+    }else if(event.code == 'KeyT' && !isOptionOpen){
         isTPressed = true;
+    }else if(isTPressed){
+        changeTimeScale(event)
     }
-    changeTimeScale(event)
 }
 
 function keyUpListeners(event){
@@ -117,12 +122,8 @@ function keyUpListeners(event){
     }
 }
 
-function options(){
-    if(isOptionOpen){
-        optionsMenu.style.display = 'flex'
-    }else{
-        optionsMenu.style.display = 'none'
-    }
+function toggleOptions(){
+    optionsMenu.style.display = isOptionOpen ? 'flex' : 'none'
 }
 
 function changeTimeScale(event){
@@ -161,33 +162,31 @@ function changeTimeScale(event){
 
 function precisionMode(){
     isPrecisionMode = precisionModeCheckbox.checked;
-    if(precisionModeCheckbox.checked == true){
-        document.querySelector('p#precisionModeWarning').style.display = 'block';
-        precisionUnit = convertIndextoTimeScale(Number(precisionUnitsSelect.options[precisionUnitsSelect.selectedIndex].value));
-        console.log(precisionUnit);
-    }else{
-        document.querySelector('p#precisionModeWarning').style.display = 'none';
-    }
+    document.querySelector('p#precisionModeWarning').style.display = isPrecisionMode ? 'flex' : 'none' ;
+}
+
+function attPrecisionUnit(){
+    precisionUnit = convertIndextoTimeScale(precisionUnitsHTMLSelect.selectedIndex);
 }
 
 //Funções
 function run(){
     createAstro(applySpaceScale(100,1), applySpaceScale(-400,1), 1, 6e+25, new Vector(2500,Math.PI/2));
-    createAstro(applySpaceScale(484.4,1), applySpaceScale(-400,1), 1, 7.36e+22, new Vector(1000,Math.PI), 0, 'imagens/teste.jpg');
-    createAstro(applySpaceScale(-284.4,1), applySpaceScale(-400,1), 1, 7.36e+26, new Vector(500,Math.PI), 0, 'imagens/teste.jpg');
+    createAstro(applySpaceScale(484.4,1), applySpaceScale(-400,1), 1, 7.36e+22, new Vector(1000,Math.PI),);
+    createAstro(applySpaceScale(-284.4,1), applySpaceScale(-400,1), 0, 7.36e+26, new Vector(500,Math.PI), 0, 'imagens/teste.jpg');
     attSpaceScaleHTMLElement();
     attTimeScaleHTMLElement()
     attAccelerationsVectors();
-    
 }
 
-function simulation(){
+function simulate(){
     for(let astro in astros.object){
-        astros.object[astro].applyPhysics(timeScale);
+        astros.object[astro].applyPhysics(isPrecisionMode ? precisionUnit : timeScale.timeScale/30);
     }
     inelasticCollision();
     attAstrosFigure();
     attAccelerationsVectors();
+    if(isSimulating) setTimeout(simulate, (isPrecisionMode ? precisionUnit*1000/timeScale.timeScale : 1000/30));
 }
 
 function attAstrosFigure(){
@@ -241,7 +240,7 @@ function attTimeScaleHTMLElement(){
     let timeUnits = ['segundo','minuto','hora','dia','ano'];
     timeScaleHTMLElement.innerHTML = `1 seg : ${
         timeScale.multiplier < 1 ? '1'.sup() + '/' + (Math.pow(2,(Math.log2(timeScale.multiplier)*-1))).toString().sub() : timeScale.multiplier
-    } ${timeScale.multiplier<0.5? ' de ' : '' }${timeUnits[timeScale.selectedUnitIndex]}${timeScale.multiplier>1 ? 's' : ''}`
+    } ${timeScale.multiplier<0.5 ? ' de ' : '' }${timeUnits[timeScale.selectedUnitIndex]}${timeScale.multiplier>1 ? 's' : ''}`
 }
 
 function attAccelerationsVectors(){
