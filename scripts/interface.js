@@ -171,9 +171,9 @@ function attPrecisionUnit(){
 
 //Funções
 function run(){
-    createAstro(applySpaceScale(100,1), applySpaceScale(-400,1), 1, 6e+25, new Vector(2500,Math.PI/2));
-    createAstro(applySpaceScale(484.4,1), applySpaceScale(-400,1), 1, 7.36e+22, new Vector(1000,Math.PI),);
-    createAstro(applySpaceScale(-284.4,1), applySpaceScale(-400,1), 0, 7.36e+26, new Vector(500,Math.PI), 0, 'imagens/teste.jpg');
+    createAstro(applySpaceScale(100,1), applySpaceScale(-400,1), 1, 6e+25, new Vector(2500,Math.PI/2),0,'imagens/telurico1.png');
+    createAstro(applySpaceScale(484.4,1), applySpaceScale(-400,1), 0, 7.36e+22, new Vector(1000,Math.PI),0,'imagens/joviano2.png');
+    createAstro(applySpaceScale(-284.4,1), applySpaceScale(-400,1), 0, 7.36e+26, new Vector(500,Math.PI),0,'imagens/joviano1.png');
     attSpaceScaleHTMLElement();
     attTimeScaleHTMLElement()
     attAccelerationsVectors();
@@ -225,7 +225,7 @@ function applyCollision(astro1, astro2){
     velocityVector.setModule = velocityVector.getModule / mass;
     deleteAstro(astro2);
     deleteAstro(astro1);
-    createAstro(x, y, -1, mass, velocityVector, mass / volume, 'imagens/teste.jpg');
+    createAstro(x, y, -1, mass, velocityVector, mass / volume, 'imagens/custom1.png');
 }
 
 function attSpaceScaleHTMLElement(){
