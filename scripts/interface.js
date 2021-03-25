@@ -9,19 +9,30 @@ let astros = {
     object: [],
 }
 let spaceScale = 1e+6; // 1 px : spaceScale m 
-let timeScale = 1
-let isSimulating;
-let isPrecisionMode = false;
+let timeScale = {
+    'timeScale': 1,
+    'selectedUnitIndex': 0,
+    'multiplier': 1
+}
+
+let precisionUnit;
 
 let spaceScaleHTMLElement = document.querySelector('div#spaceScale');
+let timeScaleHTMLElement = document.querySelector('div#timeScale');
 let optionsMenu = document.querySelector('article#options')
 let precisionModeCheckbox = document.querySelector('input#precisionMode')
+let precisionUnitsSelect = document.getElementById("units");
+
 let mousePosition = {
     x: null,
     y: null,
 }
 let isDraggable = false;
-let isOptionOpen = true;
+let isOptionOpen = false;
+let isSimulating;
+let isPrecisionMode = false;
+
+let isTPressed = false;
 
 //DOM Events
 document.addEventListener('DOMContentLoaded', run);  
@@ -29,7 +40,8 @@ document.addEventListener('mousedown', (event)=>{if(!isOptionOpen)unlockDrag(eve
 document.addEventListener('mousemove', (event)=>{drag(event)});
 document.addEventListener('mouseup', lockDrag);
 document.addEventListener('wheel', (event)=>{if(!isOptionOpen)zoom(event)});
-document.addEventListener('keydown', (event)=>{keyboardListeners(event)});
+document.addEventListener('keydown', (event)=>{keyDownListeners(event)});
+document.addEventListener('keyup',(event)=>{keyUpListeners(event)})
 precisionModeCheckbox.addEventListener('change', precisionMode);
 
 //Listeners
@@ -87,20 +99,72 @@ function zoom(event){
     attSpaceScaleHTMLElement();
 }
 
-function keyboardListeners(event){
+function keyDownListeners(event){
     if(event.code == 'Space'){
         
     }else if(event.code == 'Escape'){
         isOptionOpen = !isOptionOpen;
         options();
+    }else if(event.code == 'KeyT'){
+        isTPressed = true;
     }
-    
+    changeTimeScale(event)
+}
+
+function keyUpListeners(event){
+    if(event.code == 'KeyT'){
+        isTPressed = false;
+    }
+}
+
+function options(){
+    if(isOptionOpen){
+        optionsMenu.style.display = 'flex'
+    }else{
+        optionsMenu.style.display = 'none'
+    }
+}
+
+function changeTimeScale(event){
+    if(event.code == 'ArrowUp'){
+        if(timeScale.multiplier<60 && timeScale.multiplier>=1){
+            timeScale.multiplier++;
+        }else if(timeScale.multiplier<1){
+            timeScale.multiplier = Math.pow(Math.pow(timeScale.multiplier,-1)/2,-1)
+        }else{
+            timeScale.multiplier = 1;
+        }
+    }else if(event.code == 'ArrowDown'){
+        if(timeScale.multiplier>1){
+            timeScale.multiplier--;
+        }else if(timeScale.multiplier<=1 && timeScale.multiplier > 1/8){
+            timeScale.multiplier = Math.pow(Math.pow(timeScale.multiplier,-1)*2,-1)
+        }else{
+            timeScale.multiplier = 60;
+        }
+    }else if(event.code == 'ArrowRight'){
+        if(timeScale.selectedUnitIndex >= 4){
+            timeScale.selectedUnitIndex = 0;
+        }else{
+            timeScale.selectedUnitIndex++;
+        }
+    }else if(event.code == 'ArrowLeft'){
+        if(timeScale.selectedUnitIndex <= 0){
+            timeScale.selectedUnitIndex = 4;
+        }else{
+            timeScale.selectedUnitIndex--;
+        }
+    }
+    timeScale.timeScale = timeScale.multiplier*convertIndextoTimeScale(timeScale.selectedUnitIndex);
+    attTimeScaleHTMLElement();
 }
 
 function precisionMode(){
-    console.log('opa')
+    isPrecisionMode = precisionModeCheckbox.checked;
     if(precisionModeCheckbox.checked == true){
         document.querySelector('p#precisionModeWarning').style.display = 'block';
+        precisionUnit = convertIndextoTimeScale(Number(precisionUnitsSelect.options[precisionUnitsSelect.selectedIndex].value));
+        console.log(precisionUnit);
     }else{
         document.querySelector('p#precisionModeWarning').style.display = 'none';
     }
@@ -112,6 +176,7 @@ function run(){
     createAstro(applySpaceScale(484.4,1), applySpaceScale(-400,1), 1, 7.36e+22, new Vector(1000,Math.PI), 0, 'imagens/teste.jpg');
     createAstro(applySpaceScale(-284.4,1), applySpaceScale(-400,1), 1, 7.36e+26, new Vector(500,Math.PI), 0, 'imagens/teste.jpg');
     attSpaceScaleHTMLElement();
+    attTimeScaleHTMLElement()
     attAccelerationsVectors();
     
 }
@@ -172,6 +237,13 @@ function attSpaceScaleHTMLElement(){
     } Km`
 }
 
+function attTimeScaleHTMLElement(){
+    let timeUnits = ['segundo','minuto','hora','dia','ano'];
+    timeScaleHTMLElement.innerHTML = `1 seg : ${
+        timeScale.multiplier < 1 ? '1'.sup() + '/' + (Math.pow(2,(Math.log2(timeScale.multiplier)*-1))).toString().sub() : timeScale.multiplier
+    } ${timeScale.multiplier<0.5? ' de ' : '' }${timeUnits[timeScale.selectedUnitIndex]}${timeScale.multiplier>1 ? 's' : ''}`
+}
+
 function attAccelerationsVectors(){
     for(let astro in astros.object){
         astros.object[astro].setAccelerationVector = Vector.vectorSum(getAccelerationsActingOnTheAstro(astro));
@@ -207,13 +279,6 @@ function deleteAstro(astroIndex){
     astros.figure.splice(astroIndex,1);
 }
 
-function options(){
-    if(isOptionOpen){
-        optionsMenu.style.display = 'flex'
-    }else{
-        optionsMenu.style.display = 'none'
-    }
-}
 
 
 //Funções Auxiliares
@@ -234,4 +299,13 @@ function applySpaceScale(number, operator){
 function setMousePosition(event){
     mousePosition.x = event.x;
     mousePosition.y = event.y;
+}
+
+function convertIndextoTimeScale(unitIndex){
+    let timeUnits = [1,60,60,24,365.25]
+    let unitInSeconds = 1;
+    for(let unit = 0; unit <= unitIndex; unit++){
+        unitInSeconds *= timeUnits[unit]
+    }
+    return unitInSeconds;
 }
