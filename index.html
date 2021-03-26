@@ -12,25 +12,66 @@
         <div id="spaceScale" class= "headerDiv">escala de espaço</div>
         <div class= "headerDiv"><h1>logo</h1></div>
         <div id="timeScale" class= "headerDiv" >escala de tempo</div>
-        
     </header>
     <article>
         <div id = "addAstroButton">
-            <img src="imagens/icons/plusButton.png" alt="">
+            <img src="imagens/icons/plusButton.png" alt="Adicione novo astro">
         </div>
         <div id ="addAstroMenu" class="flexColumn">
-            
+            <h3>Novo Astro</h3>
+            <div id="elementsAstroMenu">
+                <div id="xPosition" class="flexRow">
+                    <p class="label">X:</p>
+                    <input type="number" value="0">
+                    <p>px</p>
+                </div>
+                <div id="yPosition" class="flexRow">
+                    <p class="label">Y:</p>
+                    <input type="number" value="0">
+                    <p>px</p>
+                </div>
+                <div>Massa:</div>
+                <div id="mass" class="flexRow">
+                    <input type="number"min="0" max="10" step="0.1" value="0"> 
+                    <p> × 10 <sup>^</sup> </p>
+                    <input type="number" name="" id="" min="0" max="1000" value="0" >
+                    <p>Kg</p>
+                </div>
+                <div>Tipo:</div>
+                <div id="type" class="flexRow">
+                    <select id="">
+                        <option value="">Selecione um tipo de astro</option>
+                        <option value="-1">Custom</option>
+                        <option value="0">Joviano</option>
+                        <option value="1">Telúrico</option>
+                    </select>
+                </div>
+                <div>Densidade:</div>
+                <div id="density" class="flexRow">
+                    <input type="number" value="0" disabled>
+                    <p>Kg/m³</p>
+                </div>
+                <div>Vetor Velocidade:</div>
+                <div id="velocity" class="flexRow">
+                    <input id="module" type="number" name="" id="Module" min="0" max="1000" step="0.1" value="0">
+                    <p>Km/s</p>
+                    <input id="angle" type="number" name="" id="angle" min="0" max="360" value="0">
+                    <p>°</p>
+                </div>
+            </div> 
+            <div class="flexRow">
+                <img src="imagens/icons/velocityVector.png" alt="">
+            </div>
+            <span>Adicionar</span>
         </div>
     </article>
-    
-        
-    <div id="barrier"></article>
+    <div id="barrier"></div>
     <article id="options" class="flexRow">
         <div id="options" class="flexColumn">
             <h1>Configurações</h1>
             <div class="flexRow">
                 <label id="precisionMode" for="precisionMode" class="flexRow">
-                    <input type="checkbox" id="precisionMode"> Modo de Precisão
+                    <span><img src="imagens/icons/uncheckedCheckbox.png" alt=""></span> Modo de Precisão
                 </label>
                 <select id="units">
                     <option value="0">Segundos</option>
@@ -40,9 +81,13 @@
                 </select>            
             </div>
             <p id="precisionModeWarning">O modo de precisão pode sobrecarregar seu navegador se a unidade da escala de tempo for muito maior que a unidade de precisão</p>
-            <div>
-                
-            </div>
+            <footer class="flexColumn">
+                <h4>Criado por Vinícius G Perillo</h4>
+                <div id="socialMedia" class="flexRow">
+                    <a href="https://github.com/ViniciusPerillo"><img src="imagens/icons/github.png" alt="GitHub page"></a>
+                    <a href=""><img src="imagens/icons/linkedin.png" alt="Linkedin page"></a>
+                </div>
+            </footer>
         </div>
     </article>
     <script src="scripts/interface.js" type="module"></script>

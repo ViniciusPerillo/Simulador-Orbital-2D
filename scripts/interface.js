@@ -21,19 +21,21 @@ let isSimulating = false;
 let spaceScaleHTMLElement = document.querySelector('div#spaceScale');
 let timeScaleHTMLElement = document.querySelector('div#timeScale');
 let optionsMenuHTMLElement = document.querySelector('article#options')
-let addAstroButtonHTMLElement = document.querySelector('div#addAstroButton');
-let addAstroMenuHTMLElement = document.querySelector('div#addAstroMenu');
 let mousePosition = {
     x: null,
     y: null,
 }
 let isDraggable = false;
 let isOptionOpen = false;
+
+/*Novo astro*/
+let addAstroButtonHTMLElement = document.querySelector('div#addAstroButton');
+let addAstroMenuHTMLElement = document.querySelector('div#addAstroMenu');
 let isAddAstroWindowOpened = false;
 
 /*PrecisionMode*/
 let precisionUnit;
-let precisionModeCheckbox = document.querySelector('input#precisionMode')
+let precisionModeHTMLElement = document.querySelector('label#precisionMode span img')
 let precisionUnitsHTMLSelect = document.getElementById("units");
 let isPrecisionMode = false;
 
@@ -48,7 +50,7 @@ document.addEventListener('mouseup', lockDrag);
 document.addEventListener('wheel', (event)=>{if(!isOptionOpen) zoom(event)});
 document.addEventListener('keydown', (event)=>{keyDownListeners(event)});
 document.addEventListener('keyup',(event)=>{keyUpListeners(event)});
-precisionModeCheckbox.addEventListener('change', precisionMode);
+precisionModeHTMLElement.addEventListener('click', precisionMode);
 precisionUnitsHTMLSelect.addEventListener('change', attPrecisionUnit);
 addAstroButtonHTMLElement.addEventListener('click',()=>{if(!isOptionOpen) astroMenu()})
 
@@ -59,6 +61,7 @@ addAstroButtonHTMLElement.addEventListener('click',()=>{if(!isOptionOpen) astroM
  */
 function unlockDrag(event){
     isDraggable = true;
+    document.querySelector('div#barrier').style.display = 'block'
     setMousePosition(event);
 }
 
@@ -67,6 +70,7 @@ function unlockDrag(event){
  */
 function lockDrag(){
     isDraggable = false;
+    document.querySelector('div#barrier').style.display = 'none'
 }
 
 /**
@@ -165,7 +169,8 @@ function changeTimeScale(event){
 }
 
 function precisionMode(){
-    isPrecisionMode = precisionModeCheckbox.checked;
+    isPrecisionMode = !isPrecisionMode;
+    precisionModeHTMLElement.src = `imagens/icons/${isPrecisionMode?'':'un'}checkedCheckbox.png`
     document.querySelector('p#precisionModeWarning').style.display = isPrecisionMode ? 'flex' : 'none' ;
 }
 
@@ -176,21 +181,21 @@ function attPrecisionUnit(){
 function astroMenu(){
     isAddAstroWindowOpened = !isAddAstroWindowOpened;
     if(isAddAstroWindowOpened){
-        let open = addAstroButtonHTMLElement.animate([{top: '10vh'},{top: '80vh'}],500);
-        addAstroMenuHTMLElement.animate([{top: '-70.4vh'},{top: '10vh'}],500);
+        let open = addAstroButtonHTMLElement.animate([{top: '10vh'},{top: '92vh'}],500);
+        addAstroMenuHTMLElement.animate([{top: '-92.4vh'},{top: '10vh'}],500);
         document.querySelector('div#addAstroButton img').animate([{transform: 'rotate(45deg)'}],500);
         open.addEventListener('finish',()=>{
-            addAstroButtonHTMLElement.style.top = '80vh';
+            addAstroButtonHTMLElement.style.top = '92vh';
             addAstroMenuHTMLElement.style.top = '10vh';
             document.querySelector('div#addAstroButton img').style.transform = 'rotate(45deg)';
         })
     }else{
-        let close = addAstroButtonHTMLElement.animate([{top: '80vh'},{top: '10vh'}],500);
-        addAstroMenuHTMLElement.animate([{top: '10vh'},{top: '-70.4vh'}],500);
+        let close = addAstroButtonHTMLElement.animate([{top: '92vh'},{top: '10vh'}],500);
+        addAstroMenuHTMLElement.animate([{top: '10vh'},{top: '-92.4vh'}],500);
         document.querySelector('div#addAstroButton img').animate([{transform: 'rotate(0deg)'}],500);
         close.addEventListener('finish',()=>{
             addAstroButtonHTMLElement.style.top = '10vh';
-            addAstroMenuHTMLElement.style.top = '-70.4vh';
+            addAstroMenuHTMLElement.style.top = '-92.4vh';
             document.querySelector('div#addAstroButton img').style.transform = 'rotate(0deg)';
         })
     }
