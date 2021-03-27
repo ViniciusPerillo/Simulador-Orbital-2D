@@ -9,6 +9,11 @@ body{
     color: rgb(255,255,255);
 }
 
+img#target{
+    position: absolute;
+    display: none;
+}
+
 header.flexRow{
     position: relative;
     top: 0px;
@@ -192,12 +197,12 @@ div#addAstroMenu span{
     align-items: center;
     text-align: center;
     box-sizing: border-box;
-    margin: 1vh;
+    margin: 2vh 0 1vh 0;
 }
 
 div#addAstroMenu span:hover {
     cursor: pointer;
-    box-shadow: 2px 2px 3px rgba(0,0,0,.7);
+    box-shadow: 1px 1px 2px rgba(255,255,255,.7);
 
 }
 
@@ -232,7 +237,7 @@ div#elementsAstroMenu select{
     background-color: rgb(65, 65, 65);
     color: white;
     font-family: 'Montserrat', sans-serif;
-    margin-left: 5px;
+    margin-left: 10px;
 }
 
 div#elementsAstroMenu div.flexRow{

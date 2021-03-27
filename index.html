@@ -13,6 +13,7 @@
         <div class= "headerDiv"><h1>logo</h1></div>
         <div id="timeScale" class= "headerDiv" >escala de tempo</div>
     </header>
+    <img src="imagens/icons/target.png" alt="alvo" id="target">
     <article>
         <div id = "addAstroButton">
             <img src="imagens/icons/plusButton.png" alt="Adicione novo astro">
@@ -22,47 +23,47 @@
             <div id="elementsAstroMenu">
                 <div id="xPosition" class="flexRow">
                     <p class="label">X:</p>
-                    <input type="number" value="0">
+                    <input type="number" value="0" min="0">
                     <p>px</p>
                 </div>
                 <div id="yPosition" class="flexRow">
                     <p class="label">Y:</p>
-                    <input type="number" value="0">
+                    <input type="number" value="0" min="0">
                     <p>px</p>
                 </div>
                 <div>Massa:</div>
                 <div id="mass" class="flexRow">
-                    <input type="number"min="0" max="10" step="0.1" value="0"> 
+                    <input id="multiplier" type="number"min="1" max="10" step="0.1" value="1"> 
                     <p> × 10 <sup>^</sup> </p>
-                    <input type="number" name="" id="" min="0" max="1000" value="0" >
+                    <input id="exponent" type="number" name="" id="" min="0" value="0" >
                     <p>Kg</p>
                 </div>
-                <div>Tipo:</div>
                 <div id="type" class="flexRow">
-                    <select id="">
-                        <option value="">Selecione um tipo de astro</option>
-                        <option value="-1">Custom</option>
-                        <option value="0">Joviano</option>
-                        <option value="1">Telúrico</option>
+                    <p class="label">Tipo:</p>
+                    <select>
+                        <option value="custom">Custom</option>
+                        <option value="joviano">Joviano</option>
+                        <option value="telurico">Telúrico</option>
+                        
                     </select>
                 </div>
                 <div>Densidade:</div>
                 <div id="density" class="flexRow">
-                    <input type="number" value="0" disabled>
+                    <input type="number" min="0" value="0" >
                     <p>Kg/m³</p>
                 </div>
                 <div>Vetor Velocidade:</div>
                 <div id="velocity" class="flexRow">
                     <input id="module" type="number" name="" id="Module" min="0" max="1000" step="0.1" value="0">
-                    <p>Km/s</p>
-                    <input id="angle" type="number" name="" id="angle" min="0" max="360" value="0">
+                    <p>Km/s , </p>
+                    <input id="angle" type="number" name="" id="angle" min="0" step="10" value="0">
                     <p>°</p>
                 </div>
             </div> 
             <div class="flexRow">
-                <img src="imagens/icons/velocityVector.png" alt="">
+                <img id="velocityVectorDemonstration" src="imagens/icons/velocityVector.png" alt="vetor em um planeta">
             </div>
-            <span>Adicionar</span>
+            <span id="confirm">Adicionar</span>
         </div>
     </article>
     <div id="barrier"></div>
