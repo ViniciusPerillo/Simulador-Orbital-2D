@@ -69,8 +69,10 @@ document.addEventListener('mouseup', lockDrag);
 document.addEventListener('wheel', (event)=>{if(!isOptionOpen) zoom(event)});
 document.addEventListener('keydown', (event)=>{keyDownListeners(event)});
 document.addEventListener('keyup',(event)=>{keyUpListeners(event)});
+
 precisionModeHTMLElement.addEventListener('click', precisionMode);
 precisionUnitsHTMLSelect.addEventListener('change', attPrecisionUnit);
+
 addAstroButtonHTMLElement.addEventListener('click',()=>{if(!isOptionOpen) astroMenu()})
 addAstroMenuHTMLElement.addEventListener('mouseenter',()=>{isMouseOverNewAstroMenu = true});
 addAstroMenuHTMLElement.addEventListener('mouseleave',()=>{isMouseOverNewAstroMenu = false});
@@ -78,9 +80,10 @@ newAstroHTMLElements.x.addEventListener('input',attTargetPosition);
 newAstroHTMLElements.y.addEventListener('input',attTargetPosition);
 newAstroHTMLElements.type.addEventListener('change', attDensityInput);
 newAstroHTMLElements.velocity.angle.addEventListener('input',attAstroVectorDemonstration);
-//newAstroHTMLElements.confirm.addEventListener('click',addNewAstro);
+newAstroHTMLElements.confirm.addEventListener('click',addNewAstro);
 newAstroHTMLElements.confirm.addEventListener('mousedown',addNewAstroDown);
 newAstroHTMLElements.confirm.addEventListener('mouseup',addNewAstroUp);
+
 
 //Listeners
 /**
@@ -217,25 +220,16 @@ function astroMenu(){
     isSimulating = false;
     isAddAstroMenuOpened = !isAddAstroMenuOpened;
     if(isAddAstroMenuOpened){
-        let open = addAstroButtonHTMLElement.animate([{top: '10vh'},{top: '92vh'}],500);
-        addAstroMenuHTMLElement.animate([{top: '-92.4vh'},{top: '10vh'}],500);
-        document.querySelector('div#addAstroButton img').animate([{transform: 'rotate(45deg)'}],500);
-        open.addEventListener('finish',()=>{
-            addAstroButtonHTMLElement.style.top = '92vh';
-            addAstroMenuHTMLElement.style.top = '10vh';
-            document.querySelector('div#addAstroButton img').style.transform = 'rotate(45deg)';
-            resetTargetPosition();
-        });
+        animateHTML(addAstroButtonHTMLElement,[{top: '92vh'}], 500, true, ()=>{addAstroButtonHTMLElement.style.top = '92vh'});
+        animateHTML(addAstroMenuHTMLElement,[{top: '10vh'}], 500, true, ()=>{addAstroMenuHTMLElement.style.top = '10vh'})
+        animateHTML(document.querySelector('div#addAstroButton img'),[{transform: 'rotate(45deg)'}], 500, true, ()=>{document.querySelector('div#addAstroButton img').style.transform = 'rotate(45deg)'});
+        resetTargetPosition();
+        resetNewAstroMenu();
     }else{
-        let close = addAstroButtonHTMLElement.animate([{top: '92vh'},{top: '10vh'}],500);
-        addAstroMenuHTMLElement.animate([{top: '10vh'},{top: '-92.4vh'}],500);
-        document.querySelector('div#addAstroButton img').animate([{transform: 'rotate(0deg)'}],500);
-        close.addEventListener('finish',()=>{
-            addAstroButtonHTMLElement.style.top = '10vh';
-            addAstroMenuHTMLElement.style.top = '-92.4vh';
-            document.querySelector('div#addAstroButton img').style.transform = 'rotate(0deg)';
-            resetTargetPosition();
-        });
+        resetTargetPosition();
+        animateHTML(addAstroButtonHTMLElement,[{top: '10vh'}], 500, true, ()=>{addAstroButtonHTMLElement.style.top = '10vh'});
+        animateHTML(addAstroMenuHTMLElement,[{top: '-92.4vh'}], 500, true, ()=>{addAstroMenuHTMLElement.style.top = '-92.4vh'})
+        animateHTML(document.querySelector('div#addAstroButton img'),[{transform: 'rotate(0deg)'}], 500, true, ()=>{document.querySelector('div#addAstroButton img').style.transform = 'rotate(0deg)'});
     }
     
 }
@@ -266,20 +260,20 @@ function attDensityInput(){
 function attAstroVectorDemonstration(){
     let newAngle = newAstroHTMLElements.velocity.angle.value  
     let deltaAngle = Math.abs(newAngle - newAstroHTMLElements.velocity.inputtedAngle);
-    let rotate = newAstroHTMLElements.velocity.demonstration.animate(
+    animateHTML(
+        newAstroHTMLElements.velocity.demonstration,
         [{transform: `rotate(${-newAngle}deg)`}],
-        deltaAngle < 1080? deltaAngle*5: 1000
+        (deltaAngle < 1080 ? deltaAngle*5 : 1000), 
+        true,
+        ()=>{newAstroHTMLElements.velocity.demonstration.style.transform = `rotate(${-newAngle}deg)`;}
     );
-    rotate.addEventListener('finish',()=>{
-        newAstroHTMLElements.velocity.demonstration.style.transform = `rotate(${-newAngle}deg)`;
-    })
     newAstroHTMLElements.velocity.inputtedAngle = newAngle;
 }
 
 function addNewAstro(){
     createAstro(
         applySpaceScale(newAstroHTMLElements.x.value,1),
-        applySpaceScale(newAstroHTMLElements.y.value*-1,1),
+        applySpaceScale(-newAstroHTMLElements.y.value,1),
         newAstroHTMLElements.type.selectedIndex-1,
         newAstroHTMLElements.mass.multiplier.value * Math.pow(10, newAstroHTMLElements.mass.exponent.value),
         new Vector(newAstroHTMLElements.velocity.module.value*1000, newAstroHTMLElements.velocity.angle.value*Math.PI/180),
@@ -288,6 +282,18 @@ function addNewAstro(){
     );
     astroMenu();
     
+}
+
+function resetNewAstroMenu(){
+    newAstroHTMLElements.x.value = 0; 
+    newAstroHTMLElements.y.value = 0;
+    newAstroHTMLElements.mass.multiplier.value = 1;
+    newAstroHTMLElements.mass.exponent.value = 24;
+    newAstroHTMLElements.type.selectedIndex = 0 
+    newAstroHTMLElements.density.value = 0; 
+    newAstroHTMLElements.velocity.module.value = 0
+    newAstroHTMLElements.velocity.angle.value = 0;
+    newAstroHTMLElements.velocity.demonstration.style.transform = 'rotate(0deg)';
 }
 
 function addNewAstroDown(){
@@ -300,12 +306,11 @@ function addNewAstroUp(){
 
 //Funções
 function run(){
+    precisionModeEvents();
+    newAstroEvents();
     createAstro(applySpaceScale(100,1), applySpaceScale(-400,1), 1, 6e+25, new Vector(2500,Math.PI/2),0,'imagens/telurico1.png');
     createAstro(applySpaceScale(484.4,1), applySpaceScale(-400,1), 0, 7.36e+22, new Vector(1000,Math.PI),0,'imagens/joviano2.png');
     createAstro(applySpaceScale(-284.4,1), applySpaceScale(-400,1), 0, 7.36e+26, new Vector(500,Math.PI),0,'imagens/joviano1.png');
-    attSpaceScaleHTMLElement();
-    attTimeScaleHTMLElement()
-    attAccelerationsVectors();
 }
 
 function simulate(){
@@ -436,4 +441,11 @@ function convertIndextoTimeScale(unitIndex){
         unitInSeconds *= timeUnits[unit]
     }
     return unitInSeconds;
+}
+
+function animateHTML(element, keyFrames, duration, isPermanent, finish){
+    let animation = element.animate(keyFrames,duration);
+    if(isPermanent){
+        animation.addEventListener('finish', finish);
+    }
 }
