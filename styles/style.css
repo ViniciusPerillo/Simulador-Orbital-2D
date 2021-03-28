@@ -160,23 +160,19 @@ div#moreButton{
     display: none
 }
 
-div#centerIcons{
-    top: 10vh;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-}
 
-div#help {
+a#help{
+    left: 50%;
     font-family: 'Roboto Slab', serif;
     font-size: 1.7em;
     color: white;
+    text-decoration: none;
+    transform: translateX(-50%);
 }
 
-div#help:hover{
+a#help:hover{
     height: 34px;
+    
 }
 
 .interfaceButton img{

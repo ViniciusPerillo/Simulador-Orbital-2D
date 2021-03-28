@@ -151,10 +151,17 @@ function keyDownListeners(event){
         isSimulating = !isSimulating;
         simulate();
     }else if(event.code == 'Escape'){
-        toggleOptions();
-        if(isAddAstroMenuOpened) astroMenu();
+        if(isAddAstroMenuOpened){
+            astroMenu();
+        }else{
+            toggleOptions();
+        }
     }else if(event.code == 'KeyT' && !isOptionOpen){
         isTPressed = true;
+    }else if(event.code == 'Equal' && !isAddAstroMenuOpened){
+        astroMenu();
+    }else if(event.code == 'Enter' && isAddAstroMenuOpened){
+        addNewAstro();
     }else if(isTPressed){
         changeTimeScale(event)
     }
@@ -200,12 +207,6 @@ function changeTimeScale(event){
     attTimeScaleHTMLElement();
 }
 
-
-
-function attPrecisionUnit(){
-    precisionUnit = convertIndextoTimeScale(precisionUnitsHTMLSelect.selectedIndex);
-}
-
 function addNewAstro(){
     createAstro(
         applySpaceScale(newAstroHTMLElements.x.value,1),
@@ -226,15 +227,17 @@ function run(){
     createAstro(applySpaceScale(100,1), applySpaceScale(-400,1), 1, 6e+25, new Vector(2500,Math.PI/2),0,'imagens/telurico1.png');
     createAstro(applySpaceScale(484.4,1), applySpaceScale(-400,1), 0, 7.36e+22, new Vector(1000,Math.PI),0,'imagens/joviano2.png');
     createAstro(applySpaceScale(-284.4,1), applySpaceScale(-400,1), 0, 7.36e+26, new Vector(500,Math.PI),0,'imagens/joviano1.png');
+    attSpaceScaleHTMLElement();
+    attTimeScaleHTMLElement();
 }
 
 function simulate(){
+    attAccelerationsVectors();
     for(let astro in astros.object){
         astros.object[astro].applyPhysics(isPrecisionMode ? precisionUnit : timeScale.timeScale/30);
     }
     inelasticCollision();
     attAstrosFigure();
-    attAccelerationsVectors();
     if(isSimulating) setTimeout(simulate, (isPrecisionMode ? precisionUnit*1000/timeScale.timeScale : 1000/30));
 }
 
@@ -378,6 +381,10 @@ function precisionMode(){
     document.querySelector('p#precisionModeWarning').style.display = isPrecisionMode ? 'flex' : 'none' ;
 }
 
+function attPrecisionUnit(){
+    precisionUnit = convertIndextoTimeScale(precisionUnitsHTMLSelect.selectedIndex);
+}
+
 function astroMenu(){
     isSimulating = false;
     isAddAstroMenuOpened = !isAddAstroMenuOpened;
@@ -437,8 +444,8 @@ function resetNewAstroMenu(){
     newAstroHTMLElements.y.value = 0;
     newAstroHTMLElements.mass.multiplier.value = 1;
     newAstroHTMLElements.mass.exponent.value = 24;
-    newAstroHTMLElements.type.selectedIndex = 0 
-    newAstroHTMLElements.density.value = 0; 
+    newAstroHTMLElements.type.selectedIndex = 1; 
+    attDensityInput(); 
     newAstroHTMLElements.velocity.module.value = 0
     newAstroHTMLElements.velocity.angle.value = 0;
     newAstroHTMLElements.velocity.demonstration.style.transform = 'rotate(0deg)';
