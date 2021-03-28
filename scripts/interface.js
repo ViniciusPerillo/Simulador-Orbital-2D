@@ -3,8 +3,8 @@ import {Figure} from './classes/figure.js';
 import {Astro} from './classes/astro.js';
 import {Vector} from './classes/vetor.js';
 
-//Variáveis 
-/*Simulador*/
+//Variables
+/*Simulator*/
 let astros = {
     figure: [],
     object: [],
@@ -28,7 +28,7 @@ let mousePosition = {
 let isDraggable = false;
 let isOptionOpen = false;
 
-/*Novo astro*/
+/*New astro*/
 let addAstroButtonHTMLElement = document.querySelector('div#addAstroButton');
 let addAstroMenuHTMLElement = document.querySelector('div#addAstroMenu');
 let newAstroHTMLElements = {
@@ -166,12 +166,6 @@ function keyUpListeners(event){
     }
 }
 
-function toggleOptions(){
-    isOptionOpen = !isOptionOpen;
-    isSimulating = false;
-    optionsMenuHTMLElement.style.display = isOptionOpen ? 'flex' : 'none'
-}
-
 function changeTimeScale(event){
     if(event.code == 'ArrowUp'){
         if(timeScale.multiplier<60 && timeScale.multiplier>=1){
@@ -206,14 +200,182 @@ function changeTimeScale(event){
     attTimeScaleHTMLElement();
 }
 
+
+
+function attPrecisionUnit(){
+    precisionUnit = convertIndextoTimeScale(precisionUnitsHTMLSelect.selectedIndex);
+}
+
+function addNewAstro(){
+    createAstro(
+        applySpaceScale(newAstroHTMLElements.x.value,1),
+        applySpaceScale(-newAstroHTMLElements.y.value,1),
+        newAstroHTMLElements.type.selectedIndex-1,
+        newAstroHTMLElements.mass.multiplier.value * Math.pow(10, newAstroHTMLElements.mass.exponent.value),
+        new Vector(newAstroHTMLElements.velocity.module.value*1000, newAstroHTMLElements.velocity.angle.value*Math.PI/180),
+        newAstroHTMLElements.density.value,
+        `imagens/${newAstroHTMLElements.type.options[newAstroHTMLElements.type.selectedIndex].value}1.png`
+    );
+    astroMenu(); 
+}
+
+
+
+//Main functions
+function run(){
+    createAstro(applySpaceScale(100,1), applySpaceScale(-400,1), 1, 6e+25, new Vector(2500,Math.PI/2),0,'imagens/telurico1.png');
+    createAstro(applySpaceScale(484.4,1), applySpaceScale(-400,1), 0, 7.36e+22, new Vector(1000,Math.PI),0,'imagens/joviano2.png');
+    createAstro(applySpaceScale(-284.4,1), applySpaceScale(-400,1), 0, 7.36e+26, new Vector(500,Math.PI),0,'imagens/joviano1.png');
+}
+
+function simulate(){
+    for(let astro in astros.object){
+        astros.object[astro].applyPhysics(isPrecisionMode ? precisionUnit : timeScale.timeScale/30);
+    }
+    inelasticCollision();
+    attAstrosFigure();
+    attAccelerationsVectors();
+    if(isSimulating) setTimeout(simulate, (isPrecisionMode ? precisionUnit*1000/timeScale.timeScale : 1000/30));
+}
+
+function inelasticCollision(){
+    for(let targetAstro in astros.object){
+        for(let astro in astros.object){
+            if(astro != targetAstro && isCollidingWith(astro, targetAstro)){
+                applyCollision(targetAstro, astro);
+                inelasticCollision();
+            }  
+        }
+    }
+}
+
+function isCollidingWith(astro1, astro2){
+    let distanceBetweenThem = Math.hypot(astros.object[astro1].getX - astros.object[astro2].getX, astros.object[astro1].getY - astros.object[astro1].getY);
+    let sumOfRadiuses = astros.object[astro1].getRadius + astros.object[astro2].getRadius;
+    return distanceBetweenThem < sumOfRadiuses;
+}
+
+function applyCollision(astro1, astro2){
+    let mass = astros.object[astro1].getMass + astros.object[astro2].getMass
+    let x = (astros.object[astro1].getX*astros.object[astro1].getMass + astros.object[astro2].getX*astros.object[astro2].getMass) / mass
+    let y = (astros.object[astro1].getY*astros.object[astro1].getMass + astros.object[astro2].getY*astros.object[astro2].getMass) / mass
+    let volume = (Math.PI*4*Math.pow(astros.object[astro1].getRadius,3) + Math.PI*4*Math.pow(astros.object[astro2].getRadius,3)) / 3;
+    let velocityVector = Vector.vectorSum([astros.object[astro1].getLinearMomentumVector,astros.object[astro2].getLinearMomentumVector]);
+    velocityVector.setModule = velocityVector.getModule / mass;
+    deleteAstro(astro2);
+    deleteAstro(astro1);
+    createAstro(x, y, -1, mass, velocityVector, mass / volume, 'imagens/custom1.png');
+}
+
+
+
+function attAccelerationsVectors(){
+    for(let astro in astros.object){
+        astros.object[astro].setAccelerationVector = Vector.vectorSum(getAccelerationsActingOnTheAstro(astro));
+        
+    }
+}
+
+function getAccelerationsActingOnTheAstro(targetAstro){
+    let accelerationsActingOnTheAstro = [];
+    for(let astro in astros.object){
+        let xAxisDistance = astros.object[astro].getX - astros.object[targetAstro].getX; 
+        let yAxisDistance = astros.object[astro].getY - astros.object[targetAstro].getY;
+        if(astro != targetAstro){
+            accelerationsActingOnTheAstro.push(new Vector(
+                applyLawOfGravitation(Math.hypot(xAxisDistance, yAxisDistance), 
+                astros.object[astro].getMass),Math.atan2(yAxisDistance, xAxisDistance)
+            ))
+        }
+    }
+    return accelerationsActingOnTheAstro;
+}
+
+function createAstro(x, y, type, mass, initialVelocity, density = 0,imgPath = ''){
+    astros.object.push(new Astro(x, y, type, mass, initialVelocity, density))
+    let newAstroIndex = astros.figure.push(new Figure(0,0,0,0,imgPath)) - 1
+    astros.figure[newAstroIndex].getFigure.classList.add('astro');
+    attAstrosFigure();
+}
+
+function deleteAstro(astroIndex){
+    astros.object.splice(astroIndex,1);
+    document.body.removeChild(astros.figure[astroIndex].getFigure)
+    astros.figure.splice(astroIndex,1);
+}
+
+//Auxiliar functions
+function applyLawOfGravitation(distance, mass){
+    return 6.674184e-11*mass/Math.pow(distance,2);
+}
+
+/**
+ * @description Aplica a escala de espaço, tanto de px para Km, como de Km para px
+ * @param {number} number 
+ * @param {1|-1} operator 1 : px to Km | -1 : Km to px 
+ * @returns {number}
+ */
+function applySpaceScale(number, operator){
+    return number*Math.pow(spaceScale,operator);
+}
+
+function setMousePosition(event){
+    mousePosition.x = event.x;
+    mousePosition.y = event.y;
+}
+
+function convertIndextoTimeScale(unitIndex){
+    let timeUnits = [1,60,60,24,365.25]
+    let unitInSeconds = 1;
+    for(let unit = 0; unit <= unitIndex; unit++){
+        unitInSeconds *= timeUnits[unit]
+    }
+    return unitInSeconds;
+}
+
+function animateHTML(element, keyFrames, duration, isPermanent, finish){
+    let animation = element.animate(keyFrames,duration);
+    if(isPermanent){
+        animation.addEventListener('finish', finish);
+    }
+}
+
+//DOM-related functions
+function attAstrosFigure(){
+    for(let astro in astros.object){
+        astros.figure[astro].setSize(Math.round(applySpaceScale(2*astros.object[astro].getRadius,-1)));
+        astros.figure[astro].setPosition(
+            Math.round(applySpaceScale(astros.object[astro].getX-astros.object[astro].getRadius,-1)),
+            Math.round(applySpaceScale((astros.object[astro].getY+astros.object[astro].getRadius)*-1,-1))
+        )
+    }
+}
+
+function attSpaceScaleHTMLElement(){
+    spaceScaleHTMLElement.innerHTML = `1 px  :  ${
+        (spaceScale/Math.pow(10,Math.floor(Math.log10(spaceScale)))).toFixed(1)
+    } × 10${
+        (Math.floor(Math.log10(spaceScale))-3).toString().sup()
+    } Km`
+}
+
+function attTimeScaleHTMLElement(){
+    let timeUnits = ['segundo','minuto','hora','dia','ano'];
+    timeScaleHTMLElement.innerHTML = `1 seg : ${
+        timeScale.multiplier < 1 ? '1'.sup() + '/' + (Math.pow(2,(Math.log2(timeScale.multiplier)*-1))).toString().sub() : timeScale.multiplier
+    } ${timeScale.multiplier<0.5 ? ' de ' : '' }${timeUnits[timeScale.selectedUnitIndex]}${timeScale.multiplier>1 ? 's' : ''}`
+}
+
+function toggleOptions(){
+    isOptionOpen = !isOptionOpen;
+    isSimulating = false;
+    optionsMenuHTMLElement.style.display = isOptionOpen ? 'flex' : 'none'
+}
+
 function precisionMode(){
     isPrecisionMode = !isPrecisionMode;
     precisionModeHTMLElement.src = `imagens/icons/${isPrecisionMode?'':'un'}checkedCheckbox.png`
     document.querySelector('p#precisionModeWarning').style.display = isPrecisionMode ? 'flex' : 'none' ;
-}
-
-function attPrecisionUnit(){
-    precisionUnit = convertIndextoTimeScale(precisionUnitsHTMLSelect.selectedIndex);
 }
 
 function astroMenu(){
@@ -270,20 +432,6 @@ function attAstroVectorDemonstration(){
     newAstroHTMLElements.velocity.inputtedAngle = newAngle;
 }
 
-function addNewAstro(){
-    createAstro(
-        applySpaceScale(newAstroHTMLElements.x.value,1),
-        applySpaceScale(-newAstroHTMLElements.y.value,1),
-        newAstroHTMLElements.type.selectedIndex-1,
-        newAstroHTMLElements.mass.multiplier.value * Math.pow(10, newAstroHTMLElements.mass.exponent.value),
-        new Vector(newAstroHTMLElements.velocity.module.value*1000, newAstroHTMLElements.velocity.angle.value*Math.PI/180),
-        newAstroHTMLElements.density.value,
-        `imagens/${newAstroHTMLElements.type.options[newAstroHTMLElements.type.selectedIndex].value}1.png`
-    );
-    astroMenu();
-    
-}
-
 function resetNewAstroMenu(){
     newAstroHTMLElements.x.value = 0; 
     newAstroHTMLElements.y.value = 0;
@@ -302,150 +450,4 @@ function addNewAstroDown(){
 
 function addNewAstroUp(){
     newAstroHTMLElements.confirm.style.boxShadow = '1px 1px 2px rgba(255,255,255,.7)'
-}
-
-//Funções
-function run(){
-    precisionModeEvents();
-    newAstroEvents();
-    createAstro(applySpaceScale(100,1), applySpaceScale(-400,1), 1, 6e+25, new Vector(2500,Math.PI/2),0,'imagens/telurico1.png');
-    createAstro(applySpaceScale(484.4,1), applySpaceScale(-400,1), 0, 7.36e+22, new Vector(1000,Math.PI),0,'imagens/joviano2.png');
-    createAstro(applySpaceScale(-284.4,1), applySpaceScale(-400,1), 0, 7.36e+26, new Vector(500,Math.PI),0,'imagens/joviano1.png');
-}
-
-function simulate(){
-    for(let astro in astros.object){
-        astros.object[astro].applyPhysics(isPrecisionMode ? precisionUnit : timeScale.timeScale/30);
-    }
-    inelasticCollision();
-    attAstrosFigure();
-    attAccelerationsVectors();
-    if(isSimulating) setTimeout(simulate, (isPrecisionMode ? precisionUnit*1000/timeScale.timeScale : 1000/30));
-}
-
-function attAstrosFigure(){
-    for(let astro in astros.object){
-        astros.figure[astro].setSize(Math.round(applySpaceScale(2*astros.object[astro].getRadius,-1)));
-        astros.figure[astro].setPosition(
-            Math.round(applySpaceScale(astros.object[astro].getX-astros.object[astro].getRadius,-1)),
-            Math.round(applySpaceScale((astros.object[astro].getY+astros.object[astro].getRadius)*-1,-1))
-        )
-    }
-}
-
-function inelasticCollision(){
-    for(let targetAstro in astros.object){
-        for(let astro in astros.object){
-            if(astro != targetAstro && isCollidingWith(astro, targetAstro)){
-                applyCollision(targetAstro, astro);
-                inelasticCollision();
-            }  
-        }
-    }
-}
-
-function isCollidingWith(astro1, astro2){
-    let distanceBetweenThem = Math.hypot(astros.object[astro1].getX - astros.object[astro2].getX, astros.object[astro1].getY - astros.object[astro1].getY);
-    let sumOfRadiuses = astros.object[astro1].getRadius + astros.object[astro2].getRadius;
-    return distanceBetweenThem < sumOfRadiuses;
-}
-
-function applyCollision(astro1, astro2){
-    let mass = astros.object[astro1].getMass + astros.object[astro2].getMass
-    let x = (astros.object[astro1].getX*astros.object[astro1].getMass + astros.object[astro2].getX*astros.object[astro2].getMass) / mass
-    let y = (astros.object[astro1].getY*astros.object[astro1].getMass + astros.object[astro2].getY*astros.object[astro2].getMass) / mass
-    let volume = (Math.PI*4*Math.pow(astros.object[astro1].getRadius,3) + Math.PI*4*Math.pow(astros.object[astro2].getRadius,3)) / 3;
-    let velocityVector = Vector.vectorSum([astros.object[astro1].getLinearMomentumVector,astros.object[astro2].getLinearMomentumVector]);
-    velocityVector.setModule = velocityVector.getModule / mass;
-    deleteAstro(astro2);
-    deleteAstro(astro1);
-    createAstro(x, y, -1, mass, velocityVector, mass / volume, 'imagens/custom1.png');
-}
-
-function attSpaceScaleHTMLElement(){
-    spaceScaleHTMLElement.innerHTML = `1 px  :  ${
-        (spaceScale/Math.pow(10,Math.floor(Math.log10(spaceScale)))).toFixed(1)
-    } × 10${
-        (Math.floor(Math.log10(spaceScale))-3).toString().sup()
-    } Km`
-}
-
-function attTimeScaleHTMLElement(){
-    let timeUnits = ['segundo','minuto','hora','dia','ano'];
-    timeScaleHTMLElement.innerHTML = `1 seg : ${
-        timeScale.multiplier < 1 ? '1'.sup() + '/' + (Math.pow(2,(Math.log2(timeScale.multiplier)*-1))).toString().sub() : timeScale.multiplier
-    } ${timeScale.multiplier<0.5 ? ' de ' : '' }${timeUnits[timeScale.selectedUnitIndex]}${timeScale.multiplier>1 ? 's' : ''}`
-}
-
-function attAccelerationsVectors(){
-    for(let astro in astros.object){
-        astros.object[astro].setAccelerationVector = Vector.vectorSum(getAccelerationsActingOnTheAstro(astro));
-        
-    }
-}
-
-function getAccelerationsActingOnTheAstro(targetAstro){
-    let accelerationsActingOnTheAstro = [];
-    for(let astro in astros.object){
-        let xAxisDistance = astros.object[astro].getX - astros.object[targetAstro].getX; 
-        let yAxisDistance = astros.object[astro].getY - astros.object[targetAstro].getY;
-        if(astro != targetAstro){
-            accelerationsActingOnTheAstro.push(new Vector(
-                applyLawOfGravitation(Math.hypot(xAxisDistance, yAxisDistance), 
-                astros.object[astro].getMass),Math.atan2(yAxisDistance, xAxisDistance)
-            ))
-        }
-    }
-    return accelerationsActingOnTheAstro;
-}
-
-function createAstro(x, y, type, mass, initialVelocity, density = 0,imgPath = ''){
-    astros.object.push(new Astro(x, y, type, mass, initialVelocity, density))
-    let newAstroIndex = astros.figure.push(new Figure(0,0,0,0,imgPath)) - 1
-    astros.figure[newAstroIndex].getFigure.classList.add('astro');
-    attAstrosFigure();
-}
-
-function deleteAstro(astroIndex){
-    astros.object.splice(astroIndex,1);
-    document.body.removeChild(astros.figure[astroIndex].getFigure)
-    astros.figure.splice(astroIndex,1);
-}
-
-
-
-//Funções Auxiliares
-function applyLawOfGravitation(distance, mass){
-    return 6.674184e-11*mass/Math.pow(distance,2);
-}
-
-/**
- * @description Aplica a escala de espaço, tanto de px para Km, como de Km para px
- * @param {number} number 
- * @param {1|-1} operator 1 : px to Km | -1 : Km to px 
- * @returns {number}
- */
-function applySpaceScale(number, operator){
-    return number*Math.pow(spaceScale,operator);
-}
-
-function setMousePosition(event){
-    mousePosition.x = event.x;
-    mousePosition.y = event.y;
-}
-
-function convertIndextoTimeScale(unitIndex){
-    let timeUnits = [1,60,60,24,365.25]
-    let unitInSeconds = 1;
-    for(let unit = 0; unit <= unitIndex; unit++){
-        unitInSeconds *= timeUnits[unit]
-    }
-    return unitInSeconds;
-}
-
-function animateHTML(element, keyFrames, duration, isPermanent, finish){
-    let animation = element.animate(keyFrames,duration);
-    if(isPermanent){
-        animation.addEventListener('finish', finish);
-    }
 }

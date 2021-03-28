@@ -1,4 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap');
+
 
 body{
     background-color: rgb(25, 25, 25);
@@ -147,21 +149,46 @@ footer img{
     border-top: solid 0.4vh rgb(25, 25, 25, 0.7);
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
+    top: 10vh;
 }
 div#addAstroButton{
     left: 5px;
-    top: 10vh;
 }
 
-div#addAstroButton img{
+div#moreButton{
+    right: 5px;
+    display: none
+}
+
+div#centerIcons{
+    top: 10vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+div#help {
+    font-family: 'Roboto Slab', serif;
+    font-size: 1.7em;
+    color: white;
+}
+
+div#help:hover{
+    height: 34px;
+}
+
+.interfaceButton img{
     width: 24px;
     height: 24px;
     padding: 5px;
 }
 
-div#addAstroButton:hover{
+.interfaceButton:hover{
     height: 40px;
     cursor: pointer;
+    color: white;
 }
 
 div#addAstroMenu{
