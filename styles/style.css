@@ -1,48 +1,275 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap');
+
 
 body{
     background-color: rgb(25, 25, 25);
     margin: 0px;
     overflow: hidden;
+    font-family: 'Montserrat', sans-serif;
+    text-shadow: 1px 1px 1px rgba(0,0,0,.4);
+    color: rgb(255,255,255);
 }
 
-header{
+img#target{
+    position: absolute;
+    display: none;
+}
+
+header.flexRow{
     position: relative;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    
     top: 0px;
     height: 10vh;
     margin: 0px;
-    background-color: rgb(89, 74, 102);
-    border-bottom: solid rgb(60, 50, 68) .4vh;
-    box-shadow: rgb(0, 0, 0) 2px 1px 2px;
-    
-    font-family: 'Montserrat', sans-serif;
-    color: rgb(255,255,255);
-
+    background-color: rgb(45, 45, 45);
+    border-bottom: solid rgb(160, 120, 45) .4vh;
+    box-shadow: rgb(25, 25, 25) 2px 1px 2px;
+    box-sizing: border-box;
+    z-index: 5;
 }
 
 .headerDiv{
     position: relative;
     display: block;
-    width: 20vh;
+    width: 30vh;
     margin: 0px 20px 0px 20px;
-}
+    padding: 5px;
+}   
 
-figure{
+.astro{
     position: absolute;
     display: block;
     margin: 0px;
     padding: 0px;
-}
-
-.astro{
     border-radius: 50%;
     overflow: hidden;
     z-index: -1000000;
+}
+
+.flexRow{
+    display: flex;
+    position: absolute;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.flexColumn{
+    display: flex;
+    position: absolute;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+div#barrier{
+    background-color: rgba(0,0,0,0);
+    width: 100% ;
+    height: 100%;
+    position: absolute;
+    top: 0;
+}
+
+article#options{
+    top: 10vh;
+    background-color: rgba(0,0,0,.7);
+    width: 100% ;
+    height: 90vh;
+    display: none;
+}
+
+div.flexRow{
+    position: relative;
+}
+
+div#options{
+    background-color: rgb(45, 45, 45);
+    border-radius: 5px;
+    border: solid rgb(160, 120, 45) .25vh;
+    padding: 0vh 3vh 3vh 3vh;
+    width: 45vh;
+}
+
+label#precisionMode{
+    margin: 0 25px 0 5px;
+    position: relative;
+}
+
+label#precisionMode span img{
+    width: 20px;
+    height: 20px;
+    margin: 10px;
+}
+
+select{
+    font-family: 'Montserrat', sans-serif;
+    background-color: rgb(160, 120, 45);
+    font-weight: 500;
+    color: whitesmoke;
+    text-shadow: 1px 1px 2px rgba(0,0,0,.4);
+}
+
+#precisionModeWarning{
+    display: none;
+    font-size: 0.7em;
+    word-wrap: normal;
+    font-weight: 900;
+    color: rgb(255, 0, 0);
+}
+
+footer.flexColumn{
+    position: relative;
+    width: 45vh;
+    padding-top: 5px;
+    margin-top: 5px;
+    border-top: solid rgb(160, 120, 45) .25vh;
+    font-size: 0.7em;
+
+}
+
+footer img{
+    width: 20px;
+    height: 20px;
+    margin: 0 5px -5px 5px;
+}
+
+.interfaceButton{
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    box-sizing: border-box;
+    background: rgb(160, 120, 45);
+    z-index: 2;
+    width: 34px;
+    height: 34px;
+    box-shadow: -1px 1px 2px rgba(175,175,175,.7);
+    border-top: solid 0.4vh rgb(25, 25, 25, 0.7);
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    top: 10vh;
+}
+div#addAstroButton{
+    left: 5px;
+    box-shadow: 1px 1px 2px rgba(175,175,175,.7);
+}
+
+div#moreButton{
+    right: 5px;
+    display: flex;
+}
+
+
+a#help{
+    left: 50%;
+    font-family: 'Roboto Slab', serif;
+    font-size: 1.7em;
+    color: white;
+    text-decoration: none;
+    transform: translateX(-50%);
+}
+
+a#help:hover{
+    height: 34px;
+    
+}
+
+.interfaceButton img{
+    width: 24px;
+    height: 24px;
+    padding: 5px;
+}
+
+.interfaceButton:hover{
+    height: 40px;
+    cursor: pointer;
+    color: white;
+}
+
+div#addAstroMenu{
+    position: absolute;
+    height: 82vh;
+    top: -92.4vh;
+    left: 0;
+    z-index: 4;
+    box-sizing: border-box;
+    background-color: rgb(45, 45, 45);
+    border-bottom: solid rgb(160, 120, 45) .25vh;
+    border-right: solid rgb(160, 120, 45) .25vh;;
+    border-bottom-right-radius: 5px;
+}
+
+div#addAstroMenu h3{
+    padding: 5px 20px 5px 20px;
+    margin: 0;
+    border-bottom: solid rgb(160, 120, 45) .25vh;
+
+}
+
+div#addAstroMenu img{
+    width: 20vh;
+    height: 20vh;
+    padding: 5px;
+}
+
+div#addAstroMenu span{
+    background-color: rgb(160, 120, 45);
+    border-radius: 0.25vh;
+    height: 5vh;
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-sizing: border-box;
+    margin: 2vh 0 1vh 0;
+}
+
+div#addAstroMenu span:hover {
+    cursor: pointer;
+    box-shadow: 1px 1px 2px rgba(255,255,255,.7);
+
+}
+
+div#elementsAstroMenu{
+    margin: 10px 10px 10px 10px;
+    align-items: baseline;
+    display: flex;
+    flex-direction: column;
+}
+
+div#elementsAstroMenu p{
+    padding-left: 5px;
+}
+
+div#elementsAstroMenu p.label{
+    padding-left: 0;
+}
+
+div#elementsAstroMenu input{
+    background-color: rgb(65, 65, 65);
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    width: 4vw;
+    margin-left: 5px;
+}
+
+div#elementsAstroMenu input:disabled{
+    color: rgb(175,175,175);
+}
+
+div#elementsAstroMenu select{
+    background-color: rgb(65, 65, 65);
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    margin-left: 10px;
+}
+
+div#elementsAstroMenu div.flexRow{
+    margin-bottom: 5px;
+    position: relative;
+    height: 5vh;
 }
 

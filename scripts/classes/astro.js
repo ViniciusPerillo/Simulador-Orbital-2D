@@ -42,9 +42,6 @@ export class Astro{
         )
         this.attVelocityVector(time);
     }
-   
-    
-    
 
     /**
      * @description  
