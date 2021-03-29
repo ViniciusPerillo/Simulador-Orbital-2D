@@ -153,11 +153,12 @@ footer img{
 }
 div#addAstroButton{
     left: 5px;
+    box-shadow: 1px 1px 2px rgba(175,175,175,.7);
 }
 
 div#moreButton{
     right: 5px;
-    display: none
+    display: flex;
 }
 
 
