@@ -7,7 +7,7 @@
     <title>Simulador Orbital</title>
     <link rel="stylesheet" href="styles/style.css">
 </head>
-<body>
+<body onselectstart="return">
     <header class="flexRow">
         <div id="spaceScale" class= "headerDiv">escala de espaço</div>
         <div class= "headerDiv"><h1>logo</h1></div>
@@ -21,54 +21,52 @@
         <img src="imagens/icons/more.png" alt="Adicione novo astro">
     </div>
     <a href="https://github.com/ViniciusPerillo/Simulador-Orbital-2D/blob/main/README.md#simulador-orbital-2d" target="_blank" id = "help" class="interfaceButton"> ? </a>
-    <article>
-        <div id ="addAstroMenu" class="flexColumn">
-            <h3>Novo Astro</h3>
-            <div id="elementsAstroMenu">
-                <div id="xPosition" class="flexRow">
-                    <p class="label">X:</p>
-                    <input type="number" value="0" min="0">
-                    <p>px</p>
-                </div>
-                <div id="yPosition" class="flexRow">
-                    <p class="label">Y:</p>
-                    <input type="number" value="0" min="0">
-                    <p>px</p>
-                </div>
-                <div>Massa:</div>
-                <div id="mass" class="flexRow">
-                    <input id="multiplier" type="number"min="1" max="10" step="0.1" value="1"> 
-                    <p> × 10 <sup>^</sup> </p>
-                    <input id="exponent" type="number" name="" id="" min="0" value="24" >
-                    <p>Kg</p>
-                </div>
-                <div id="type" class="flexRow">
-                    <p class="label">Tipo:</p>
-                    <select>
-                        <option value="custom">Custom</option>
-                        <option value="joviano">Gasoso</option>
-                        <option value="telurico">Rochoso</option>
-                        
-                    </select>
-                </div>
-                <div>Densidade:</div>
-                <div id="density" class="flexRow">
-                    <input type="number" min="0" value="0" >
-                    <p>Kg/m³</p>
-                </div>
-                <div>Vetor Velocidade:</div>
-                <div id="velocity" class="flexRow">
-                    <input id="module" type="number" name="" id="Module" min="0" max="1000" step="0.1" value="0">
-                    <p>Km/s , </p>
-                    <input id="angle" type="number" name="" id="angle" min="0" step="10" value="0">
-                    <p>°</p>
-                </div>
-            </div> 
-            <div class="flexRow">
-                <img id="velocityVectorDemonstration" src="imagens/icons/velocityVector.png" alt="vetor em um planeta">
+    <article id ="addAstroMenu" class="flexColumn sideMenu">
+        <h3>Novo Astro</h3>
+        <div id="elementsAstroMenu">
+            <div id="xPosition" class="flexRow">
+                <p class="label">X:</p>
+                <input type="number" value="0" min="0">
+                <p>px</p>
             </div>
-            <span id="confirm">Adicionar</span>
+            <div id="yPosition" class="flexRow">
+                <p class="label">Y:</p>
+                <input type="number" value="0" min="0">
+                <p>px</p>
+            </div>
+            <div>Massa:</div>
+            <div id="mass" class="flexRow">
+                <input id="multiplier" type="number"min="1" max="10" step="0.1" value="1"> 
+                <p> × 10 <sup>^</sup> </p>
+                <input id="exponent" type="number" name="" id="" min="0" value="24" >
+                <p>Kg</p>
+            </div>
+            <div id="type" class="flexRow">
+                <p class="label">Tipo:</p>
+                <select>
+                    <option value="custom">Custom</option>
+                    <option value="joviano">Gasoso</option>
+                    <option value="telurico">Rochoso</option>
+                    
+                </select>
+            </div>
+            <div>Densidade:</div>
+            <div id="density" class="flexRow">
+                <input type="number" min="0" value="0" >
+                <p>Kg/m³</p>
+            </div>
+            <div>Vetor Velocidade:</div>
+            <div id="velocity" class="flexRow">
+                <input id="module" type="number" name="" id="Module" min="0" max="1000" step="0.1" value="0">
+                <p>Km/s , </p>
+                <input id="angle" type="number" name="" id="angle" min="0" step="10" value="0">
+                <p>°</p>
+            </div>
+        </div> 
+        <div class="flexRow">
+            <img id="velocityVectorDemonstration" src="imagens/icons/velocityVector.png" alt="vetor em um planeta">
         </div>
+        <span id="confirm">Adicionar</span>
     </article>
     <div id="barrier"></div>
     <article id="options" class="flexRow">
@@ -94,6 +92,9 @@
                 </div>
             </footer>
         </div>
+    </article>
+    <article id="descriptionMenu" class="flexColumn sideMenu">
+
     </article>
     <script src="scripts/interface.js" type="module"></script>
 </body>

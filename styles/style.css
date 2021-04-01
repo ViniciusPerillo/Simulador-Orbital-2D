@@ -39,6 +39,7 @@ header.flexRow{
 .astro{
     position: absolute;
     display: block;
+    box-sizing: border-box;
     margin: 0px;
     padding: 0px;
     border-radius: 50%;
@@ -158,7 +159,7 @@ div#addAstroButton{
 
 div#moreButton{
     right: 5px;
-    display: flex;
+    display: none;
 }
 
 
@@ -188,33 +189,37 @@ a#help:hover{
     color: white;
 }
 
-div#addAstroMenu{
+.sideMenu{
     position: absolute;
     height: 82vh;
+    width: 16.5vw;
     top: -92.4vh;
-    left: 0;
     z-index: 4;
     box-sizing: border-box;
     background-color: rgb(45, 45, 45);
     border-bottom: solid rgb(160, 120, 45) .25vh;
-    border-right: solid rgb(160, 120, 45) .25vh;;
+}
+
+article#addAstroMenu{
+    left: 0;
+    border-right: solid rgb(160, 120, 45) .25vh;
     border-bottom-right-radius: 5px;
 }
 
-div#addAstroMenu h3{
+article#addAstroMenu h3{
     padding: 5px 20px 5px 20px;
     margin: 0;
     border-bottom: solid rgb(160, 120, 45) .25vh;
 
 }
 
-div#addAstroMenu img{
+article#addAstroMenu img{
     width: 20vh;
     height: 20vh;
     padding: 5px;
 }
 
-div#addAstroMenu span{
+article#addAstroMenu span{
     background-color: rgb(160, 120, 45);
     border-radius: 0.25vh;
     height: 5vh;
@@ -227,7 +232,7 @@ div#addAstroMenu span{
     margin: 2vh 0 1vh 0;
 }
 
-div#addAstroMenu span:hover {
+article#addAstroMenu span:hover {
     cursor: pointer;
     box-shadow: 1px 1px 2px rgba(255,255,255,.7);
 
@@ -271,5 +276,11 @@ div#elementsAstroMenu div.flexRow{
     margin-bottom: 5px;
     position: relative;
     height: 5vh;
+}
+
+article#descriptionMenu{
+    right: 0;
+    border-left: solid rgb(160, 120, 45) .25vh;
+    border-bottom-left-radius: 5px;
 }
 
