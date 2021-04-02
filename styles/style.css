@@ -202,8 +202,9 @@ div#delete:hover{
 
 .sideMenu{
     position: absolute;
+    justify-content: flex-start;
     height: 82vh;
-    width: 16.5vw;
+    width: 18vw;
     top: -72.4vh;
     z-index: 4;
     box-sizing: border-box;
@@ -217,7 +218,7 @@ article#addAstroMenu{
     border-bottom-right-radius: 5px;
 }
 
-article#addAstroMenu h3{
+.sideMenu h3{
     padding: 5px 20px 5px 20px;
     margin: 0;
     border-bottom: solid rgb(160, 120, 45) .25vh;
@@ -233,7 +234,7 @@ article#addAstroMenu img{
 article#addAstroMenu span{
     background-color: rgb(160, 120, 45);
     border-radius: 0.25vh;
-    height: 5vh;
+    height: 40px;
     width: 80%;
     display: flex;
     justify-content: center;
@@ -249,7 +250,7 @@ article#addAstroMenu span:hover {
 
 }
 
-div#elementsAstroMenu{
+.sideMenu .components{
     margin: 10px 10px 10px 10px;
     align-items: baseline;
     display: flex;
@@ -290,16 +291,15 @@ div#elementsAstroMenu div.flexRow{
 }
 
 div#presetButtons{
+    position: absolute;
     display: none;
     opacity: 0;
     justify-content: left;
     align-items: flex-end;
     transform: translateY(0.25vh);
-    bottom: -0.25vh;
+    top: 82vh;
     left: 44px;
     width: 100%;
-    transform: translateY(100%);
-    transform: translateZ(3);
 } 
 
 div#presetButtons div{
@@ -309,7 +309,7 @@ div#presetButtons div{
     top: 0;
     width: 30px;
     height: 30px;
-    border-top: solid 0.4vh rgb(25, 25, 25, 0.7);
+    border-top: solid 0.25vh rgb(25, 25, 25, 0.7);
 }
 
 div#presetButtons div img{
@@ -323,7 +323,27 @@ div#presetButtons div:hover{
 
 article#descriptionMenu{
     right: 0;
+    
     border-left: solid rgb(160, 120, 45) .25vh;
     border-bottom-left-radius: 5px;
 }
 
+.vetores{
+    position: relative;
+    justify-content: left;
+}
+
+article#descriptionMenu div{
+    position: relative;
+    align-items: baseline;
+}
+
+article#descriptionMenu p{
+    margin: 8px 5px 0 5px;
+}
+
+div#coordinates{
+    position: relative;
+    justify-content: space-between;
+    width: 100%;
+}

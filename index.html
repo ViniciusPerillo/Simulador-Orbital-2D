@@ -27,7 +27,7 @@
     </div>
     <article id ="addAstroMenu" class="flexColumn sideMenu">
         <h3>Novo Astro</h3>
-        <div id="elementsAstroMenu">
+        <div id="elementsAstroMenu" class="components">
             <div id="xPosition" class="flexRow">
                 <p class="label">X:</p>
                 <input type="number" value="0" min="0">
@@ -110,7 +110,49 @@
         </div>
     </article>
     <article id="descriptionMenu" class="flexColumn sideMenu">
-
+        <h3>Astro Selecionado</h3>
+        <div class="components">
+            <div id="coordinates" class="flexRow">
+                <p id="x" >X: 0 px</p>
+                <p id="y">Y: 0 px</p>  
+            </div>
+            <p id="massa">Massa: 0 Kg</p>
+            <p id="tipo">Tipo: Gasoso</p>
+            <p id="densidade"> Densidade: 0 Kg/m³ </p>
+            <div class="flexRow">
+                <div class="flexColumn">
+                    <span>
+                    </span>
+                    <p>Velocidade: </p>
+                    <p>0 Km/s, 0°</p>
+                </div>
+            </div>
+            <div class="flexRow">
+                
+                <div class="flexColumn">
+                    <span>
+                    </span>
+                    <p>Aceleração: </p>
+                    <p>0 Km/s, 0°</p>
+                </div>
+            </div>
+            <div class="flexRow">
+                <div class="flexColumn">
+                    <span>
+                    </span>
+                    <p>Aceleração centrípeta: </p>
+                    <p>0 Km/s, 0°</p>
+                </div>
+            </div>
+            <div class="flexRow">
+                <div class="flexColumn">
+                    <span>
+                    </span>
+                    <p>Aceleração tangencial: </p>
+                    <p>0 Km/s, 0°</p>
+                </div>
+            </div>
+        </div>
     </article>
     <script src="scripts/interface.js" type="module"></script>
 </body>

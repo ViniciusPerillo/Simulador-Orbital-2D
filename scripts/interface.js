@@ -249,6 +249,7 @@ function addNewAstro(){
 
 //Main functions
 function run(){
+    createAstro(applySpaceScale(300,1), applySpaceScale(-300,1), 1, 6e+26, new Vector(1000, Math.PI/4), 0,'');
     attSpaceScaleHTMLElement();
     attTimeScaleHTMLElement();
 }
@@ -558,6 +559,8 @@ function closeDescriptionMenu(){
 
 function presetEarthMoon(){
     deleteAll();
+    createAstro(applySpaceScale(600,1), applySpaceScale(-400,1), -1, 6e+24, new Vector(0, 0), 5510,'');
+    createAstro(applySpaceScale(963.4,1), applySpaceScale(-400,1), -1, 7.36e+22, new Vector(970, Math.PI/2), 3340,'');
     closeAddAstroMenu();
 }
 
@@ -570,7 +573,7 @@ function presetColision(){
     deleteAll();
     createAstro(applySpaceScale(300,1), applySpaceScale(-300,1), 1, 6e+24, new Vector(1000, Math.PI/4), 0,'');
     createAstro(applySpaceScale(300,1), applySpaceScale(-600,1), 1, 6e+24, new Vector(1000, 7*Math.PI/4), 0,'');
-    createAstro(applySpaceScale(1150,1), applySpaceScale(-450,1), 0, 2e+24, new Vector(500, Math.PI), 0,'');
+    createAstro(applySpaceScale(1150,1), applySpaceScale(-450,1), 0, 2e+24, new Vector(1080, Math.PI), 0,'');
     timeScale.multiplier = 12 
     timeScale.selectedUnitIndex = 2 
     timeScale.timeScale = 12*60*60
