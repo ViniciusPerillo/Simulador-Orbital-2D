@@ -113,46 +113,63 @@
         <h3>Astro Selecionado</h3>
         <div class="components">
             <div id="coordinates" class="flexRow">
-                <p id="x" >X: 0 px</p>
-                <p id="y">Y: 0 px</p>  
+                <p id="showX" >X: 0 px</p>
+                <p id="showY">Y: 0 px</p>  
             </div>
-            <p id="massa">Massa: 0 Kg</p>
-            <p id="tipo">Tipo: Gasoso</p>
-            <p id="densidade"> Densidade: 0 Kg/m³ </p>
-            <div class="flexRow">
+            <p id="showMass">Massa: 0 Kg</p>
+            <p id="showType">Tipo: Gasoso</p>
+            <p id="showDensity"> Densidade: 0 Kg/m³ </p>
+            <div id="velocityVector" class="flexRow">
+                <span class="caption">
+                </span>
                 <div class="flexColumn">
-                    <span>
-                    </span>
                     <p>Velocidade: </p>
-                    <p>0 Km/s, 0°</p>
+                    <p id="data">0 Km/s , 0°</p>
                 </div>
             </div>
-            <div class="flexRow">
-                
-                <div class="flexColumn">
-                    <span>
-                    </span>
+            <div id="accelerationVector" class="flexRow">
+                <span class="caption">
+                </span>
+                <div  class="flexColumn">
                     <p>Aceleração: </p>
-                    <p>0 Km/s, 0°</p>
+                    <p id="data">0 Km/s² , 0°</p>
                 </div>
             </div>
-            <div class="flexRow">
+            <div id="centripetalAccelerationVector" class="flexRow">
+                <span class="caption">
+                </span>
                 <div class="flexColumn">
-                    <span>
-                    </span>
                     <p>Aceleração centrípeta: </p>
-                    <p>0 Km/s, 0°</p>
+                    <p id="data">0 m/s² , nulo°</p>
                 </div>
             </div>
-            <div class="flexRow">
+            <div id="tangencialAccelerationVector" class="flexRow">
+                <span class="caption">
+                </span>
                 <div class="flexColumn">
-                    <span>
-                    </span>
                     <p>Aceleração tangencial: </p>
-                    <p>0 Km/s, 0°</p>
+                    <p id="data">0 m/s² , nulo°</p>
                 </div>
             </div>
         </div>
+        <div id="demonstration">
+            <div id="showVelocity" class="vectorDemonstration">
+                <img src="imagens/icons/velocity.png" alt="">
+            </div>
+            <div id="showAcceleration" class="vectorDemonstration">
+                <img src="imagens/icons/acceleration.png" alt="">
+            </div>
+            <div id="showCentripetal"class="vectorDemonstration">
+                <img src="imagens/icons/centripetalAcceleration.png" alt="">
+            </div>
+            <div id="showTangencial" class="vectorDemonstration">
+                <img src="imagens/icons/tangencialAcceleration.png" alt="">
+            </div>
+            <div id="planet" class="vectorDemonstration">
+                
+            </div>   
+        </div>
+        
     </article>
     <script src="scripts/interface.js" type="module"></script>
 </body>

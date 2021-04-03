@@ -221,12 +221,16 @@ export class Astro{
             case -1:
                 return 'Custom'
             case 0:
-                return 'Joviano'
+                return 'Gasoso'
             case 1:
-                return 'Telúricos'
+                return 'Rochoso'
         }
     }
 
+    get getDensity(){
+        return this.density;
+    }
+    
     /**
      * @description retorna o Vector da aceleração resultante atuando no astro
      */

@@ -75,7 +75,30 @@ const HTML_ELEMENTS = {
         description: {
             button: document.querySelector('div#moreButton'),
             delete: document.querySelector('div#delete'),
-            window: document.querySelector('article#descriptionMenu')
+            window: document.querySelector('article#descriptionMenu'),
+            elements: {
+                x: document.querySelector('p#showX'),
+                y:document.querySelector('p#showY'),
+                mass: document.querySelector('p#showMass'),
+                type: document.querySelector('p#showType'),
+                density: document.querySelector('p#showDensity'),
+                velocity: {
+                    data: document.querySelector('div#velocityVector div p#data'),
+                    demonstration: document.querySelector('div#showVelocity')
+                },
+                acceleration: {
+                    data: document.querySelector('div#accelerationVector div p#data'),
+                    demonstration: document.querySelector('div#showAcceleration')
+                },
+                centripetalAcceleration: {
+                    data: document.querySelector('div#centripetalAccelerationVector div p#data'),
+                    demonstration: document.querySelector('div#showCentripetalAcceleration')
+                },
+                tangencialAcceleration: {
+                    data: document.querySelector('div#tangencialAccelerationVector div p#data'),
+                    demonstration: document.querySelector('div#showTangencialAcceleration')
+                }
+            },
         }
     }
 }
@@ -249,9 +272,10 @@ function addNewAstro(){
 
 //Main functions
 function run(){
-    createAstro(applySpaceScale(300,1), applySpaceScale(-300,1), 1, 6e+26, new Vector(1000, Math.PI/4), 0,'');
+    createAstro(applySpaceScale(300,1), applySpaceScale(-300,1), 1, 6e+26, new Vector(0, 0), 0,'');
     attSpaceScaleHTMLElement();
     attTimeScaleHTMLElement();
+    attAccelerationsVectors();
 }
 
 function simulate(){
@@ -348,6 +372,7 @@ function selectAstro(event){
             HTML_ELEMENTS.menus.description.delete.style.display = 'flex'
             animateHTML(HTML_ELEMENTS.menus.description.button,[{opacity: '1'}], 250, true, ()=>{HTML_ELEMENTS.menus.description.button.style.opacity = '1'})
             animateHTML(HTML_ELEMENTS.menus.description.delete,[{opacity: '1'}], 250, true, ()=>{HTML_ELEMENTS.menus.description.delete.style.opacity = '1'})
+            attDescriptionMenu();
             break;
         }
     }
@@ -397,6 +422,10 @@ function convertIndextoTimeScale(unitIndex){
     return unitInSeconds;
 }
 
+function radianToDegree(angle){
+    return angle*180/Math.PI;
+}
+
 function animateHTML(element, keyFrames, duration, isPermanent, finish){
     let animation = element.animate(keyFrames,duration);
     if(isPermanent){
@@ -413,6 +442,7 @@ function attAstrosFigure(){
             Math.round(applySpaceScale((astros.object[astro].getY+astros.object[astro].getRadius)*-1,-1))
         )
     }
+    if(selectAstro != undefined && isSimulating)attDescriptionMenu()
 }
 
 function attSpaceScaleHTMLElement(){
@@ -533,7 +563,6 @@ function addNewAstroUp(){
 }
 
 function descriptionMenu(){
-    isSimulating = false;
     if(isDescriptionMenuOpened){
         closeDescriptionMenu();
     }else{
@@ -553,6 +582,36 @@ function closeDescriptionMenu(){
     animateHTML(HTML_ELEMENTS.menus.description.delete,[{top: '10vh'}], 500, true, ()=>{HTML_ELEMENTS.menus.description.delete.style.top = '10vh'});
     animateHTML(HTML_ELEMENTS.menus.description.window,[{top: '-72.4vh'}], 500, true, ()=>{HTML_ELEMENTS.menus.description.window.style.top = '-92.4vh'});
     isDescriptionMenuOpened = false;
+}
+
+function attDescriptionMenu(){
+    HTML_ELEMENTS.menus.description.elements.x.innerHTML = `X: ${astros.figure[selectedAstro].getX} px`;
+    HTML_ELEMENTS.menus.description.elements.y.innerHTML = `Y: ${astros.figure[selectedAstro].getY} px`;
+    HTML_ELEMENTS.menus.description.elements.mass.innerHTML = `Mass: ${
+        (astros.object[selectedAstro].getMass/Math.pow(10,Math.floor(Math.log10(astros.object[selectedAstro].getMass)))).toFixed(1)
+        } × 10${
+        (Math.floor(Math.log10(astros.object[selectedAstro].getMass))).toString().sup()
+        } Kg`;
+    HTML_ELEMENTS.menus.description.elements.type.innerHTML = `Tipo: ${astros.object[selectedAstro].getNameOfType}`;
+    HTML_ELEMENTS.menus.description.elements.density.innerHTML = `Densidade: ${astros.object[selectedAstro].getDensity} Km/m³`;
+    HTML_ELEMENTS.menus.description.elements.velocity.data.innerHTML = `${(astros.object[selectedAstro].getVelocityVector.getModule/1000).toFixed(3)} Km/s , ${
+        astros.object[selectedAstro].getVelocityVector.isNull ? 'nulo' : radianToDegree(astros.object[selectedAstro].getVelocityVector.getAngle)
+    }°`;
+    HTML_ELEMENTS.menus.description.elements.acceleration.data.innerHTML = `${(astros.object[selectedAstro].getAccelerationVector.getModule).toFixed(3)} m/s² , ${
+        astros.object[selectedAstro].getAccelerationVector.isNull ? 'nulo' : radianToDegree(astros.object[selectedAstro].getAccelerationVector.getAngle)
+    }°`;
+
+    if(astros.object[selectedAstro].getCentripetalAcceleration != undefined){
+        HTML_ELEMENTS.menus.description.elements.centripetalAcceleration.data.innerHTML = `${(astros.object[selectedAstro].getCentripetalAccelerationVector.getModule).toFixed(3)} m/s² , ${
+            astros.object[selectedAstro].getCentripetalAccelerationVector.isNull ? 'nulo' : radianToDegree(astros.object[selectedAstro].getCentripetalAccelerationVector.getAngle)
+        }°`;
+    }
+    if(astros.object[selectedAstro].getTangencialAcceleration != undefined){
+        HTML_ELEMENTS.menus.description.elements.tangencialAcceleration.data.innerHTML = `${(astros.object[selectedAstro].getTangencialAccelerationVector.getModule.toFixed(3))} m/s² , ${
+            astros.object[selectedAstro].getTangencialAccelerationVector.isNull ? 'nulo' : radianToDegree(astros.object[selectedAstro].getTangencialAccelerationVector.getAngle)
+        }°`;
+    }
+    
 }
 
 //Presets

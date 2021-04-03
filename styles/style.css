@@ -210,6 +210,7 @@ div#delete:hover{
     box-sizing: border-box;
     background-color: rgb(45, 45, 45);
     border-bottom: solid rgb(160, 120, 45) .25vh;
+    font-size: 1em;
 }
 
 article#addAstroMenu{
@@ -346,4 +347,56 @@ div#coordinates{
     position: relative;
     justify-content: space-between;
     width: 100%;
+}
+
+.caption{
+    margin: 0.25em;
+    height: 1em;
+    width: 1em;
+   transform: translateY(0.1em);
+
+}
+
+#velocityVector span{
+    background-color: #37286E;
+}
+
+#accelerationVector span{
+    background-color: #1C625D;
+}
+
+#centripetalAccelerationVector span{
+    background-color: #2F837D;
+}
+
+#tangencialAccelerationVector span{
+    background-color: #09413D;
+}
+
+div#demonstration{
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    width: 100%;
+}
+
+article#descriptionMenu div div.vectorDemonstration {
+    position: absolute;
+    display: block;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    top: 0vh;
+    width: 12vw;
+    height: 12vw;
+}
+
+div.vectorDemonstration img{
+    max-width: 100%;
+    max-height: 100%;
+}
+
+#planet figure{
+    width: 4vw;
+    height: 4vw;
 }
