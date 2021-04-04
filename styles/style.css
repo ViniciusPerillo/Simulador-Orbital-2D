@@ -366,11 +366,11 @@ div#coordinates{
 }
 
 #centripetalAccelerationVector span{
-    background-color: #2F837D;
+    background-color: #1F6B50;
 }
 
 #tangencialAccelerationVector span{
-    background-color: #09413D;
+    background-color: #205164;
 }
 
 div#demonstration{
@@ -382,7 +382,7 @@ div#demonstration{
 
 article#descriptionMenu div div.vectorDemonstration {
     position: absolute;
-    display: block;
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -399,4 +399,6 @@ div.vectorDemonstration img{
 #planet figure{
     width: 4vw;
     height: 4vw;
+    padding: 4vh;
+    z-index: 8;
 }

@@ -83,21 +83,26 @@ const HTML_ELEMENTS = {
                 type: document.querySelector('p#showType'),
                 density: document.querySelector('p#showDensity'),
                 velocity: {
+                    div: document.querySelector('div#velocityVector'),
                     data: document.querySelector('div#velocityVector div p#data'),
                     demonstration: document.querySelector('div#showVelocity')
                 },
                 acceleration: {
+                    div: document.querySelector('div#accelerationVector'),
                     data: document.querySelector('div#accelerationVector div p#data'),
                     demonstration: document.querySelector('div#showAcceleration')
                 },
                 centripetalAcceleration: {
+                    div: document.querySelector('div#centripetalAccelerationVector'),
                     data: document.querySelector('div#centripetalAccelerationVector div p#data'),
-                    demonstration: document.querySelector('div#showCentripetalAcceleration')
+                    demonstration: document.querySelector('div#showCentripetal')
                 },
                 tangencialAcceleration: {
+                    div: document.querySelector('div#tangencialAccelerationVector'),
                     data: document.querySelector('div#tangencialAccelerationVector div p#data'),
-                    demonstration: document.querySelector('div#showTangencialAcceleration')
-                }
+                    demonstration: document.querySelector('div#showTangencial')
+                },
+                astro: document.querySelector('div#planet figure')
             },
         }
     }
@@ -356,10 +361,9 @@ function deleteAstro(astroIndex){
 }
 
 function deleteAll(){
-    if(astros.object[0] != undefined){
+    while(astros.object[0] != undefined){
         deleteAstro(0);
-        deleteAll();
-    } 
+    }
 }
 
 function selectAstro(event){
@@ -423,7 +427,7 @@ function convertIndextoTimeScale(unitIndex){
 }
 
 function radianToDegree(angle){
-    return angle*180/Math.PI;
+    return (360+(Math.round(angle*180/Math.PI)%360))%360;
 }
 
 function animateHTML(element, keyFrames, duration, isPermanent, finish){
@@ -442,7 +446,7 @@ function attAstrosFigure(){
             Math.round(applySpaceScale((astros.object[astro].getY+astros.object[astro].getRadius)*-1,-1))
         )
     }
-    if(selectAstro != undefined && isSimulating)attDescriptionMenu()
+    if(selectAstro != undefined && isSimulating) attDescriptionMenu();
 }
 
 function attSpaceScaleHTMLElement(){
@@ -585,33 +589,78 @@ function closeDescriptionMenu(){
 }
 
 function attDescriptionMenu(){
-    HTML_ELEMENTS.menus.description.elements.x.innerHTML = `X: ${astros.figure[selectedAstro].getX} px`;
-    HTML_ELEMENTS.menus.description.elements.y.innerHTML = `Y: ${astros.figure[selectedAstro].getY} px`;
-    HTML_ELEMENTS.menus.description.elements.mass.innerHTML = `Mass: ${
-        (astros.object[selectedAstro].getMass/Math.pow(10,Math.floor(Math.log10(astros.object[selectedAstro].getMass)))).toFixed(1)
-        } × 10${
-        (Math.floor(Math.log10(astros.object[selectedAstro].getMass))).toString().sup()
-        } Kg`;
-    HTML_ELEMENTS.menus.description.elements.type.innerHTML = `Tipo: ${astros.object[selectedAstro].getNameOfType}`;
-    HTML_ELEMENTS.menus.description.elements.density.innerHTML = `Densidade: ${astros.object[selectedAstro].getDensity} Km/m³`;
-    HTML_ELEMENTS.menus.description.elements.velocity.data.innerHTML = `${(astros.object[selectedAstro].getVelocityVector.getModule/1000).toFixed(3)} Km/s , ${
-        astros.object[selectedAstro].getVelocityVector.isNull ? 'nulo' : radianToDegree(astros.object[selectedAstro].getVelocityVector.getAngle)
-    }°`;
-    HTML_ELEMENTS.menus.description.elements.acceleration.data.innerHTML = `${(astros.object[selectedAstro].getAccelerationVector.getModule).toFixed(3)} m/s² , ${
-        astros.object[selectedAstro].getAccelerationVector.isNull ? 'nulo' : radianToDegree(astros.object[selectedAstro].getAccelerationVector.getAngle)
-    }°`;
+    if(selectedAstro != undefined){
+        HTML_ELEMENTS.menus.description.elements.x.innerHTML = `X: ${astros.figure[selectedAstro].getX} px`;
+        HTML_ELEMENTS.menus.description.elements.y.innerHTML = `Y: ${astros.figure[selectedAstro].getY} px`;
+        HTML_ELEMENTS.menus.description.elements.mass.innerHTML = `Mass: ${
+            (astros.object[selectedAstro].getMass/Math.pow(10,Math.floor(Math.log10(astros.object[selectedAstro].getMass)))).toFixed(2)
+            } × 10${
+            (Math.floor(Math.log10(astros.object[selectedAstro].getMass))).toString().sup()
+            } Kg`;
+        HTML_ELEMENTS.menus.description.elements.type.innerHTML = `Tipo: ${astros.object[selectedAstro].getNameOfType}`;
+        HTML_ELEMENTS.menus.description.elements.density.innerHTML = `Densidade: ${(astros.object[selectedAstro].getDensity).toFixed(1)} Km/m³`;
+        HTML_ELEMENTS.menus.description.elements.astro.style.backgroundColor = astros.figure[selectedAstro].getFigure.style.backgroundColor;
+        attDescriptionMenuVelocityVector(HTML_ELEMENTS.menus.description.elements.velocity, astros.object[selectedAstro].getVelocityVector);
+        attDescriptionMenuVector(HTML_ELEMENTS.menus.description.elements.acceleration, astros.object[selectedAstro].getAccelerationVector);
+        attDescriptionMenuVector(HTML_ELEMENTS.menus.description.elements.centripetalAcceleration, astros.object[selectedAstro].getCentripetalAccelerationVector);
+        attDescriptionMenuTangencialVector(HTML_ELEMENTS.menus.description.elements.tangencialAcceleration, astros.object[selectedAstro].getTangencialAccelerationVector);
+    }
+}
 
-    if(astros.object[selectedAstro].getCentripetalAcceleration != undefined){
-        HTML_ELEMENTS.menus.description.elements.centripetalAcceleration.data.innerHTML = `${(astros.object[selectedAstro].getCentripetalAccelerationVector.getModule).toFixed(3)} m/s² , ${
-            astros.object[selectedAstro].getCentripetalAccelerationVector.isNull ? 'nulo' : radianToDegree(astros.object[selectedAstro].getCentripetalAccelerationVector.getAngle)
-        }°`;
+function attDescriptionMenuVector(variable, vector){
+    if(vector == undefined){
+        variable.div.style.display = 'none';
+        variable.demonstration.style.display = 'none';
+    }else{
+        if((vector.getModule).toFixed(5) == 0){
+            variable.div.style.display = 'none';
+            variable.demonstration.style.display = 'none';
+        }else{
+            variable.div.style.display = 'flex';
+            variable.demonstration.style.display = 'flex';
+            variable.data.innerHTML = `${(vector.getModule).toFixed(5)} Km/s² , ${radianToDegree(vector.getAngle)}°`;
+            variable.demonstration.style.transform = `rotate(${-1*radianToDegree(vector.getAngle)}deg)`
+        }
     }
-    if(astros.object[selectedAstro].getTangencialAcceleration != undefined){
-        HTML_ELEMENTS.menus.description.elements.tangencialAcceleration.data.innerHTML = `${(astros.object[selectedAstro].getTangencialAccelerationVector.getModule.toFixed(3))} m/s² , ${
-            astros.object[selectedAstro].getTangencialAccelerationVector.isNull ? 'nulo' : radianToDegree(astros.object[selectedAstro].getTangencialAccelerationVector.getAngle)
-        }°`;
+}
+
+function attDescriptionMenuVelocityVector(variable, vector){
+    if(vector == undefined){
+        variable.div.style.display = 'none';
+        variable.demonstration.style.display = 'none';
+    }else{
+        if((vector.getModule).toFixed(3) == 0){
+            variable.div.style.display = 'none';
+            variable.demonstration.style.display = 'none';
+        }else{
+            variable.div.style.display = 'flex';
+            variable.demonstration.style.display = 'flex';
+            variable.data.innerHTML = `${(vector.getModule/1000).toFixed(3)} Km/s , ${radianToDegree(vector.getAngle)}°`;
+            variable.demonstration.style.transform = `rotate(${-1*radianToDegree(vector.getAngle)}deg)`
+        }
     }
-    
+}
+
+function attDescriptionMenuTangencialVector(variable, vector){
+    if(vector == undefined){
+        variable.div.style.display = 'none';
+        variable.demonstration.style.display = 'none';
+    }else{
+        if((vector.getModule).toFixed(5) == 0){
+            variable.div.style.display = 'none';
+            variable.demonstration.style.display = 'none';
+        }else if(vector.getModule < 0){
+            variable.div.style.display = 'flex';
+            variable.demonstration.style.display = 'flex';
+            variable.data.innerHTML = `${(vector.getModule*-1).toFixed(5)} m/s² , ${radianToDegree(vector.getAngle+Math.PI)}°`;
+            variable.demonstration.style.transform = `rotate(${-1*radianToDegree(vector.getAngle+Math.PI)}deg)`
+        }else{
+            variable.div.style.display = 'flex';
+            variable.demonstration.style.display = 'flex';
+            variable.data.innerHTML = `${(vector.getModule).toFixed(5)} m/s² , ${radianToDegree(vector.getAngle)}°`;
+            variable.demonstration.style.transform = `rotate(${-1*radianToDegree(vector.getAngle)}deg)`
+        }
+    }
 }
 
 //Presets
