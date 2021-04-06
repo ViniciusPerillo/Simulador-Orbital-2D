@@ -324,7 +324,7 @@ div#presetButtons div:hover{
 
 article#descriptionMenu{
     right: 0;
-    
+    font-size: .9em;
     border-left: solid rgb(160, 120, 45) .25vh;
     border-bottom-left-radius: 5px;
 }
@@ -353,7 +353,7 @@ div#coordinates{
     margin: 0.25em;
     height: 1em;
     width: 1em;
-   transform: translateY(0.1em);
+    transform: translateY(0.1em);
 
 }
 
@@ -389,6 +389,15 @@ article#descriptionMenu div div.vectorDemonstration {
     top: 0vh;
     width: 12vw;
     height: 12vw;
+    
+}
+
+article#descriptionMenu div.components div span{
+    border: solid 1px black;
+}
+
+article#descriptionMenu div.components div span:hover{
+    cursor: pointer;
 }
 
 div.vectorDemonstration img{

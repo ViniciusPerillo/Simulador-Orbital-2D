@@ -29,6 +29,12 @@ let isAddAstroMenuOpened = false;
 let isMouseOverNewAstroMenu = false;
 let isDescriptionMenuOpened = false;
 let isTPressed = false;
+let vectorDemonstration = {
+    isVelocityShowed: true,
+    isAccelerationShowed: true,
+    isCentripetalShowed: true,
+    isTangencialShowed: true
+}
 
 const HTML_ELEMENTS = {
     scales: {
@@ -85,22 +91,26 @@ const HTML_ELEMENTS = {
                 velocity: {
                     div: document.querySelector('div#velocityVector'),
                     data: document.querySelector('div#velocityVector div p#data'),
-                    demonstration: document.querySelector('div#showVelocity')
+                    demonstration: document.querySelector('div#showVelocity'),
+                    caption: document.querySelector('div#velocityVector span') 
                 },
                 acceleration: {
                     div: document.querySelector('div#accelerationVector'),
                     data: document.querySelector('div#accelerationVector div p#data'),
-                    demonstration: document.querySelector('div#showAcceleration')
+                    demonstration: document.querySelector('div#showAcceleration'),
+                    caption: document.querySelector('div#accelerationVector span') 
                 },
                 centripetalAcceleration: {
                     div: document.querySelector('div#centripetalAccelerationVector'),
                     data: document.querySelector('div#centripetalAccelerationVector div p#data'),
-                    demonstration: document.querySelector('div#showCentripetal')
+                    demonstration: document.querySelector('div#showCentripetal'),
+                    caption: document.querySelector('div#centripetalAccelerationVector span') 
                 },
                 tangencialAcceleration: {
                     div: document.querySelector('div#tangencialAccelerationVector'),
                     data: document.querySelector('div#tangencialAccelerationVector div p#data'),
-                    demonstration: document.querySelector('div#showTangencial')
+                    demonstration: document.querySelector('div#showTangencial'),
+                    caption: document.querySelector('div#tangencialAccelerationVector span') 
                 },
                 astro: document.querySelector('div#planet figure')
             },
@@ -134,8 +144,22 @@ HTML_ELEMENTS.menus.addAstro.preset.colision.addEventListener('click', presetCol
 HTML_ELEMENTS.menus.addAstro.preset.binarySistem.addEventListener('click', presetBinarySistem);
 HTML_ELEMENTS.menus.description.button.addEventListener('click', descriptionMenu);
 HTML_ELEMENTS.menus.description.delete.addEventListener('click', ()=>{deleteAstro(selectedAstro);})
-
-
+HTML_ELEMENTS.menus.description.elements.velocity.caption.addEventListener('click', ()=>{
+    hideVectorDemonstration(HTML_ELEMENTS.menus.description.elements.velocity, vectorDemonstration.isVelocityShowed);
+    vectorDemonstration.isVelocityShowed = !vectorDemonstration.isVelocityShowed;
+})
+HTML_ELEMENTS.menus.description.elements.acceleration.caption.addEventListener('click', ()=>{
+    hideVectorDemonstration(HTML_ELEMENTS.menus.description.elements.acceleration, vectorDemonstration.isAccelerationShowed);
+    vectorDemonstration.isAccelerationShowed = !vectorDemonstration.isAccelerationShowed;
+})
+HTML_ELEMENTS.menus.description.elements.centripetalAcceleration.caption.addEventListener('click', ()=>{
+    hideVectorDemonstration(HTML_ELEMENTS.menus.description.elements.centripetalAcceleration, vectorDemonstration.isCentripetalShowed);
+    vectorDemonstration.isCentripetalShowed = !vectorDemonstration.isCentripetalShowed;
+})
+HTML_ELEMENTS.menus.description.elements.tangencialAcceleration.caption.addEventListener('click', ()=>{
+    hideVectorDemonstration(HTML_ELEMENTS.menus.description.elements.tangencialAcceleration, vectorDemonstration.isTangencialShowed);
+    vectorDemonstration.isTangencialShowed = !vectorDemonstration.isTangencialShowed;
+})
 
 //Listeners
 /**
@@ -215,6 +239,9 @@ function keyDownListeners(event){
         addAstroMenu();
     }else if(event.code == 'Enter' && isAddAstroMenuOpened){
         addNewAstro();
+    }else if(event.code == 'Delete' && selectedAstro != undefined){
+        deleteAstro(selectedAstro);
+        unselectAstro();
     }else if(isTPressed){
         changeTimeScale(event)
     }
@@ -273,11 +300,8 @@ function addNewAstro(){
     addAstroMenu(); 
 }
 
-
-
 //Main functions
 function run(){
-    createAstro(applySpaceScale(300,1), applySpaceScale(-300,1), 1, 6e+26, new Vector(0, 0), 0,'');
     attSpaceScaleHTMLElement();
     attTimeScaleHTMLElement();
     attAccelerationsVectors();
@@ -298,6 +322,7 @@ function inelasticCollision(){
         for(let astro in astros.object){
             if(astro != targetAstro && isCollidingWith(astro, targetAstro)){
                 applyCollision(targetAstro, astro);
+                unselectAstro();
                 inelasticCollision();
             }  
         }
@@ -427,7 +452,7 @@ function convertIndextoTimeScale(unitIndex){
 }
 
 function radianToDegree(angle){
-    return (360+(Math.round(angle*180/Math.PI)%360))%360;
+    return ((360+(((angle*180/Math.PI).toFixed(1))%360))%360).toFixed(1);
 }
 
 function animateHTML(element, keyFrames, duration, isPermanent, finish){
@@ -435,6 +460,12 @@ function animateHTML(element, keyFrames, duration, isPermanent, finish){
     if(isPermanent){
         animation.addEventListener('finish', finish);
     }
+}
+
+function setTimeScale(multiplier, unitIndex){
+    timeScale.multiplier = multiplier;
+    timeScale.selectedUnitIndex = unitIndex;
+    timeScale.timeScale = multiplier*convertIndextoTimeScale(unitIndex);
 }
 
 //DOM-related functions
@@ -592,7 +623,7 @@ function attDescriptionMenu(){
     if(selectedAstro != undefined){
         HTML_ELEMENTS.menus.description.elements.x.innerHTML = `X: ${astros.figure[selectedAstro].getX} px`;
         HTML_ELEMENTS.menus.description.elements.y.innerHTML = `Y: ${astros.figure[selectedAstro].getY} px`;
-        HTML_ELEMENTS.menus.description.elements.mass.innerHTML = `Mass: ${
+        HTML_ELEMENTS.menus.description.elements.mass.innerHTML = `Massa: ${
             (astros.object[selectedAstro].getMass/Math.pow(10,Math.floor(Math.log10(astros.object[selectedAstro].getMass)))).toFixed(2)
             } × 10${
             (Math.floor(Math.log10(astros.object[selectedAstro].getMass))).toString().sup()
@@ -609,16 +640,19 @@ function attDescriptionMenu(){
 
 function attDescriptionMenuVector(variable, vector){
     if(vector == undefined){
-        variable.div.style.display = 'none';
-        variable.demonstration.style.display = 'none';
+        variable.div.style.opacity = '0';
+        variable.demonstration.style.opacity = '0';
+        variable.caption.style.display = 'none';
     }else{
         if((vector.getModule).toFixed(5) == 0){
-            variable.div.style.display = 'none';
-            variable.demonstration.style.display = 'none';
+            variable.div.style.opacity = '0';
+            variable.demonstration.style.opacity = '0';
+            variable.caption.style.display = 'none';
         }else{
-            variable.div.style.display = 'flex';
-            variable.demonstration.style.display = 'flex';
-            variable.data.innerHTML = `${(vector.getModule).toFixed(5)} Km/s² , ${radianToDegree(vector.getAngle)}°`;
+            variable.div.style.opacity = '1';
+            variable.demonstration.style.opacity = '1';
+            variable.caption.style.display = 'block';
+            variable.data.innerHTML = `${(vector.getModule).toFixed(5)} m/s² , ${radianToDegree(vector.getAngle)}°`;
             variable.demonstration.style.transform = `rotate(${-1*radianToDegree(vector.getAngle)}deg)`
         }
     }
@@ -626,54 +660,72 @@ function attDescriptionMenuVector(variable, vector){
 
 function attDescriptionMenuVelocityVector(variable, vector){
     if(vector == undefined){
-        variable.div.style.display = 'none';
-        variable.demonstration.style.display = 'none';
+        variable.div.style.opacity = '0';
+        variable.demonstration.style.opacity = '0';
+        variable.caption.style.display = 'none';
     }else{
         if((vector.getModule).toFixed(3) == 0){
-            variable.div.style.display = 'none';
-            variable.demonstration.style.display = 'none';
+            variable.div.style.opacity = '0';
+            variable.demonstration.style.opacity = '0';
+            variable.caption.style.display = 'none';
         }else{
-            variable.div.style.display = 'flex';
-            variable.demonstration.style.display = 'flex';
+            variable.div.style.opacity = '1';
+            variable.demonstration.style.opacity = '1';
+            variable.caption.style.display = 'block';
             variable.data.innerHTML = `${(vector.getModule/1000).toFixed(3)} Km/s , ${radianToDegree(vector.getAngle)}°`;
-            variable.demonstration.style.transform = `rotate(${-1*radianToDegree(vector.getAngle)}deg)`
+            variable.demonstration.style.transform = `rotate(-${radianToDegree(vector.getAngle)}deg)`
         }
     }
 }
 
 function attDescriptionMenuTangencialVector(variable, vector){
     if(vector == undefined){
-        variable.div.style.display = 'none';
-        variable.demonstration.style.display = 'none';
+        variable.div.style.opacity = '0';
+        variable.demonstration.style.opacity = '0';
+        variable.caption.style.display = 'none';
     }else{
         if((vector.getModule).toFixed(5) == 0){
-            variable.div.style.display = 'none';
-            variable.demonstration.style.display = 'none';
-        }else if(vector.getModule < 0){
-            variable.div.style.display = 'flex';
-            variable.demonstration.style.display = 'flex';
-            variable.data.innerHTML = `${(vector.getModule*-1).toFixed(5)} m/s² , ${radianToDegree(vector.getAngle+Math.PI)}°`;
-            variable.demonstration.style.transform = `rotate(${-1*radianToDegree(vector.getAngle+Math.PI)}deg)`
+            variable.div.style.opacity = '0';
+            variable.demonstration.style.opacity = '0';
+            variable.caption.style.display = 'none';
         }else{
-            variable.div.style.display = 'flex';
-            variable.demonstration.style.display = 'flex';
-            variable.data.innerHTML = `${(vector.getModule).toFixed(5)} m/s² , ${radianToDegree(vector.getAngle)}°`;
+            variable.div.style.opacity = '1';
+            variable.demonstration.style.opacity = '1';
+            variable.caption.style.display = 'block';
+            if(vector.getModule < 0){
+                variable.data.innerHTML = `${(vector.getModule*-1).toFixed(5)} m/s² , ${radianToDegree(vector.getAngle+Math.PI)}°`;
+                variable.demonstration.style.transform = `rotate(${-1*radianToDegree(vector.getAngle+Math.PI)}deg)`
+            }else{
+                variable.data.innerHTML = `${(vector.getModule).toFixed(5)} m/s² , ${radianToDegree(vector.getAngle)}°`;
             variable.demonstration.style.transform = `rotate(${-1*radianToDegree(vector.getAngle)}deg)`
-        }
+            }
+        }        
+    }
+}
+
+function hideVectorDemonstration(variable, boolean){
+    if(boolean){
+        variable.demonstration.style.display = 'none';
+        variable.caption.style.opacity = '.4';
+    }else{
+        variable.demonstration.style.display = 'block';
+        variable.caption.style.opacity = '1';
     }
 }
 
 //Presets
-
 function presetEarthMoon(){
     deleteAll();
     createAstro(applySpaceScale(600,1), applySpaceScale(-400,1), -1, 6e+24, new Vector(0, 0), 5510,'');
     createAstro(applySpaceScale(963.4,1), applySpaceScale(-400,1), -1, 7.36e+22, new Vector(970, Math.PI/2), 3340,'');
+    setTimeScale(12,2);
+    run();
     closeAddAstroMenu();
 }
 
 function presetMassCenter(){
     deleteAll();
+    run();
     closeAddAstroMenu();
 }
 
@@ -682,14 +734,13 @@ function presetColision(){
     createAstro(applySpaceScale(300,1), applySpaceScale(-300,1), 1, 6e+24, new Vector(1000, Math.PI/4), 0,'');
     createAstro(applySpaceScale(300,1), applySpaceScale(-600,1), 1, 6e+24, new Vector(1000, 7*Math.PI/4), 0,'');
     createAstro(applySpaceScale(1150,1), applySpaceScale(-450,1), 0, 2e+24, new Vector(1080, Math.PI), 0,'');
-    timeScale.multiplier = 12 
-    timeScale.selectedUnitIndex = 2 
-    timeScale.timeScale = 12*60*60
-    attTimeScaleHTMLElement();
+    setTimeScale(12,2);
+    run();
     closeAddAstroMenu();
 }
 
 function presetBinarySistem(){
     deleteAll();
+    run();
     closeAddAstroMenu();
 }
