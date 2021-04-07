@@ -38,6 +38,7 @@
   ![keys](https://user-images.githubusercontent.com/76188994/112862780-810f0b00-908c-11eb-9a6e-968c5e4c7bd7.png) | Aumentar escala de tempo </br></br></br> Diminuir escala de tempo </br></br></br> Aumentar unidade da escala de tempo <br/></br></br> Diminuir a unidade da escala de tempo
   ![escape](https://user-images.githubusercontent.com/76188994/112864481-3b534200-908e-11eb-8878-3f7ebca374c3.png) | Cancela ações e abre/fecha menu de configurações
   ![add](https://user-images.githubusercontent.com/76188994/112864765-866d5500-908e-11eb-93a1-d557e1c862db.png) ![plus](https://user-images.githubusercontent.com/76188994/113921648-a0104a00-97bc-11eb-9490-86526bd5bede.png)| Abre o menu de adição de novo astro
+  Clicar duas vezes no astro | Seleciona o astro habilitando a remoção e a aba de informações dele
   ![delete](https://user-images.githubusercontent.com/76188994/112864890-a43aba00-908e-11eb-97c6-4da8e13b9f6a.png) | Deleta astro selecionado </br> 
   ![asterisco](https://user-images.githubusercontent.com/76188994/112865230-f085fa00-908e-11eb-930b-4df9fba61195.png) ![track](https://user-images.githubusercontent.com/76188994/113920475-3479ad00-97bb-11eb-99f2-a1104f0caba6.png) | Ativa/desativa rastro deixado pelo astro </br> *Quando ativo, arrastar e zoom são desabilitados*
   
