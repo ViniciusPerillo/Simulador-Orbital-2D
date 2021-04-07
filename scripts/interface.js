@@ -774,32 +774,49 @@ function hideVectorDemonstration(variable, boolean){
 //Presets
 function presetEarthMoon(){
     deleteAll();
+    spaceScale = 1e+6;
     createAstro(applySpaceScale(600,1), applySpaceScale(-400,1), -1, 6e+24, new Vector(0, 0), 5510,'');
     createAstro(applySpaceScale(963.4,1), applySpaceScale(-400,1), -1, 7.36e+22, new Vector(970, Math.PI/2), 3340,'');
     setTimeScale(12,2);
     run();
     closeAddAstroMenu();
+    hideAstroTrack();
 }
 
 function presetMassCenter(){
     deleteAll();
+    spaceScale = 1e+6;
+    createAstro(applySpaceScale(400,1), applySpaceScale(-200,1), 1, 1e+25, new Vector(1100, 1*Math.PI/4));
+    createAstro(applySpaceScale(400,1), applySpaceScale(-600,1), 1, 1e+25, new Vector(1100, 3*Math.PI/4));
+    createAstro(applySpaceScale(800,1), applySpaceScale(-200,1), 1, 1e+25, new Vector(1100, 7*Math.PI/4));
+    createAstro(applySpaceScale(800,1), applySpaceScale(-600,1), 1, 1e+25, new Vector(1100, 5*Math.PI/4));
+    setTimeScale(6,2);
     run();
     closeAddAstroMenu();
+    hideAstroTrack();
 }
 
 function presetColision(){
     deleteAll();
+    spaceScale = 1e+6;
     createAstro(applySpaceScale(300,1), applySpaceScale(-300,1), 1, 6e+24, new Vector(1000, Math.PI/4), 0,'');
     createAstro(applySpaceScale(300,1), applySpaceScale(-600,1), 1, 6e+24, new Vector(1000, 7*Math.PI/4), 0,'');
     createAstro(applySpaceScale(1150,1), applySpaceScale(-450,1), 0, 2e+24, new Vector(1080, Math.PI), 0,'');
     setTimeScale(12,2);
     run();
     closeAddAstroMenu();
+    hideAstroTrack();
 }
 
 function presetBinarySistem(){
     deleteAll();
+    spaceScale = 1e+8;
+    createAstro(applySpaceScale(200,1), applySpaceScale(-300,1), -1, 2e+30, new Vector(47940, Math.PI), 1410,'');
+    createAstro(applySpaceScale(200,1), applySpaceScale(-600,1), -1, 2e+30, new Vector(47940, 0), 1410,'');
+    createAstro(applySpaceScale(1000,1), applySpaceScale(-450,1), 0, 2e+27, new Vector(60000, Math.PI/2));
+    setTimeScale(1,3);
     run();
     closeAddAstroMenu();
+    hideAstroTrack();
 }
 
