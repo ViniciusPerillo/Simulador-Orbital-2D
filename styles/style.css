@@ -30,20 +30,43 @@ header.flexRow{
 
 .headerDiv{
     position: relative;
-    display: block;
+    display: flex;
     width: 30vh;
     margin: 0px 20px 0px 20px;
     padding: 5px;
-}   
+}
+
+div#logo.headerDiv{
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 6vh;
+}
+
+div#logo img{
+    height: 6vh; 
+}
 
 .astro{
     position: absolute;
     display: block;
+    box-sizing: border-box;
     margin: 0px;
     padding: 0px;
     border-radius: 50%;
     overflow: hidden;
-    z-index: -1000000;
+    z-index: -1000;
+}
+
+.track{
+    position: absolute;
+    display: block;
+    margin: 0;
+    padding: 0;
+    z-index: -10000000;
+    width: 1px;
+    height: 1px;
 }
 
 .flexRow{
@@ -151,16 +174,32 @@ footer img{
     border-bottom-right-radius: 5px;
     top: 10vh;
 }
+
+.interfaceButton img{
+    width: 24px;
+    height: 24px;
+    padding: 5px;
+}
+
+.interfaceButton:hover{
+    height: 40px;
+    cursor: pointer;
+    color: white;
+}
+
 div#addAstroButton{
     left: 5px;
     box-shadow: 1px 1px 2px rgba(175,175,175,.7);
 }
 
-div#moreButton{
-    right: 5px;
-    display: flex;
+div#astroTrack{
+    left: 48px;
+    box-shadow: 1px 1px 2px rgba(175,175,175,.7);
 }
 
+div#astroTrack:hover{
+    height: 34px;
+}
 
 a#help{
     left: 50%;
@@ -176,48 +215,58 @@ a#help:hover{
     
 }
 
-.interfaceButton img{
-    width: 24px;
-    height: 24px;
-    padding: 5px;
+div#moreButton{
+    right: 5px;
+    display: none;
+    opacity: 0;
 }
 
-.interfaceButton:hover{
-    height: 40px;
-    cursor: pointer;
-    color: white;
+div#delete{
+    right: 48px;
+    display: none;
+    opacity: 0;
 }
 
-div#addAstroMenu{
+div#delete:hover{
+    height: 34px;
+}
+
+.sideMenu{
     position: absolute;
+    justify-content: flex-start;
     height: 82vh;
-    top: -92.4vh;
-    left: 0;
+    width: 18vw;
+    top: -72.4vh;
     z-index: 4;
     box-sizing: border-box;
     background-color: rgb(45, 45, 45);
     border-bottom: solid rgb(160, 120, 45) .25vh;
-    border-right: solid rgb(160, 120, 45) .25vh;;
+    font-size: 1em;
+}
+
+article#addAstroMenu{
+    left: 0;
+    border-right: solid rgb(160, 120, 45) .25vh;
     border-bottom-right-radius: 5px;
 }
 
-div#addAstroMenu h3{
+.sideMenu h3{
     padding: 5px 20px 5px 20px;
     margin: 0;
     border-bottom: solid rgb(160, 120, 45) .25vh;
 
 }
 
-div#addAstroMenu img{
+article#addAstroMenu img{
     width: 20vh;
     height: 20vh;
     padding: 5px;
 }
 
-div#addAstroMenu span{
+article#addAstroMenu span{
     background-color: rgb(160, 120, 45);
     border-radius: 0.25vh;
-    height: 5vh;
+    height: 40px;
     width: 80%;
     display: flex;
     justify-content: center;
@@ -227,13 +276,13 @@ div#addAstroMenu span{
     margin: 2vh 0 1vh 0;
 }
 
-div#addAstroMenu span:hover {
+article#addAstroMenu span:hover {
     cursor: pointer;
     box-shadow: 1px 1px 2px rgba(255,255,255,.7);
 
 }
 
-div#elementsAstroMenu{
+.sideMenu .components{
     margin: 10px 10px 10px 10px;
     align-items: baseline;
     display: flex;
@@ -273,3 +322,125 @@ div#elementsAstroMenu div.flexRow{
     height: 5vh;
 }
 
+div#presetButtons{
+    position: absolute;
+    display: none;
+    opacity: 0;
+    justify-content: left;
+    align-items: flex-end;
+    transform: translateY(0.25vh);
+    top: 82vh;
+    left: 44px;
+    width: 100%;
+} 
+
+div#presetButtons div{
+    position: relative;
+    display: flex;
+    margin-left: 5px;
+    top: 0;
+    width: 30px;
+    height: 30px;
+    border-top: solid 0.25vh rgb(25, 25, 25, 0.7);
+}
+
+div#presetButtons div img{
+    width: 20px;
+    height: 20px;
+}
+
+div#presetButtons div:hover{
+    height: 30px;
+}
+
+article#descriptionMenu{
+    right: 0;
+    font-size: .9em;
+    border-left: solid rgb(160, 120, 45) .25vh;
+    border-bottom-left-radius: 5px;
+}
+
+.vetores{
+    position: relative;
+    justify-content: left;
+}
+
+article#descriptionMenu div{
+    position: relative;
+    align-items: baseline;
+}
+
+article#descriptionMenu p{
+    margin: 8px 5px 0 5px;
+}
+
+div#coordinates{
+    position: relative;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.caption{
+    margin: 0.25em;
+    height: 1em;
+    width: 1em;
+    transform: translateY(0.2em);
+
+}
+
+article#descriptionMenu div.components div span{
+    box-shadow: -1px 1px 2px rgba(0,0,0,.4);
+}
+
+article#descriptionMenu div.components div span:hover{
+    cursor: pointer;
+}
+
+#velocityVector span{
+    background-color: #37286E;
+}
+
+#accelerationVector span{
+    background-color: #1C625D;
+}
+
+#centripetalAccelerationVector span{
+    background-color: #1F6B50;
+}
+
+#tangencialAccelerationVector span{
+    background-color: #205164;
+}
+
+div#demonstration{
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    width: 12vw;
+    height: 12vw;
+    
+}
+
+article#descriptionMenu div div.vectorDemonstration {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    top: 0vh;
+    width: 12vw;
+    height: 12vw;
+    
+}
+
+div.vectorDemonstration img{
+    max-width: 100%;
+    max-height: 100%;
+}
+
+#planet figure{
+    width: 4vw;
+    height: 4vw;
+    padding: 4vh;
+    z-index: 8;
+}
