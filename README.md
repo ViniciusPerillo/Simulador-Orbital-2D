@@ -13,7 +13,8 @@
   - [Licença](https://github.com/ViniciusPerillo/Simulador-Orbital-2D-em-JavaScripit#licença)
  ***
  ### Status
-  #### Simulador pronto
+  #### Simulador pronto acesse clicando [aqui](https://viniciusperillo.github.io/Simulador-Orbital-2D/)
+  Recomendado que acesse em um desktop.
  ***
  ### Features
   - #### Interface
@@ -75,6 +76,8 @@ Analisando esse processo pode-se ver que quanto menor for a escala temporal, mai
  ### Autor
   #### Feito por Vinícius Gonçalves Perillo
   [![Gmail Badge](https://img.shields.io/badge/-vinicius.perillo25@gmail.com-c14438?style=flat-square&logo=Gmail&logoColor=white&link=mailto:vinicius.perillo25@gmail.com)](mailto:vinicius.perillo25@gmail.com)
+  #### Notas do autor
+  Esse é o meu primeiro projeto, então muitos commits estão com uma descrição péssima, qualquer bug, correção ou sugestão entre em contato comigo. 
  ***
  ### Participantes na produção
   #### Imagens dos planetas e logo feitos por Heloísa Rades
