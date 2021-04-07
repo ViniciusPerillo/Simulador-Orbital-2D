@@ -312,6 +312,7 @@ function astroTrack(){
     }else{
         showAstroTrack();
     }
+    HTML_ELEMENTS.track.style.height = isTracking ? '40px' : '34px';
 }
 
 function showAstroTrack(){
@@ -545,9 +546,7 @@ function attSpaceScaleHTMLElement(){
 
 function attTimeScaleHTMLElement(){
     let timeUnits = ['segundo','minuto','hora','dia','ano'];
-    HTML_ELEMENTS.scales.time.innerHTML = `1 seg : ${
-        timeScale.multiplier < 1 ? '1'.sup() + '/' + (Math.pow(2,(Math.log2(timeScale.multiplier)*-1))).toString().sub() : timeScale.multiplier
-    } ${timeScale.multiplier<0.5 ? ' de ' : '' }${timeUnits[timeScale.selectedUnitIndex]}${timeScale.multiplier>1 ? 's' : ''}`;
+    HTML_ELEMENTS.scales.time.innerHTML = `1 seg : ${timeScale.multiplier < 1 ? '1'.sup() + '/' + (Math.pow(2,(Math.log2(timeScale.multiplier)*-1))).toString().sub() : timeScale.multiplier}${timeScale.multiplier<0.5 ? ' de ' : '' } ${timeUnits[timeScale.selectedUnitIndex]}${timeScale.multiplier>1 ? 's' : ''}`;
 }
 
 function toggleOptions(){
