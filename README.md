@@ -77,7 +77,7 @@ Analisando esse processo pode-se ver que quanto menor for a escala temporal, mai
   [![Gmail Badge](https://img.shields.io/badge/-vinicius.perillo25@gmail.com-c14438?style=flat-square&logo=Gmail&logoColor=white&link=mailto:vinicius.perillo25@gmail.com)](mailto:vinicius.perillo25@gmail.com)
  ***
  ### Participantes na produção
-  #### Imagens dos planetas feitas por Heloísa Rades
+  #### Imagens dos planetas e logo feitos por Heloísa Rades
   [![Gmail Badge](https://img.shields.io/badge/-heloisa1466@gmail.com-c14438?style=flat-square&logo=Gmail&logoColor=white&link=mailto:heloisa1466@gmail.com)](heloisa1466@gmail.com)
  #### Icones do github e instagram feitos por  Pixel perfect
  [Pixel perfect](https://www.flaticon.com/br/autores/pixel-perfect) from [www.flaticon.com](https://www.flaticon.com/br/)
