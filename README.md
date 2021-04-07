@@ -35,7 +35,7 @@
   Teclas|Ações
   :---:|:---:
   ![Spacebar](https://user-images.githubusercontent.com/76188994/112848308-5027d980-907e-11eb-879d-884fcfb9055c.png) | Play/pause a simulação
-  ![keys](https://user-images.githubusercontent.com/76188994/112862780-810f0b00-908c-11eb-9a6e-968c5e4c7bd7.png) | Aumentar escala de tempo </br></br></br> Diminuir escala de tempo </br></br></br> Aumentar unidade da escala de tempo <br/></br></br> Diminuir a unidade da escala de tempo
+  ![keys](https://user-images.githubusercontent.com/76188994/113942388-1621aa80-97d7-11eb-95d3-8c3eb075f4a5.png) | Aumentar escala de tempo </br></br></br> Diminuir escala de tempo </br></br></br> Aumentar unidade da escala de tempo <br/></br></br> Diminuir a unidade da escala de tempo
   ![escape](https://user-images.githubusercontent.com/76188994/112864481-3b534200-908e-11eb-8878-3f7ebca374c3.png) | Cancela ações e abre/fecha menu de configurações
   ![add](https://user-images.githubusercontent.com/76188994/112864765-866d5500-908e-11eb-93a1-d557e1c862db.png) ![plus](https://user-images.githubusercontent.com/76188994/113921648-a0104a00-97bc-11eb-9490-86526bd5bede.png)| Abre o menu de adição de novo astro
   Clicar duas vezes no astro | Seleciona o astro habilitando a remoção e a aba de informações dele
