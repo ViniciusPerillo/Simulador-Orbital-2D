@@ -39,7 +39,7 @@
   ![escape](https://user-images.githubusercontent.com/76188994/112864481-3b534200-908e-11eb-8878-3f7ebca374c3.png) | Cancela ações e abre/fecha menu de configurações
   ![add](https://user-images.githubusercontent.com/76188994/112864765-866d5500-908e-11eb-93a1-d557e1c862db.png) ![plus](https://user-images.githubusercontent.com/76188994/113921648-a0104a00-97bc-11eb-9490-86526bd5bede.png)| Abre o menu de adição de novo astro
   ![delete](https://user-images.githubusercontent.com/76188994/112864890-a43aba00-908e-11eb-97c6-4da8e13b9f6a.png) | Deleta astro selecionado </br> 
-  ![asterisco](https://user-images.githubusercontent.com/76188994/112865230-f085fa00-908e-11eb-930b-4df9fba61195.png) ![track](https://user-images.githubusercontent.com/76188994/113920475-3479ad00-97bb-11eb-99f2-a1104f0caba6.png) | Ativa/desativa rastro deixado pelo astro </br> 
+  ![asterisco](https://user-images.githubusercontent.com/76188994/112865230-f085fa00-908e-11eb-930b-4df9fba61195.png) ![track](https://user-images.githubusercontent.com/76188994/113920475-3479ad00-97bb-11eb-99f2-a1104f0caba6.png) | Ativa/desativa rastro deixado pelo astro </br> *Quando ativo, arrastar e zoom são desabilitados*
   
  #### Presets
  Preset|Ação
