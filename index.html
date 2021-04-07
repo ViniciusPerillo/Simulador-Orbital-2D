@@ -18,6 +18,9 @@
     <div id = "addAstroButton" class="interfaceButton">
         <img src="imagens/icons/plusButton.png" alt="Adicione novo astro">
     </div>
+    <div id = "astroTrack" class="interfaceButton">
+        <img src="imagens/icons/astroTrack.png" alt="Liga e desliga o rasto">
+    </div>
     <a href="https://github.com/ViniciusPerillo/Simulador-Orbital-2D/blob/main/README.md#simulador-orbital-2d" target="_blank" id = "help" class="interfaceButton"> ? </a>
     <div id = "moreButton" class="interfaceButton">
         <img src="imagens/icons/more.png" alt="Adicione novo astro">
@@ -110,48 +113,48 @@
         </div>
     </article>
     <article id="descriptionMenu" class="flexColumn sideMenu">
-        <h3>Astro Selecionado</h3>
-        <div class="components">
-            <div id="coordinates" class="flexRow">
-                <p id="showX" >X: 0 px</p>
-                <p id="showY">Y: 0 px</p>  
-            </div>
-            <p id="showMass">Massa: 0 Kg</p>
-            <p id="showType">Tipo: Gasoso</p>
-            <p id="showDensity"> Densidade: 0 Kg/m³ </p>
-            <div id="velocityVector" class="flexRow">
-                <span class="caption">
-                </span>
-                <div class="flexColumn">
-                    <p>Velocidade: </p>
-                    <p id="data">0 Km/s , 0°</p>
+            <h3>Astro Selecionado</h3>
+            <div class="components">
+                <div id="coordinates" class="flexRow">
+                    <p id="showX" ></p>
+                    <p id="showY"></p>  
+                </div>
+                <p id="showMass"></p>
+                <p id="showType"></p>
+                <p id="showDensity"></p>
+                <div id="velocityVector" class="flexRow">
+                    <span class="caption">
+                    </span>
+                    <div class="flexColumn">
+                        <p>Velocidade: </p>
+                        <p id="data"></p>
+                    </div>
+                </div>
+                <div id="accelerationVector" class="flexRow">
+                    <span class="caption">
+                    </span>
+                    <div  class="flexColumn">
+                        <p>Aceleração: </p>
+                        <p id="data"></p>
+                    </div>
+                </div>
+                <div id="centripetalAccelerationVector" class="flexRow">
+                    <span class="caption">
+                    </span>
+                    <div class="flexColumn">
+                        <p>Aceleração centrípeta: </p>
+                        <p id="data"></p>
+                    </div>
+                </div>
+                <div id="tangencialAccelerationVector" class="flexRow">
+                    <span class="caption">
+                    </span>
+                    <div class="flexColumn">
+                        <p>Aceleração tangencial: </p>
+                        <p id="data"></p>
+                    </div>
                 </div>
             </div>
-            <div id="accelerationVector" class="flexRow">
-                <span class="caption">
-                </span>
-                <div  class="flexColumn">
-                    <p>Aceleração: </p>
-                    <p id="data">0 Km/s² , 0°</p>
-                </div>
-            </div>
-            <div id="centripetalAccelerationVector" class="flexRow">
-                <span class="caption">
-                </span>
-                <div class="flexColumn">
-                    <p>Aceleração centrípeta: </p>
-                    <p id="data">0 m/s² , nulo°</p>
-                </div>
-            </div>
-            <div id="tangencialAccelerationVector" class="flexRow">
-                <span class="caption">
-                </span>
-                <div class="flexColumn">
-                    <p>Aceleração tangencial: </p>
-                    <p id="data">0 m/s² , nulo°</p>
-                </div>
-            </div>
-        </div>
         <div id="demonstration">
             <div id="showVelocity" class="vectorDemonstration">
                 <img src="imagens/icons/velocity.png" alt="">
@@ -169,7 +172,6 @@
                 <figure class="astro"></figure>
             </div>   
         </div>
-        
     </article>
     <script src="scripts/interface.js" type="module"></script>
 </body>

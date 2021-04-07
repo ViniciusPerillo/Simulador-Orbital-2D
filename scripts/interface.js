@@ -8,18 +8,19 @@ import {Vector} from './classes/vetor.js';
 let astros = {
     figure: [],
     object: [],
-}
+    track: [],
+};
 let spaceScale = 1e+6; // 1 px : spaceScale m 
 let timeScale = {
     'timeScale': 1,
     'selectedUnitIndex': 0,
     'multiplier': 1
-}
+};
 let precisionUnit;
 let mousePosition = {
     x: null,
     y: null,
-}
+};
 let selectedAstro;
 let isSimulating = false;
 let isDraggable = false;
@@ -34,7 +35,8 @@ let vectorDemonstration = {
     isAccelerationShowed: true,
     isCentripetalShowed: true,
     isTangencialShowed: true
-}
+};
+let isTracking = false;
 
 const HTML_ELEMENTS = {
     scales: {
@@ -115,20 +117,21 @@ const HTML_ELEMENTS = {
                 astro: document.querySelector('div#planet figure')
             },
         }
-    }
-}
+    },
+    track: document.querySelector('div#astroTrack')
+};
 
 //DOM Events
 document.addEventListener('DOMContentLoaded', run);  
-document.addEventListener('mousedown', (event)=>{if(!isOptionOpen) unlockDrag(event)});
+document.addEventListener('mousedown', (event)=>{if(!isOptionOpen && !isTracking) unlockDrag(event)});
 document.addEventListener('mousemove', (event)=>{if(isDraggable && !isAddAstroMenuOpened) drag(event)});
 document.addEventListener('mouseup', lockDrag);
-document.addEventListener('wheel', (event)=>{if(!isOptionOpen && !isAddAstroMenuOpened) zoom(event)});
+document.addEventListener('wheel', (event)=>{if(!isOptionOpen && !isAddAstroMenuOpened && !isTracking) zoom(event)});
 document.addEventListener('keydown', (event)=>{keyDownListeners(event)});
 document.addEventListener('keyup',(event)=>{keyUpListeners(event)});
 HTML_ELEMENTS.menus.options.precisionMode.checkbox.addEventListener('click', precisionMode);
 HTML_ELEMENTS.menus.options.precisionMode.select.addEventListener('change', attPrecisionUnit);
-HTML_ELEMENTS.menus.addAstro.button.addEventListener('click',()=>{if(!isOptionOpen) addAstroMenu()})
+HTML_ELEMENTS.menus.addAstro.button.addEventListener('click',()=>{if(!isOptionOpen) addAstroMenu()});
 HTML_ELEMENTS.menus.addAstro.window.addEventListener('mouseenter',()=>{isMouseOverNewAstroMenu = true});
 HTML_ELEMENTS.menus.addAstro.window.addEventListener('mouseleave',()=>{isMouseOverNewAstroMenu = false});
 HTML_ELEMENTS.menus.addAstro.elements.x.addEventListener('input',attTargetPosition);
@@ -143,23 +146,24 @@ HTML_ELEMENTS.menus.addAstro.preset.massCenter.addEventListener('click', presetM
 HTML_ELEMENTS.menus.addAstro.preset.colision.addEventListener('click', presetColision);
 HTML_ELEMENTS.menus.addAstro.preset.binarySistem.addEventListener('click', presetBinarySistem);
 HTML_ELEMENTS.menus.description.button.addEventListener('click', descriptionMenu);
-HTML_ELEMENTS.menus.description.delete.addEventListener('click', ()=>{deleteAstro(selectedAstro);})
+HTML_ELEMENTS.menus.description.delete.addEventListener('click', ()=>{deleteAstro(selectedAstro)});
 HTML_ELEMENTS.menus.description.elements.velocity.caption.addEventListener('click', ()=>{
     hideVectorDemonstration(HTML_ELEMENTS.menus.description.elements.velocity, vectorDemonstration.isVelocityShowed);
     vectorDemonstration.isVelocityShowed = !vectorDemonstration.isVelocityShowed;
-})
+});
 HTML_ELEMENTS.menus.description.elements.acceleration.caption.addEventListener('click', ()=>{
     hideVectorDemonstration(HTML_ELEMENTS.menus.description.elements.acceleration, vectorDemonstration.isAccelerationShowed);
     vectorDemonstration.isAccelerationShowed = !vectorDemonstration.isAccelerationShowed;
-})
+});
 HTML_ELEMENTS.menus.description.elements.centripetalAcceleration.caption.addEventListener('click', ()=>{
     hideVectorDemonstration(HTML_ELEMENTS.menus.description.elements.centripetalAcceleration, vectorDemonstration.isCentripetalShowed);
     vectorDemonstration.isCentripetalShowed = !vectorDemonstration.isCentripetalShowed;
-})
+});
 HTML_ELEMENTS.menus.description.elements.tangencialAcceleration.caption.addEventListener('click', ()=>{
     hideVectorDemonstration(HTML_ELEMENTS.menus.description.elements.tangencialAcceleration, vectorDemonstration.isTangencialShowed);
     vectorDemonstration.isTangencialShowed = !vectorDemonstration.isTangencialShowed;
-})
+});
+HTML_ELEMENTS.track.addEventListener('click', astroTrack);
 
 //Listeners
 /**
@@ -242,8 +246,10 @@ function keyDownListeners(event){
     }else if(event.code == 'Delete' && selectedAstro != undefined){
         deleteAstro(selectedAstro);
         unselectAstro();
+    }else if(event.code == 'Digit8' && !isOptionOpen){
+        astroTrack();
     }else if(isTPressed){
-        changeTimeScale(event)
+        changeTimeScale(event);
     }
 }
 
@@ -258,7 +264,7 @@ function changeTimeScale(event){
         if(timeScale.multiplier<60 && timeScale.multiplier>=1){
             timeScale.multiplier++;
         }else if(timeScale.multiplier<1){
-            timeScale.multiplier = Math.pow(Math.pow(timeScale.multiplier,-1)/2,-1)
+            timeScale.multiplier = Math.pow(Math.pow(timeScale.multiplier,-1)/2,-1);
         }else{
             timeScale.multiplier = 1;
         }
@@ -266,7 +272,7 @@ function changeTimeScale(event){
         if(timeScale.multiplier>1){
             timeScale.multiplier--;
         }else if(timeScale.multiplier<=1 && timeScale.multiplier > 1/8){
-            timeScale.multiplier = Math.pow(Math.pow(timeScale.multiplier,-1)*2,-1)
+            timeScale.multiplier = Math.pow(Math.pow(timeScale.multiplier,-1)*2,-1);
         }else{
             timeScale.multiplier = 60;
         }
@@ -300,6 +306,23 @@ function addNewAstro(){
     addAstroMenu(); 
 }
 
+function astroTrack(){
+    if(isTracking){
+        hideAstroTrack();
+    }else{
+        showAstroTrack();
+    }
+}
+
+function showAstroTrack(){
+    isTracking = true;
+}
+
+function hideAstroTrack(){
+    isTracking = false;
+    clearAllTracks();
+}
+
 //Main functions
 function run(){
     attSpaceScaleHTMLElement();
@@ -311,6 +334,9 @@ function simulate(){
     attAccelerationsVectors();
     for(let astro in astros.object){
         astros.object[astro].applyPhysics(isPrecisionMode ? precisionUnit : timeScale.timeScale/30);
+        if(isTracking){
+            addTrack(astro);  
+        } 
     }
     inelasticCollision();
     attAstrosFigure();
@@ -336,9 +362,9 @@ function isCollidingWith(astro1, astro2){
 }
 
 function applyCollision(astro1, astro2){
-    let mass = astros.object[astro1].getMass + astros.object[astro2].getMass
-    let x = (astros.object[astro1].getX*astros.object[astro1].getMass + astros.object[astro2].getX*astros.object[astro2].getMass) / mass
-    let y = (astros.object[astro1].getY*astros.object[astro1].getMass + astros.object[astro2].getY*astros.object[astro2].getMass) / mass
+    let mass = astros.object[astro1].getMass + astros.object[astro2].getMass;
+    let x = (astros.object[astro1].getX*astros.object[astro1].getMass + astros.object[astro2].getX*astros.object[astro2].getMass) / mass;
+    let y = (astros.object[astro1].getY*astros.object[astro1].getMass + astros.object[astro2].getY*astros.object[astro2].getMass) / mass;
     let volume = (Math.PI*4*Math.pow(astros.object[astro1].getRadius,3) + Math.PI*4*Math.pow(astros.object[astro2].getRadius,3)) / 3;
     let velocityVector = Vector.vectorSum([astros.object[astro1].getLinearMomentumVector,astros.object[astro2].getLinearMomentumVector]);
     velocityVector.setModule = velocityVector.getModule / mass;
@@ -374,13 +400,16 @@ function createAstro(x, y, type, mass, initialVelocity, density = 0,imgPath = ''
     let newAstroIndex = astros.figure.push(new Figure(0,0,0,0,imgPath)) - 1
     astros.figure[newAstroIndex].getFigure.classList.add('astro');
     astros.figure[newAstroIndex].getFigure.addEventListener('dblclick',(event)=>{selectAstro(event)})
+    astros.track[newAstroIndex] = [];
     attAstrosFigure();
 }
 
 function deleteAstro(astroIndex){
     astros.object.splice(astroIndex,1);
-    document.body.removeChild(astros.figure[astroIndex].getFigure)
+    document.body.removeChild(astros.figure[astroIndex].getFigure);
     astros.figure.splice(astroIndex,1);
+    clearTrack(astroIndex);
+    astros.track.splice(astroIndex,1);
     selectedAstro = undefined;
     unselectAstro();
 }
@@ -394,13 +423,13 @@ function deleteAll(){
 function selectAstro(event){
     for(let astro in astros.figure){
         if(astros.figure[astro].getFigure == event.target || astros.figure[astro].getImg == event.target){
-            if(selectedAstro != undefined) astros.figure[selectedAstro].getFigure.style.border = 'none'
+            if(selectedAstro != undefined) astros.figure[selectedAstro].getFigure.style.border = 'none';
             selectedAstro = astro;
-            astros.figure[selectedAstro].getFigure.style.border = 'double 5px #ffffff'
-            HTML_ELEMENTS.menus.description.button.style.display = 'flex'
-            HTML_ELEMENTS.menus.description.delete.style.display = 'flex'
-            animateHTML(HTML_ELEMENTS.menus.description.button,[{opacity: '1'}], 250, true, ()=>{HTML_ELEMENTS.menus.description.button.style.opacity = '1'})
-            animateHTML(HTML_ELEMENTS.menus.description.delete,[{opacity: '1'}], 250, true, ()=>{HTML_ELEMENTS.menus.description.delete.style.opacity = '1'})
+            astros.figure[selectedAstro].getFigure.style.border = 'double 5px #ffffff';
+            HTML_ELEMENTS.menus.description.button.style.display = 'flex';
+            HTML_ELEMENTS.menus.description.delete.style.display = 'flex';
+            animateHTML(HTML_ELEMENTS.menus.description.button,[{opacity: '1'}], 250, true, ()=>{HTML_ELEMENTS.menus.description.button.style.opacity = '1'});
+            animateHTML(HTML_ELEMENTS.menus.description.delete,[{opacity: '1'}], 250, true, ()=>{HTML_ELEMENTS.menus.description.delete.style.opacity = '1'});
             attDescriptionMenu();
             break;
         }
@@ -408,18 +437,44 @@ function selectAstro(event){
 }
 
 function unselectAstro(){
-    if(selectedAstro != undefined) astros.figure[selectedAstro].getFigure.style.border = 'none'
+    if(selectedAstro != undefined) astros.figure[selectedAstro].getFigure.style.border = 'none';
     animateHTML(HTML_ELEMENTS.menus.description.button,[{opacity: '0'}], 250, true, ()=>{
         HTML_ELEMENTS.menus.description.button.style.opacity = '0';
         HTML_ELEMENTS.menus.description.button.style.display = 'none';
-    })
+    });
     animateHTML(HTML_ELEMENTS.menus.description.delete,[{opacity: '0'}], 250, true, ()=>{
         HTML_ELEMENTS.menus.description.delete.style.opacity = '0';
         HTML_ELEMENTS.menus.description.delete.style.display = 'none';
-    })
+    });
     closeDescriptionMenu();
     selectedAstro = undefined;
 
+}
+
+function addTrack(astroIndex){
+    let trackIndex = astros.track[astroIndex].push(document.createElement('span')) - 1;
+    document.body.appendChild(astros.track[astroIndex][trackIndex]);
+    astros.track[astroIndex][trackIndex].classList.add('track');
+    astros.track[astroIndex][trackIndex].style.backgroundColor = astros.figure[astroIndex].getFigure.style.backgroundColor;
+    astros.track[astroIndex][trackIndex].style.left = `${astros.figure[astroIndex].getX + astros.figure[astroIndex].getWidth/2}px`;
+    astros.track[astroIndex][trackIndex].style.top = `${astros.figure[astroIndex].getY + astros.figure[astroIndex].getHeight/2}px`;
+    if(astros.track[astroIndex].length >= 301 && !isPrecisionMode){
+        document.body.removeChild(astros.track[astroIndex][0]);
+        astros.track[astroIndex].shift();
+    }
+}
+
+function clearTrack(astroIndex){
+    for(let index in astros.track[astroIndex]){
+        document.body.removeChild(astros.track[astroIndex][index]);
+    }
+    astros.track[astroIndex] = [];
+}
+
+function clearAllTracks(){
+    for(let astro in astros.track){
+        clearTrack(astro);
+    }
 }
 
 //Auxiliar functions
@@ -485,25 +540,25 @@ function attSpaceScaleHTMLElement(){
         (spaceScale/Math.pow(10,Math.floor(Math.log10(spaceScale)))).toFixed(1)
     } × 10${
         (Math.floor(Math.log10(spaceScale))-3).toString().sup()
-    } Km`
+    } Km`;
 }
 
 function attTimeScaleHTMLElement(){
     let timeUnits = ['segundo','minuto','hora','dia','ano'];
     HTML_ELEMENTS.scales.time.innerHTML = `1 seg : ${
         timeScale.multiplier < 1 ? '1'.sup() + '/' + (Math.pow(2,(Math.log2(timeScale.multiplier)*-1))).toString().sub() : timeScale.multiplier
-    } ${timeScale.multiplier<0.5 ? ' de ' : '' }${timeUnits[timeScale.selectedUnitIndex]}${timeScale.multiplier>1 ? 's' : ''}`
+    } ${timeScale.multiplier<0.5 ? ' de ' : '' }${timeUnits[timeScale.selectedUnitIndex]}${timeScale.multiplier>1 ? 's' : ''}`;
 }
 
 function toggleOptions(){
     isOptionOpen = !isOptionOpen;
     isSimulating = false;
-    HTML_ELEMENTS.menus.options.window.style.display = isOptionOpen ? 'flex' : 'none'
+    HTML_ELEMENTS.menus.options.window.style.display = isOptionOpen ? 'flex' : 'none';
 }
 
 function precisionMode(){
     isPrecisionMode = !isPrecisionMode;
-    HTML_ELEMENTS.menus.options.precisionMode.checkbox.src = `imagens/icons/${isPrecisionMode?'':'un'}checkedCheckbox.png`
+    HTML_ELEMENTS.menus.options.precisionMode.checkbox.src = `imagens/icons/${isPrecisionMode?'':'un'}checkedCheckbox.png`;
     document.querySelector('p#precisionModeWarning').style.display = isPrecisionMode ? 'flex' : 'none' ;
 }
 
@@ -514,43 +569,44 @@ function attPrecisionUnit(){
 function addAstroMenu(){
     isSimulating = false;
     if(isAddAstroMenuOpened){
-        closeAddAstroMenu()
+        closeAddAstroMenu();
     }else{
-        openAddAstroMenu()
+        openAddAstroMenu();
     }
 }
 
 function openAddAstroMenu(){
     HTML_ELEMENTS.menus.addAstro.preset.menu.style.display = 'flex';
     animateHTML(HTML_ELEMENTS.menus.addAstro.button,[{top: '92vh'}], 500, true, ()=>{HTML_ELEMENTS.menus.addAstro.button.style.top = '92vh'});
-    animateHTML(HTML_ELEMENTS.menus.addAstro.window,[{top: '10vh'}], 500, true, ()=>{HTML_ELEMENTS.menus.addAstro.window.style.top = '10vh'})
+    animateHTML(HTML_ELEMENTS.menus.addAstro.window,[{top: '10vh'}], 500, true, ()=>{HTML_ELEMENTS.menus.addAstro.window.style.top = '10vh'});
     animateHTML(document.querySelector('div#addAstroButton img'),[{transform: 'rotate(45deg)'}], 500, true, ()=>{document.querySelector('div#addAstroButton img').style.transform = 'rotate(45deg)'});
-    animateHTML(HTML_ELEMENTS.menus.addAstro.preset.menu,[{opacity: '1'}], 250, true, ()=>{HTML_ELEMENTS.menus.addAstro.preset.menu.style.opacity = '1';})
+    animateHTML(HTML_ELEMENTS.menus.addAstro.preset.menu,[{opacity: '1'}], 250, true, ()=>{HTML_ELEMENTS.menus.addAstro.preset.menu.style.opacity = '1'});
     resetNewAstroMenu();
     isAddAstroMenuOpened = true;
+    resetTargetPosition();
 }
 
 function closeAddAstroMenu(){
     animateHTML(HTML_ELEMENTS.menus.addAstro.button,[{top: '10vh'}], 500, true, ()=>{HTML_ELEMENTS.menus.addAstro.button.style.top = '10vh'});
-    animateHTML(HTML_ELEMENTS.menus.addAstro.window,[{top: '-72.4vh'}], 500, true, ()=>{HTML_ELEMENTS.menus.addAstro.window.style.top = '-72.4vh'})
+    animateHTML(HTML_ELEMENTS.menus.addAstro.window,[{top: '-72.4vh'}], 500, true, ()=>{HTML_ELEMENTS.menus.addAstro.window.style.top = '-72.4vh'});
     animateHTML(document.querySelector('div#addAstroButton img'),[{transform: 'rotate(0deg)'}], 500, true, ()=>{document.querySelector('div#addAstroButton img').style.transform = 'rotate(0deg)'});
     animateHTML(HTML_ELEMENTS.menus.addAstro.preset.menu,[{opacity: '0'}], 250, true, ()=>{
         HTML_ELEMENTS.menus.addAstro.preset.menu.style.opacity = '0';
         HTML_ELEMENTS.menus.addAstro.preset.menu.style.display = 'none';
     })
-    resetTargetPosition();
     isAddAstroMenuOpened = false;
+    resetTargetPosition();
 }
 
 function resetTargetPosition(){
-    HTML_ELEMENTS.menus.addAstro.elements.target.style.display =  isAddAstroMenuOpened? 'none' : 'block'
-    HTML_ELEMENTS.menus.addAstro.elements.target.style.left = `${-16}px`
-    HTML_ELEMENTS.menus.addAstro.elements.target.style.top = `${-16}px`
+    HTML_ELEMENTS.menus.addAstro.elements.target.style.display =  isAddAstroMenuOpened ? 'block' : 'none';
+    HTML_ELEMENTS.menus.addAstro.elements.target.style.left = `${-16}px`;
+    HTML_ELEMENTS.menus.addAstro.elements.target.style.top = `${-16}px`;
 }
 
 function attTargetPosition(){
-    HTML_ELEMENTS.menus.addAstro.elements.target.style.left = `${HTML_ELEMENTS.menus.addAstro.elements.x.value - 16}px`
-    HTML_ELEMENTS.menus.addAstro.elements.target.style.top = `${HTML_ELEMENTS.menus.addAstro.elements.y.value - 16}px`
+    HTML_ELEMENTS.menus.addAstro.elements.target.style.left = `${HTML_ELEMENTS.menus.addAstro.elements.x.value - 16}px`;
+    HTML_ELEMENTS.menus.addAstro.elements.target.style.top = `${HTML_ELEMENTS.menus.addAstro.elements.y.value - 16}px`;
 }
 
 function attDensityInput(){
@@ -565,7 +621,7 @@ function attDensityInput(){
 }
 
 function attAstroVectorDemonstration(){
-    let newAngle = HTML_ELEMENTS.menus.addAstro.elements.velocity.angle.value  
+    let newAngle = HTML_ELEMENTS.menus.addAstro.elements.velocity.angle.value;
     let deltaAngle = Math.abs(newAngle - HTML_ELEMENTS.menus.addAstro.elements.velocity.inputtedAngle);
     animateHTML(
         HTML_ELEMENTS.menus.addAstro.elements.velocity.demonstration,
@@ -590,11 +646,11 @@ function resetNewAstroMenu(){
 }
 
 function addNewAstroDown(){
-    HTML_ELEMENTS.menus.addAstro.elements.confirm.style.boxShadow = '-1px -1px 2px rgba(255,255,255,.7)'
+    HTML_ELEMENTS.menus.addAstro.elements.confirm.style.boxShadow = '-1px -1px 2px rgba(255,255,255,.7)';
 }
 
 function addNewAstroUp(){
-    HTML_ELEMENTS.menus.addAstro.elements.confirm.style.boxShadow = '1px 1px 2px rgba(255,255,255,.7)'
+    HTML_ELEMENTS.menus.addAstro.elements.confirm.style.boxShadow = '1px 1px 2px rgba(255,255,255,.7)';
 }
 
 function descriptionMenu(){
@@ -625,9 +681,9 @@ function attDescriptionMenu(){
         HTML_ELEMENTS.menus.description.elements.y.innerHTML = `Y: ${astros.figure[selectedAstro].getY} px`;
         HTML_ELEMENTS.menus.description.elements.mass.innerHTML = `Massa: ${
             (astros.object[selectedAstro].getMass/Math.pow(10,Math.floor(Math.log10(astros.object[selectedAstro].getMass)))).toFixed(2)
-            } × 10${
+        } × 10${
             (Math.floor(Math.log10(astros.object[selectedAstro].getMass))).toString().sup()
-            } Kg`;
+        } Kg`;
         HTML_ELEMENTS.menus.description.elements.type.innerHTML = `Tipo: ${astros.object[selectedAstro].getNameOfType}`;
         HTML_ELEMENTS.menus.description.elements.density.innerHTML = `Densidade: ${(astros.object[selectedAstro].getDensity).toFixed(1)} Km/m³`;
         HTML_ELEMENTS.menus.description.elements.astro.style.backgroundColor = astros.figure[selectedAstro].getFigure.style.backgroundColor;
@@ -640,16 +696,16 @@ function attDescriptionMenu(){
 
 function attDescriptionMenuVector(variable, vector){
     if(vector == undefined){
-        variable.div.style.opacity = '0';
+        variable.div.style.display = 'none';
         variable.demonstration.style.opacity = '0';
         variable.caption.style.display = 'none';
     }else{
         if((vector.getModule).toFixed(5) == 0){
-            variable.div.style.opacity = '0';
+            variable.div.style.display = 'none'
             variable.demonstration.style.opacity = '0';
             variable.caption.style.display = 'none';
         }else{
-            variable.div.style.opacity = '1';
+            variable.div.style.display = 'flex';
             variable.demonstration.style.opacity = '1';
             variable.caption.style.display = 'block';
             variable.data.innerHTML = `${(vector.getModule).toFixed(5)} m/s² , ${radianToDegree(vector.getAngle)}°`;
@@ -660,16 +716,16 @@ function attDescriptionMenuVector(variable, vector){
 
 function attDescriptionMenuVelocityVector(variable, vector){
     if(vector == undefined){
-        variable.div.style.opacity = '0';
+        variable.div.style.display = 'none';
         variable.demonstration.style.opacity = '0';
         variable.caption.style.display = 'none';
     }else{
         if((vector.getModule).toFixed(3) == 0){
-            variable.div.style.opacity = '0';
+            variable.div.style.display = 'none';
             variable.demonstration.style.opacity = '0';
             variable.caption.style.display = 'none';
         }else{
-            variable.div.style.opacity = '1';
+            variable.div.style.display = 'flex';
             variable.demonstration.style.opacity = '1';
             variable.caption.style.display = 'block';
             variable.data.innerHTML = `${(vector.getModule/1000).toFixed(3)} Km/s , ${radianToDegree(vector.getAngle)}°`;
@@ -680,16 +736,16 @@ function attDescriptionMenuVelocityVector(variable, vector){
 
 function attDescriptionMenuTangencialVector(variable, vector){
     if(vector == undefined){
-        variable.div.style.opacity = '0';
+        variable.div.style.display = 'none';
         variable.demonstration.style.opacity = '0';
         variable.caption.style.display = 'none';
     }else{
         if((vector.getModule).toFixed(5) == 0){
-            variable.div.style.opacity = '0';
+            variable.div.style.display = 'none';
             variable.demonstration.style.opacity = '0';
             variable.caption.style.display = 'none';
         }else{
-            variable.div.style.opacity = '1';
+            variable.div.style.display = 'flex';
             variable.demonstration.style.opacity = '1';
             variable.caption.style.display = 'block';
             if(vector.getModule < 0){
@@ -712,6 +768,8 @@ function hideVectorDemonstration(variable, boolean){
         variable.caption.style.opacity = '1';
     }
 }
+
+
 
 //Presets
 function presetEarthMoon(){
@@ -744,3 +802,4 @@ function presetBinarySistem(){
     run();
     closeAddAstroMenu();
 }
+

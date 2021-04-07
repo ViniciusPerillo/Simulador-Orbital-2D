@@ -44,7 +44,17 @@ header.flexRow{
     padding: 0px;
     border-radius: 50%;
     overflow: hidden;
-    z-index: -1000000;
+    z-index: -1000;
+}
+
+.track{
+    position: absolute;
+    display: block;
+    margin: 0;
+    padding: 0;
+    z-index: -10000000;
+    width: 1px;
+    height: 1px;
 }
 
 .flexRow{
@@ -168,6 +178,15 @@ footer img{
 div#addAstroButton{
     left: 5px;
     box-shadow: 1px 1px 2px rgba(175,175,175,.7);
+}
+
+div#astroTrack{
+    left: 48px;
+    box-shadow: 1px 1px 2px rgba(175,175,175,.7);
+}
+
+div#astroTrack:hover{
+    height: 34px;
 }
 
 a#help{
@@ -353,8 +372,16 @@ div#coordinates{
     margin: 0.25em;
     height: 1em;
     width: 1em;
-    transform: translateY(0.1em);
+    transform: translateY(0.2em);
 
+}
+
+article#descriptionMenu div.components div span{
+    box-shadow: -1px 1px 2px rgba(0,0,0,.4);
+}
+
+article#descriptionMenu div.components div span:hover{
+    cursor: pointer;
 }
 
 #velocityVector span{
@@ -377,7 +404,9 @@ div#demonstration{
     display: flex;
     align-content: center;
     justify-content: center;
-    width: 100%;
+    width: 12vw;
+    height: 12vw;
+    
 }
 
 article#descriptionMenu div div.vectorDemonstration {
@@ -390,14 +419,6 @@ article#descriptionMenu div div.vectorDemonstration {
     width: 12vw;
     height: 12vw;
     
-}
-
-article#descriptionMenu div.components div span{
-    border: solid 1px black;
-}
-
-article#descriptionMenu div.components div span:hover{
-    cursor: pointer;
 }
 
 div.vectorDemonstration img{
