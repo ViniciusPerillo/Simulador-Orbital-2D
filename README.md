@@ -9,20 +9,20 @@
   - [Como Usar](https://github.com/ViniciusPerillo/Simulador-Orbital-2D-em-JavaScripit#como-usar)
   - [Como Funciona](https://github.com/ViniciusPerillo/Simulador-Orbital-2D-em-JavaScripit#como-funciona)
   - [Autor](https://github.com/ViniciusPerillo/Simulador-Orbital-2D-em-JavaScripit#autor)
+  - [Participantes](https://github.com/ViniciusPerillo/Simulador-Orbital-2D-em-JavaScripit#participantes-na-produção)
   - [Licença](https://github.com/ViniciusPerillo/Simulador-Orbital-2D-em-JavaScripit#licença)
  ***
  ### Status
-  #### 🚧 Em contrução... 🚧
-   - Completamente testável, entretanto não é possível apagar astros.
+  #### Simulador pronto
  ***
  ### Features
   - #### Interface
    - [x] Header e lugar das escalas
    - [x] Arrastar e zoom
    - [x] Criação de astros
-   - [ ] Seleção e exclusão de astros
-   - [ ] Rastro do astro
-   - [ ] Box com dados do astro selecionado
+   - [x] Seleção e exclusão de astros
+   - [x] Rastro do astro
+   - [x] Box com dados do astro selecionado
   - #### Simulador
    - [x] Vetores 
    - [x] Astro
@@ -36,9 +36,17 @@
   ![Spacebar](https://user-images.githubusercontent.com/76188994/112848308-5027d980-907e-11eb-879d-884fcfb9055c.png) | Play/pause a simulação
   ![keys](https://user-images.githubusercontent.com/76188994/112862780-810f0b00-908c-11eb-9a6e-968c5e4c7bd7.png) | Aumentar escala de tempo </br></br></br> Diminuir escala de tempo </br></br></br> Aumentar unidade da escala de tempo <br/></br></br> Diminuir a unidade da escala de tempo
   ![escape](https://user-images.githubusercontent.com/76188994/112864481-3b534200-908e-11eb-8878-3f7ebca374c3.png) | Cancela ações e abre/fecha menu de configurações
-  ![add](https://user-images.githubusercontent.com/76188994/112864765-866d5500-908e-11eb-93a1-d557e1c862db.png) | Abre o menu de adição de novo astro
-  ![delete](https://user-images.githubusercontent.com/76188994/112864890-a43aba00-908e-11eb-97c6-4da8e13b9f6a.png) | Deleta astro selecionado </br> *Feature não adicionada*
-  ![asterisco](https://user-images.githubusercontent.com/76188994/112865230-f085fa00-908e-11eb-930b-4df9fba61195.png) | Ativa/desativa rastro deixado pelo astro </br> *Feature não adicionada*
+  ![add](https://user-images.githubusercontent.com/76188994/112864765-866d5500-908e-11eb-93a1-d557e1c862db.png) ![plus](https://user-images.githubusercontent.com/76188994/113921648-a0104a00-97bc-11eb-9490-86526bd5bede.png)| Abre o menu de adição de novo astro
+  ![delete](https://user-images.githubusercontent.com/76188994/112864890-a43aba00-908e-11eb-97c6-4da8e13b9f6a.png) | Deleta astro selecionado </br> 
+  ![asterisco](https://user-images.githubusercontent.com/76188994/112865230-f085fa00-908e-11eb-930b-4df9fba61195.png) ![track](https://user-images.githubusercontent.com/76188994/113920475-3479ad00-97bb-11eb-99f2-a1104f0caba6.png) | Ativa/desativa rastro deixado pelo astro </br> 
+  
+ #### Presets
+ Preset|Ação
+ :---:|:---:
+ ![terra lua](https://user-images.githubusercontent.com/76188994/113921787-d77ef680-97bc-11eb-94f9-6f4e5c033793.png)| Adiciona o sistema Terra-Lua
+ ![centro de massa](https://user-images.githubusercontent.com/76188994/113921816-df3e9b00-97bc-11eb-89a3-deddb8c59634.png)| Adiciona um sistema de 4 astros de mesmo tamanho que orbitam um centro de massa
+ ![colision](https://user-images.githubusercontent.com/76188994/113921870-efef1100-97bc-11eb-8c34-d92bf288beb5.png)| Adiciona um sistema de 3 astros que irão colidir
+ ![sistema binario](https://user-images.githubusercontent.com/76188994/113921882-f5e4f200-97bc-11eb-90dd-02309a0503d9.png)| Adiciona um sistema binário com um planeta em órbita
 
  #### Modos
  Modo| definicão
@@ -63,13 +71,16 @@ Com as duas componentes do vetor aceleração podemos calcular a nova posição 
 Com a nova posição encontrada podemos atualizar o vetor velocidade. Primeiro precisamos curvar o vetor velocidade, e quem é responsável por isso é a aceleração centrípeta. Através da função de aceleração centrípeta a<sub>c</sub> = v×ω podemos chegar em Δθ = Δt×a<sub>c</sub>/v e a partir disso calculamos o novo ângulo de nosso vetor velocidade, somando o Δθ caso a órbita seja anti-horária e subtraindo caso seja horária.
 Após isso calculamos o novo módulo do vetor velocidade através da função horária da velocidade, usando a aceleração tangencial novamente.
 Analisando esse processo pode-se ver que quanto menor for a escala temporal, mais preciso a simulação fica, pois como o movimento de órbita não é uniformemente variado e sim variado por completo, causando mais imprecisões quanto maior a escala 
-
-  #### 🚧 Em contrução... 🚧
  ***
  ### Autor
   #### Feito por Vinícius Gonçalves Perillo
   [![Gmail Badge](https://img.shields.io/badge/-vinicius.perillo25@gmail.com-c14438?style=flat-square&logo=Gmail&logoColor=white&link=mailto:vinicius.perillo25@gmail.com)](mailto:vinicius.perillo25@gmail.com)
  ***
+ ### Participantes na produção
+  #### Imagens dos planetas feitas por Heloísa Rades
+  [![Gmail Badge](https://img.shields.io/badge/-heloisa1466@gmail.com-c14438?style=flat-square&logo=Gmail&logoColor=white&link=mailto:heloisa1466@gmail.com)](heloisa1466@gmail.com)
+ #### Icones do github e instagram feitos por  Pixel perfect
+ [Pixel perfect](https://www.flaticon.com/br/autores/pixel-perfect) from [www.flaticon.com](https://www.flaticon.com/br/)
  ### Licença
   ![image](https://user-images.githubusercontent.com/76188994/110950964-40409380-8323-11eb-8e72-bb8ff54c6c79.png)
- ***
+
