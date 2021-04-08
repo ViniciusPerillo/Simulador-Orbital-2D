@@ -78,7 +78,8 @@ Analisando esse processo pode-se ver que quanto menor for a escala temporal, mai
   #### Feito por Vinícius Gonçalves Perillo
   [![Gmail Badge](https://img.shields.io/badge/-vinicius.perillo25@gmail.com-c14438?style=flat-square&logo=Gmail&logoColor=white&link=mailto:vinicius.perillo25@gmail.com)](mailto:vinicius.perillo25@gmail.com)
   #### Notas do autor
-  Esse é o meu primeiro projeto, então muitos commits estão com uma descrição péssima, qualquer bug, correção ou sugestão entre em contato comigo. 
+  Esse é o meu primeiro projeto com github, então muitos commits estão com uma descrição péssima, qualquer bug, correção ou sugestão entre em contato comigo. Além disso o simulador é impreciso, as escalas de tempo podem fazer com que astros não colidam ou que órbitas ocorram com formato diferente.
+  O meu objetivo com esse projeto era tentar trabalhar com JavaScript orientado á objetos e tentar colocar em código algo da física e da matemática. 
  ***
  ### Participantes na produção
   #### Imagens dos planetas e logo feitos por Heloísa Rades
